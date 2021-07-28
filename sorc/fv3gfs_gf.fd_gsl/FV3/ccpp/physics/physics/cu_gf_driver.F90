@@ -7,7 +7,7 @@ module cu_gf_driver
    ! DH* TODO: replace constants with arguments to cu_gf_driver_run
    use physcons  , g => con_g, cp => con_cp, xlv => con_hvap, r_v => con_rv
    use machine   , only: kind_phys
-   use cu_gf_deep, only: cu_gf_deep_run,neg_check,autoconv,aeroevap,fct1d3
+   use cu_gf_deep, only: cu_gf_deep_run,neg_check,fct1d3
    use cu_gf_sh  , only: cu_gf_sh_run
 
    implicit none
@@ -75,10 +75,10 @@ contains
 !!
 !>\section gen_gf_driver GSD GF Cumulus Scheme General Algorithm
 !> @{
-      subroutine cu_gf_driver_run(ntracer,garea,im,km,dt,cactiv,                &
+      subroutine cu_gf_driver_run(ntracer,garea,im,km,dt,flag_init,cactiv,cactiv_m,                &
                forcet,forceqv_spechum,phil,raincv,qv_spechum,t,cld1d,           &
                us,vs,t2di,w,qv2di_spechum,p2di,psuri,                           &
-               hbot,htop,kcnv,xland,hfx2,qfx2,cliw,clcw,                        &
+               hbot,htop,kcnv,xland,hfx2,qfx2,aod_gf,cliw,clcw,                        &
                pbl,ud_mf,dd_mf,dt_mf,cnvw_moist,cnvc,imfshalcnv,                &
                flag_for_scnv_generic_tend,flag_for_dcnv_generic_tend,           &
                du3dt_SCNV,dv3dt_SCNV,dt3dt_SCNV,dq3dt_SCNV,                     &
@@ -97,7 +97,9 @@ contains
      !integer, parameter :: ichoicem=5	! 0 2 5 13
       integer, parameter :: ichoicem=13	! 0 2 5 13
       integer, parameter :: ichoice_s=3	! 0 1 2 3
-      real(kind=kind_phys), parameter :: aodccn=0.1
+
+      real(kind=kind_phys), parameter :: aodc0=0.14
+      real(kind=kind_phys), parameter :: aodreturn=30.   
       real(kind=kind_phys) :: dts,fpi,fp
       integer, parameter :: dicycle=0 ! diurnal cycle flag
       integer, parameter :: dicycle_m=0 !- diurnal cycle flag
@@ -105,7 +107,7 @@ contains
 !-------------------------------------------------------------
    integer      :: its,ite, jts,jte, kts,kte 
    integer, intent(in   ) :: im,km,ntracer
-   logical, intent(in   ) :: flag_for_scnv_generic_tend,flag_for_dcnv_generic_tend
+   logical, intent(in   ) :: flag_for_scnv_generic_tend,flag_for_dcnv_generic_tend,flag_init
    logical, intent(in   ) :: ldiag3d,qdiag3d
 
    real(kind=kind_phys),  dimension( : , : ), intent(in    ) :: forcet,forceqv_spechum,w,phil
@@ -130,6 +132,7 @@ contains
    ! Specific humidity from FV3
    real(kind=kind_phys), dimension (:,:), intent(in) :: qv2di_spechum
    real(kind=kind_phys), dimension (:,:), intent(inout) :: qv_spechum
+   real(kind=kind_phys), dimension (:), intent(inout) :: aod_gf
    ! Local water vapor mixing ratios and cloud water mixing ratios
    real(kind=kind_phys), dimension (im,km) :: qv2di, qv, forceqv, cnvw
    !
@@ -137,7 +140,7 @@ contains
    real(kind=kind_phys), intent(in   ) :: dt 
 
    integer, intent(in   ) :: imfshalcnv
-   integer, dimension(:), intent(inout) :: cactiv
+   integer, dimension(:), intent(inout) :: cactiv,cactiv_m
 
    character(len=*), intent(out) :: errmsg
    integer,          intent(out) :: errflg
@@ -148,6 +151,8 @@ contains
    real(kind=kind_phys), dimension (im,4)  :: rand_clos
    real(kind=kind_phys), dimension (im,km,11) :: gdc,gdc2
    real(kind=kind_phys), dimension (im)    :: ht
+   real(kind=kind_phys), dimension (im)    :: ccn_gf,ccn_m
+   real(kind=kind_phys) :: ccnclean
    real(kind=kind_phys), dimension (im)    :: dx
    real(kind=kind_phys), dimension (im,km) :: outt,outq,outqc,phh,subm,cupclw,cupclws
    real(kind=kind_phys), dimension (im,km) :: dhdt,zu,zus,zd,phf,zum,zdm,outum,outvm
@@ -176,9 +181,9 @@ contains
 ! omega (omeg), windspeed (us,vs), and a flag (ierr) to turn off
 ! convection for this call only and at that particular gridpoint
 !
-   real(kind=kind_phys), dimension (im,km) :: qcheck,zo,t2d,q2d,po,p2d,rhoi
+   real(kind=kind_phys), dimension (im,km) :: qcheck,zo,t2d,q2d,po,p2d,rhoi,clw_ten
    real(kind=kind_phys), dimension (im,km) :: tn,qo,tshall,qshall,dz8w,omeg
-   real(kind=kind_phys), dimension (im)    :: ccn,z1,psur,cuten,cutens,cutenm
+   real(kind=kind_phys), dimension (im)    :: z1,psur,cuten,cutens,cutenm
    real(kind=kind_phys), dimension (im)    :: umean,vmean,pmean
    real(kind=kind_phys), dimension (im)    :: xmbs,xmbs2,xmb,xmbm,xmb_dumm,mconv
 
@@ -187,7 +192,7 @@ contains
    integer :: high_resolution
    real(kind=kind_phys)    :: clwtot,clwtot1,excess,tcrit,tscl_kf,dp,dq,sub_spread,subcenter
    real(kind=kind_phys)    :: dsubclw,dsubclws,dsubclwm,dtime_max,ztm,ztq,hfm,qfm,rkbcon,rktop
-   real(kind=kind_phys), dimension(km)   :: massflx,trcflx_in1,clw_in1,clw_ten1,po_cup
+   real(kind=kind_phys), dimension(km)   :: massflx,trcflx_in1,clw_in1,po_cup
 !  real(kind=kind_phys), dimension(km)   :: trcflx_in2,clw_in2,clw_ten2
    real(kind=kind_phys), dimension (im)  :: flux_tun,tun_rad_mid,tun_rad_shall,tun_rad_deep
    character*50 :: ierrc(im),ierrcm(im)
@@ -219,7 +224,8 @@ contains
 !
 ! these should be coming in from outside
 !
-!    cactiv(:)      = 0
+    cactiv(:)      = 0
+    cactiv_m(:)      = 0
      rand_mom(:)    = 0.
      rand_vmas(:)   = 0.
      rand_clos(:,:) = 0.
@@ -250,7 +256,6 @@ contains
 ! dx for scale awareness
 !    dx=40075000./float(lonf)
 !    tscl_kf=dx/25000.
-     ccn(its:ite)=150.
   
      if (imfshalcnv == 3) then
       ishallow_g3 = 1
@@ -305,7 +310,24 @@ contains
      do i= its,itf
       forcing(i,:)=0.
       forcing2(i,:)=0.
-      ccn(i)=100.
+      ccn_gf(i) = 0.
+      ccn_m(i) = 0.
+
+      ! set aod and ccn
+      if (flag_init) then
+        aod_gf(i)=aodc0
+      else
+        if((cactiv(i).eq.0) .and. (cactiv_m(i).eq.0))then
+          if(aodc0>aod_gf(i)) aod_gf(i)=aod_gf(i)+((aodc0-aod_gf(i))*(dt/(aodreturn*60)))
+          if(aod_gf(i)>aodc0) aod_gf(i)=aodc0
+        endif
+      endif
+
+      ccn_gf(i)=max(5., (aod_gf(i)/0.0027)**(1/0.640))
+      ccn_m(i)=ccn_gf(i)
+
+      ccnclean=max(5., (aodc0/0.0027)**(1/0.640))
+
       hbot(i)  =kte
       htop(i)  =kts
       raincv(i)=0.
@@ -528,7 +550,8 @@ contains
               ,dicycle_m       &
               ,ichoicem       &
               ,ipr           &
-              ,ccn           &
+              ,ccn_m         &
+              ,ccnclean      &
               ,dt            &
               ,imid_gf       &
               ,kpbli         &
@@ -608,7 +631,8 @@ contains
               ,dicycle       &
               ,ichoice       &
               ,ipr           &
-              ,ccn           &
+              ,ccn_gf        &
+              ,ccnclean      &
               ,dt            &
               ,0             &
 
@@ -731,7 +755,9 @@ contains
             massflx(:)=0.
             trcflx_in1(:)=0.
             clw_in1(:)=0.
-            clw_ten1(:)=0.
+            do k=kts,ktf 
+              clw_ten(i, k)=0.
+            enddo   
             po_cup(:)=0.
             kstop=kts
             if(ktopm(i).gt.kts .or. ktop(i).gt.kts)kstop=max(ktopm(i),ktop(i))
@@ -759,11 +785,9 @@ contains
                vs(i,k)=vs(i,k)+outv(i,k)*cuten(i)*dt +outvm(i,k)*cutenm(i)*dt +outvs(i,k)*cutens(i)*dt
 
                gdc(i,k,1)= max(0.,tun_rad_shall(i)*cupclws(i,k)*cutens(i))      ! my mod
-              !gdc2(i,k,1)=max(0.,tun_rad_deep(i)*(cupclwm(i,k)*cutenm(i)+cupclw(i,k)*cuten(i)))
-!hli 06/27(30)/2021 rad2, rad3
-               gdc2(i,k,1)=max(0.,0.04*cupclwm(i,k)*cutenm(i)+0.13*cupclw(i,k)*cuten(i)+0.02*cupclws(i,k)*cutens(i))
-              !hli 06/30/2021 -- rad4
-              !gdc2(i,k,1)=max(0.,0.02*cupclwm(i,k)*cutenm(i)+0.065*cupclw(i,k)*cuten(i)+0.01*cupclws(i,k)*cutens(i))
+               !gdc2(i,k,1)=max(0.,tun_rad_deep(i)*(cupclwm(i,k)*cutenm(i)+cupclw(i,k)*cuten(i)))
+               !gdc2(i,k,1)=max(0.,0.04*cupclwm(i,k)*cutenm(i)+0.13*cupclw(i,k)*cuten(i)+0.02*cupclws(i,k)*cutens(i))
+               gdc2(i,k,1)=max(0.,0.02*cupclwm(i,k)*cutenm(i)+0.065*cupclw(i,k)*cuten(i)+0.01*cupclws(i,k)*cutens(i))
                qci_conv(i,k)=gdc2(i,k,1)
                gdc(i,k,2)=(outt(i,k))*86400.
                gdc(i,k,3)=(outtm(i,k))*86400. 
@@ -825,12 +849,12 @@ contains
              massflx   (1)=0.
              trcflx_in1(1)=0.
              call fct1d3 (kstop,kte,dtime_max,po_cup,                  &
-                            clw_in1,massflx,trcflx_in1,clw_ten1,g)
+                            clw_in1,massflx,trcflx_in1,clw_ten(i,:),g)
 
              do k=1,kstop
                tem  = dt*(outqcs(i,k)*cutens(i)+outqc(i,k)*cuten(i)    &
                       +outqcm(i,k)*cutenm(i)                           &
-                      +clw_ten1(k)                                     &
+                      +clw_ten(i,k)                                    &
                          )
                tem1 = max(0.0, min(1.0, (tcr-t(i,k))*tcrf))
                if (clcw(i,k) .gt. -999.0) then
@@ -867,6 +891,29 @@ contains
                  cactiv(i)=0
                  if(pretm(i).gt.0)raincv(i)=.001*cutenm(i)*pretm(i)*dt
               endif   ! pret > 0
+
+              if(pretm(i).gt.0)then
+                 cactiv_m(i)=1
+              else
+                 cactiv_m(i)=0
+              endif
+
+              ! Unify ccn
+              if(ccn_m(i).lt.ccn_gf(i))then
+                ccn_gf(i)=ccn_m(i)
+              endif
+
+              if(ccn_gf(i)<0) ccn_gf(i)=0
+
+              ! Convert ccn back to aod
+              aod_gf(i)=0.0027*(ccn_gf(i)**0.64)
+              if(aod_gf(i)<0.007)then
+                aod_gf(i)=0.007
+                ccn_gf(i)=(aod_gf(i)/0.0027)**(1/0.640)
+              elseif(aod_gf(i)>aodc0)then
+                aod_gf(i)=aodc0
+                ccn_gf(i)=(aod_gf(i)/0.0027)**(1/0.640)
+              endif
             enddo
  100    continue
 !
