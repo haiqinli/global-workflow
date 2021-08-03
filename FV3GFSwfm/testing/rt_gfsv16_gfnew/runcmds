@@ -1,0 +1,14 @@
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/gfsv16_gfnew_nores_post.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/gfsv16_gfnew_nores_post.db
+rocotostat  -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/gfsv16_gfnew_nores_post.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/gfsv16_gfnew_nores_post.db
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/gfsv16_gfnew_nores.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/gfsv16_gfnew_nores.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/gfsv16_gfnew_nores.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/gfsv16_gfnew_nores.db
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/retro_gfsv16_gfnew.xml -d /home/rtfim/retro_dbfiles/retro_gfsv16_gfnew.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/retro_gfsv16_gfnew.xml -d /home/rtfim/retro_dbfiles/retro_gfsv16_gfnew.db
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/retro_gfsv16_gfnew_A.xml -d /home/rtfim/retro_dbfiles/retro_gfsv16_gfnew_A.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/retro_gfsv16_gfnew_A.xml -d /home/rtfim/retro_dbfiles/retro_gfsv16_gfnew_A.db
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/retro_gfsv16_gfnew_B.xml -d /home/rtfim/retro_dbfiles/retro_gfsv16_gfnew_B.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gfnew/retro_gfsv16_gfnew_B.xml -d /home/rtfim/retro_dbfiles/retro_gfsv16_gfnew_B.db

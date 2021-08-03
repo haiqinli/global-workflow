@@ -1,0 +1,4 @@
+rocotorun -w rt_gfsv16_thmp_subcyc_12x12_168h.xml -d rt_gfsv16_thmp_subcyc_12x12_168h.db
+rocotostat -w rt_gfsv16_thmp_subcyc_12x12_168h.xml -d rt_gfsv16_thmp_subcyc_12x12_168h.db
+
+

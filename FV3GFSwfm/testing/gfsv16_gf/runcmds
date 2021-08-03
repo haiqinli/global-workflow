@@ -1,0 +1,4 @@
+rocotorun -w retroA_gfsv16_gf.xml -d retroA_gfsv16_gf.db
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/gfsv16_gf/retroA_gfsv16_gf.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/gfsv16_gf/retroA_gfsv16_gf.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/gfsv16_gf/retroA_gfsv16_gf.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/gfsv16_gf/retroA_gfsv16_gf.db

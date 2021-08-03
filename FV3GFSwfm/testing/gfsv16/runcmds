@@ -1,0 +1,3 @@
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/gfsv16/gfsv16.xml -d /home/rtfim/retro_dbfiles/gfsv16.db
+rocotostat  -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/gfsv16/gfsv16.xml -d /home/rtfim/retro_dbfiles/gfsv16.db

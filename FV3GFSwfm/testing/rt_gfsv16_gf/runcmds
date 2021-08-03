@@ -1,0 +1,29 @@
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/gfsv16_gf_nores.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/gfsv16_gf_nores.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/gfsv16_gf_nores.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/gfsv16_gf_nores.db
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/gfsv16_gf_post_nores.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/gfsv16_gf_post_nores.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/gfsv16_gf_post_nores.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/gfsv16_gf_post_nores.db
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/rt_gfsv16_gf.xml -d /home/rtfim/rt_dbfiles/rt_gfsv16_gf.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/rt_gfsv16_gf.xml -d /home/rtfim/rt_dbfiles/rt_gfsv16_gf.db | m
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/retro_gfsv16_gf.xml -d /home/rtfim/retro_dbfiles/retro_gfsv16_gf.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/retro_gfsv16_gf.xml -d /home/rtfim/retro_dbfiles/retro_gfsv16_gf.db
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/retro_gfsv16_gf_A.xml -d /home/rtfim/retro_dbfiles/retro_gfsv16_gf_A.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/retro_gfsv16_gf_A.xml -d /home/rtfim/retro_dbfiles/retro_gfsv16_gf_A.db
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/retro_gfsv16_gf_B.xml -d /home/rtfim/retro_dbfiles/retro_gfsv16_gf_B.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_gf/retro_gfsv16_gf_B.xml -d /home/rtfim/retro_dbfiles/retro_gfsv16_gf_B.db
+
+rocotorun -w arch.xml -d arch.db
+rocotostat -w arch.xml -d arch.db
+
+rocotorun -w trak.xml -d trak.db
+rocotostat -w trak.xml -d trak.db
+
+rocotorun -w trak_rt.xml -d trak_rt.db
+rocotostat  -w trak_rt.xml -d trak_rt.db
+
+rocotorun -w trakres.xml -d trakres.db
+rocotostat -w trakres.xml -d trakres.db

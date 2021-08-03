@@ -1,0 +1,12 @@
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/testing/gfsv16_mynn_12x12/gfsv16_mynn_nores.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/testing/gfsv16_mynn_12x12/gfsv16_mynn_nores.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/testing/gfsv16_mynn_12x12/gfsv16_mynn_nores.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/testing/gfsv16_mynn_12x12/gfsv16_mynn_nores.db
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/testing/gfsv16_mynn_12x12/gfsv16_mynn_res2.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/testing/gfsv16_mynn_12x12/gfsv16_mynn_res2.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/testing/gfsv16_mynn_12x12/gfsv16_mynn_res2.xml -d /home/rtfim/GFSv16_HFIP/FV3GFSwfm/testing/gfsv16_mynn_12x12/gfsv16_mynn_res2.db
+
+ rocotorun -w gfsv16_mynn_res2.xml -d gfsv16_mynn_res2.db
+ rocotostat -w gfsv16_mynn_res2.xml -d gfsv16_mynn_res2.db
+
+ rocotorun -w gfsv16_mynn_nores.xml -d gfsv16_mynn_nores.db
+ rocotostat -w gfsv16_mynn_nores.xml -d gfsv16_mynn_nores.db

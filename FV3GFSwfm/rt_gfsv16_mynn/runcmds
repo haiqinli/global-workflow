@@ -1,0 +1,13 @@
+
+rocotorun -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_mynn/rt_gfsv16_mynn.xml -d /home/rtfim/rt_dbfiles/rt_gfsv16_mynn.db
+rocotostat -w /home/rtfim/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_mynn/rt_gfsv16_mynn.xml -d /home/rtfim/rt_dbfiles/rt_gfsv16_mynn.db -c `date --date='4 days ago' +%Y%m%d0000`: | m
+
+rocotorun -w gfsv16_mynn_nores.xml -d gfsv16_mynn_nores.db
+rocotostat  -w gfsv16_mynn_nores.xml -d gfsv16_mynn_nores.db
+
+rocotorun -w tmp_mynn.xml -d tmp_mynn.db
+rocotostat  -w tmp_mynn.xml -d tmp_mynn.db
+
+rocotorun -w rt_mynn_vrfy_post3.xml -d rt_mynn_vrfy_post3.db
+rocotostat -w rt_mynn_vrfy_post3.xml -d rt_mynn_vrfy_post3.db
+

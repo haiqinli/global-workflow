@@ -1,0 +1,41 @@
+
+rocotorun -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc/rtl127_icsonly.xml -d /home/rtfim/rt_dbfiles/rtl127_icsonly.db
+rocotostat  -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc/rtl127_icsonly.xml -d /home/rtfim/rt_dbfiles/rtl127_icsonly.db -c `date --date='4 days ago' +%Y%m%d0000`: | m 
+
+rocotorun -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc/rt_gfsv16_thmp_subcyc.xml -d /home/rtfim/rt_dbfiles/rt_gfsv16_thmp_subcyc.db 
+rocotostat  -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc/rt_gfsv16_thmp_subcyc.xml -d /home/rtfim/rt_dbfiles/rt_gfsv16_thmp_subcyc.db -c `date --date='4 days ago' +%Y%m%d0000`: | m 
+
+rocotorun -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc/gfsv16_thmp_subcyc_nores.xml -d /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc/gfsv16_thmp_subcyc_nores.db
+rocotostat -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc/gfsv16_thmp_subcyc_nores.xml -d /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc/gfsv16_thmp_subcyc_nores.db
+
+rocotorun -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/gfsv16_thmp_subcyc/gfsv16_thmp_subcyc_post_nores.xml -d /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/gfsv16_thmp_subcyc/gfsv16_thmp_subcyc_post_nores.db
+rocotostat -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/gfsv16_thmp_subcyc/gfsv16_thmp_subcyc_post_nores.xml -d /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/gfsv16_thmp_subcyc/gfsv16_thmp_subcyc_post_nores.db | m
+
+rocotorun -w gfsv16_thmp_subcyc_nores.xml -d gfsv16_thmp_subcyc_nores.db
+rocotostat -w gfsv16_thmp_subcyc_nores.xml -d gfsv16_thmp_subcyc_nores.db | m
+
+rocotorun -w gfsv16_thmp_subcyc_post_nores.xml -d gfsv16_thmp_subcyc_post_nores.db
+rocotostat -w gfsv16_thmp_subcyc_post_nores.xml -d gfsv16_thmp_subcyc_post_nores.db
+
+-- archive storm data to HPSS (gfs, gfsB, gfsC) --
+rocotorun -w arch.xml -d arch.db
+rocotostat -w arch.xml -d arch.db
+
+==============================
+
+rocotorun  -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc/retroB_gfsv16_thmp_subcyc.xml -d  /home/rtfim/retro_dbfiles/retroB_gfsv16_thmp_subcyc.db
+rocotostat -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc/retroB_gfsv16_thmp_subcyc.xml -d  /home/rtfim/retro_dbfiles/retroB_gfsv16_thmp_subcyc.db
+
+rocotorun  -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc/retroA_gfsv16_thmp_subcyc.xml -d  /home/rtfim/retro_dbfiles/retroA_gfsv16_thmp_subcyc.db
+rocotostat -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc/retroA_gfsv16_thmp_subcyc.xml -d  /home/rtfim/retro_dbfiles/retroA_gfsv16_thmp_subcyc.db
+
+rocotorun -w trak.xml -d trak.db
+rocotostat -w trak.xml -d trak.db
+
+rocotorun -w rt_gfsv16_thmp_subcyc.xml -d rt_gfsv16_thmp_subcyc.db
+rocotostat -w rt_gfsv16_thmp_subcyc.xml -d rt_gfsv16_thmp_subcyc.db | m
+
+rocotorun -w rtl127_icsonly.xml -d rtl127_icsonly.db
+rocotostat -w rtl127_icsonly.xml -d rtl127_icsonly.db | m
+
+

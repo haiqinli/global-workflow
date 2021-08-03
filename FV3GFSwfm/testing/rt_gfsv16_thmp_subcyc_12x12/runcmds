@@ -1,0 +1,6 @@
+rocotorun -w rt_gfsv16_thmp_subcyc_12x12.xml -d rt_gfsv16_thmp_subcyc_12x12.db
+rocotostat -w rt_gfsv16_thmp_subcyc_12x12.xml -d rt_gfsv16_thmp_subcyc_12x12.db
+
+rocotorun -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc_12x12/rt_gfsv16_thmp_subcyc_12x12.xml -d /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc_12x12/rt_gfsv16_thmp_subcyc_12x12.db
+rocotostat -w /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc_12x12/rt_gfsv16_thmp_subcyc_12x12.xml -d /lfs4/BMC/gsd-fv3-dev/rtruns/GFSv16_HFIP/FV3GFSwfm/rt_gfsv16_thmp_subcyc_12x12/rt_gfsv16_thmp_subcyc_12x12.db | m
+
