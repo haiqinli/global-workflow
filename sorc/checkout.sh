@@ -6,7 +6,7 @@ while getopts "oc" option;
 do
  case $option in
   o)
-   echo "Received -o flag for optional checkout of GTG, will check out GTG with EMC_post"
+   echo "Received -o flag for optional checkout of GTG, will check out GTG with UPP"
    checkout_gtg="YES"
    ;;
   c)
@@ -29,23 +29,22 @@ echo $topdir
 echo fv3gfs checkout ...
 if [[ ! -d fv3gfs.fd ]] ; then
     rm -f ${topdir}/checkout-fv3gfs.log
-    #JKHgit clone https://github.com/ufs-community/ufs-weather-model fv3gfs.fd >> ${topdir}/checkout-fv3gfs.log 2>&1
-    #JKHcd fv3gfs.fd
     if [ ${run_ccpp:-"NO"} = "NO" ]; then
         git clone https://github.com/ufs-community/ufs-weather-model fv3gfs.fd >> ${topdir}/checkout-fv3gfs.log 2>&1
         cd fv3gfs.fd
-        git checkout GFS.v16.0.14
+        git checkout GFS.v16.0.16
     else
-        git clone --recursive -b gsl/develop https://github.com/NOAA-GSL/ufs-weather-model ufs-weather-model_18dec_57a8258  >> ${topdir}/checkout-fv3gfs.log
-g 2>&1
-        cd ufs-weather-model_18dec_57a8258
-        git checkout 57a825847f51e18705faf5216e93c4ddbb1307a7
-        #git checkout b771e5be7e35eaea5ee7f762d644afccab019ed3
+        echo ufs-weather-model 18mar gsl/develop checkout ...
+        git clone --recursive -b gsl/develop https://github.com/NOAA-GSL/ufs-weather-model ufs-weather-model_18mar_f204bfd >> ${topdir}/checkout-fv3gfs_18mar.log 2>&1
+        cd ufs-weather-model_18mar_f204bfd
+        git checkout f204bfd922318c6dc39619d1c7f217fe49de7292 
     fi
     git submodule update --init --recursive
     cd ${topdir}
-    ln -fs ufs-weather-model_18dec_57a8258 fv3gfs.fd 
-    rsync -ax fv3gfs.fd_gsl/ fv3gfs.fd/        ## copy over changes not in FV3 repository
+    if [ ${run_ccpp:-"NO"} = "YES" ]; then
+      ln -fs ufs-weather-model_18mar_f204bfd fv3gfs.fd 
+      rsync -ax fv3gfs.fd_gsl/ fv3gfs.fd/        ## copy over changes not in FV3 repository
+    fi
 else
     echo 'Skip.  Directory fv3gfs.fd already exists.'
 fi
@@ -78,17 +77,18 @@ if [[ ! -d ufs_utils.fd ]] ; then
     rm -f ${topdir}/checkout-ufs_utils.log
     git clone https://github.com/NOAA-EMC/UFS_UTILS.git ufs_utils.fd >> ${topdir}/checkout-ufs_utils.fd.log 2>&1
     cd ufs_utils.fd
-    git checkout ops-gfsv16.0.0
+    git checkout ufs_utils_1_4_0
+    git submodule update
     cd ${topdir}
     rsync -ax ufs_utils.fd_gsl/ ufs_utils.fd/        ## copy over changes not in UFS_UTILS repository
 else
     echo 'Skip.  Directory ufs_utils.fd already exists.'
 fi
 
-echo EMC_post checkout ...
+echo UPP checkout ...
 if [[ ! -d gfs_post.fd ]] ; then
     rm -f ${topdir}/checkout-gfs_post.log
-    git clone https://github.com/NOAA-EMC/EMC_post.git gfs_post.fd >> ${topdir}/checkout-gfs_post.log 2>&1
+    git clone https://github.com/NOAA-EMC/UPP.git gfs_post.fd >> ${topdir}/checkout-gfs_post.log 2>&1
     cd gfs_post.fd
     git checkout upp_gfsv16_release.v1.1.1
     ################################################################################
@@ -104,7 +104,7 @@ if [[ ! -d gfs_post.fd ]] ; then
       cp sorc/post_gtg.fd/gtg.config.gfs parm/gtg.config.gfs
     fi
     cd ${topdir}
-    rsync -ax gfs_post.fd_gsl/ gfs_post.fd/        ## copy over GSL changes not in EMC_post repository
+    rsync -ax gfs_post.fd_gsl/ gfs_post.fd/        ## copy over GSL changes not in UPP repository
 else
     echo 'Skip.  Directory gfs_post.fd already exists.'
 fi
@@ -131,16 +131,16 @@ else
     echo 'Skip. Directory verif-global.fd already exist.'
 fi
 
-echo aeroconv checkout ...
-if [[ ! -d aeroconv.fd ]] ; then
-    rm -f ${topdir}/checkout-aero.log
-    git clone https://github.com/NCAR/aeroconv aeroconv.fd >> ${topdir}/checkout-aero.log 2>&1
-    cd aeroconv.fd
-    git checkout 24f6ddc
-    cd ${topdir}
-    ./aero_extract.sh
-else
-    echo 'Skip.  Directory aeroconv.fd already exists.'
-fi
+#JKHecho aeroconv checkout ...
+#JKHif [[ ! -d aeroconv.fd ]] ; then
+#JKH    rm -f ${topdir}/checkout-aero.log
+#JKH    git clone https://github.com/NCAR/aeroconv aeroconv.fd >> ${topdir}/checkout-aero.log 2>&1
+#JKH    cd aeroconv.fd
+#JKH    git checkout 24f6ddc
+#JKH    cd ${topdir}
+#JKH    ./aero_extract.sh
+#JKHelse
+#JKH    echo 'Skip.  Directory aeroconv.fd already exists.'
+#JKHfi
 
 exit 0

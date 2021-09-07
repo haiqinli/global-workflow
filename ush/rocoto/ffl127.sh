@@ -1,14 +1,14 @@
 USER=Judy.K.Henderson
-GITDIR=/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_dev/           ## where your git checkout is located
+GITDIR=/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_dev_sep2021/           ## where your git checkout is located
 COMROT=$GITDIR/FV3GFSrun                                         ## default COMROT directory
 EXPDIR=$GITDIR/FV3GFSwfm                                         ## default EXPDIR directory
 
 #    ICSDIR is assumed to be under $COMROT/FV3ICS
 #cp $GITDIR/parm/config/config.base.emc.dyn $GITDIR/parm/config/config.base
 
-PSLOT=ff_l128
-IDATE=2020070100
-EDATE=2029070100
+PSLOT=ff_l127
+IDATE=2021090100
+EDATE=2021090100
 RESDET=768               ## 96 192 384 768
 
 # set machine
