@@ -6,7 +6,7 @@ while getopts "oc" option;
 do
  case $option in
   o)
-   echo "Received -o flag for optional checkout of GTG, will check out GTG with EMC_post"
+   echo "Received -o flag for optional checkout of GTG, will check out GTG with UPP"
    checkout_gtg="YES"
    ;;
   c)
@@ -85,10 +85,10 @@ else
     echo 'Skip.  Directory ufs_utils.fd already exists.'
 fi
 
-echo EMC_post checkout ...
+echo UPP checkout ...
 if [[ ! -d gfs_post.fd ]] ; then
     rm -f ${topdir}/checkout-gfs_post.log
-    git clone https://github.com/NOAA-EMC/EMC_post.git gfs_post.fd >> ${topdir}/checkout-gfs_post.log 2>&1
+    git clone https://github.com/NOAA-EMC/UPP.git gfs_post.fd >> ${topdir}/checkout-gfs_post.log 2>&1
     cd gfs_post.fd
     git checkout upp_gfsv16_release.v1.1.1
     ################################################################################
@@ -104,7 +104,7 @@ if [[ ! -d gfs_post.fd ]] ; then
       cp sorc/post_gtg.fd/gtg.config.gfs parm/gtg.config.gfs
     fi
     cd ${topdir}
-    rsync -ax gfs_post.fd_gsl/ gfs_post.fd/        ## copy over GSL changes not in EMC_post repository
+    rsync -ax gfs_post.fd_gsl/ gfs_post.fd/        ## copy over GSL changes not in UPP repository
 else
     echo 'Skip.  Directory gfs_post.fd already exists.'
 fi
