@@ -1037,7 +1037,6 @@ deflate_level=${deflate_level:-1}
   fhcyc        = $FHCYC
   use_ufo      = ${use_ufo:-".true."}
   pre_rad      = ${pre_rad:-".false."}
-  ncld         = ${ncld:-1}
   imp_physics  = ${imp_physics:-"99"}
   pdfcld       = ${pdfcld:-".false."}
   fhswr        = ${FHSWR:-"3600."}
@@ -1367,7 +1366,7 @@ $NCP model_configure $memdir
 
 $NCP $FCSTEXECDIR/$FCSTEXEC $DATA/.
 export OMP_NUM_THREADS=$NTHREADS_FV3
-$APRUN_FV3 $DATA/$FCSTEXEC 1>&1 2>&2
+eval $APRUN_FV3 $DATA/$FCSTEXEC 1>&1 2>&2
 export ERR=$?
 export err=$ERR
 $ERRSCRIPT || exit $err
