@@ -744,6 +744,9 @@ if [ "$CCPP_SUITE" = 'FV3_GSD_v0' -o "$CCPP_SUITE" = 'FV3_GSD_noah' ]; then
 fi
 fi
 
+# JKH   copy yaml file over
+cp $HOMEgfs/sorc/fv3gfs.fd/tests/parm/fd_nems.yaml fd_nems.yaml
+
 #------------------------------------------------------------------
 rm -f nems.configure
 
@@ -1357,7 +1360,7 @@ fi
 $NCP input.nml $memdir
 
 # Copy model_configure file   #JKH
-$NCP model_configure $memdi
+$NCP model_configure $memdir
 
 #------------------------------------------------------------------
 # run the executable

@@ -31,9 +31,9 @@ else
  ## 21Jul21 and after
  ## ./compile.sh "$target" "-DAPP=ATM -D32BIT=Y -DCCPP_SUITES=FV3_GFS_v16,FV3_GSD_noah,FV3_GSD_v0" 2 NO NO
  ## before 21Jul21 
- ## ./compile.sh "$target" "APP=ATM 32BIT=Y SUITES=FV3_GFS_v16,FV3_GSD_noah,FV3_GSD_v0" 2 NO NO
+ ./compile.sh "$target" "APP=ATM 32BIT=Y SUITES=FV3_GFS_v16,FV3_GSD_noah,FV3_GSD_v0" 2 NO NO
  ## before 24Mar21
- ./compile.sh "$target" "32BIT=Y SUITES=FV3_GFS_v16,FV3_GSD_noah,FV3_GSD_v0" 2 NO NO
+ ##./compile.sh "$target" "32BIT=Y SUITES=FV3_GFS_v16,FV3_GSD_noah,FV3_GSD_v0" 2 NO NO
  mkdir -p ../NEMS/exe
  mv -f fv3_2.exe ../NEMS/exe/global_fv3gfs.x
 fi
