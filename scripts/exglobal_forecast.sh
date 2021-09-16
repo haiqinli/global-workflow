@@ -900,11 +900,6 @@ cat > input.nml <<EOF
   blocksize = $blocksize
   chksum_debug = $chksum_debug
   dycore_only = $dycore_only
-  fdiag = $FDIAG
-  fhmax = $FHMAX
-  fhout = $FHOUT
-  fhmaxhf = $FHMAX_HF
-  fhouthf = $FHOUT_HF
   $atmos_model_nml
 /
 
