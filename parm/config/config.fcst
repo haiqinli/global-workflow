@@ -59,7 +59,9 @@ export do_ugwp=".false."
 export do_tofd=".true."
 export launch_level=$(echo "$LEVS/2.35" |bc)
 
-export  n_sponge=42
+if [ $LEVS = "128" ]; then export n_sponge=42; fi   #127 layer
+if [ $LEVS = "65" ]; then export n_sponge=23; fi    # 64 layer
+#JKHexport  n_sponge=42
 export  d2_bg_k1=0.20
 export  d2_bg_k2=0.04
 
@@ -71,29 +73,64 @@ if [ $LEVS = "128" -a "$CDUMP" = "gdas" ]; then
    export  d2_bg_k2=0.0
 fi
 
-# PBL/turbulance schemes
+# PBL/turbulence schemes
 export hybedmf=".false."
-export satmedmf=".true."
-export isatmedmf=1
+if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GFS_v16_mynn" ]] ; then
+    export satmedmf=".false."
+    export isatmedmf=0
+    export shal_cnv=".true."       
+    export do_mynnedmf=".true."     
+    export do_mynnsfclay=".false."
+    export icloud_bl=1        
+    export bl_mynn_tkeadvect=.true. 
+    export bl_mynn_edmf=1        
+    export bl_mynn_edmf_mom=1
+else
+    export satmedmf=".true."   
+    export isatmedmf=1        
+fi
+
 tbf=""
 if [ $satmedmf = ".true." ]; then tbf="_satmedmf" ; fi
 
-# Land surface model. (2--NoahMP, landice=F); (1--Noah, landice=T)
-export lsm=1
-if [ $lsm -eq 2 ]; then
+# Land surface model. (3--RUCLSM, landice=F;) (2--NoahMP, landice=F); (1--Noah, landice=T)
+if [ $CCPP_SUITE = "FV3_GSD_v0" ]; then
+    export lsm=3
+    export lsoil_lsm=9
+else
+    export lsm=1
+fi
+
+if [ $lsm -eq 2 -o $lsm -eq 3 ]; then
     export lheatstrg=".false."
     export landice=".false."
 else
-    export lheatstrg=".false."
-    export landice=".true."
+    export lheatstrg=".false."    
+    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
+        export landice=".false."      ##JKH
+    else
+        export landice=".true."
+    fi
 fi
 
 # Radiation options 
 export IAER=5111    ;#spectral band mapping method for aerosol optical properties
-export iovr_lw=3    ;#de-correlation length cloud overlap method (Barker, 2008)
-export iovr_sw=3    ;#de-correlation length cloud overlap method (Barker, 2008)
+export iovr_lw=3    ;#de-correlation length cloud overlap method (Barker, 2008) 
+export iovr_sw=3    ;#de-correlation length cloud overlap method (Barker, 2008) 
+export iovr=3       ;#de-correlation length cloud overlap method (Barker, 2008) 
 export icliq_sw=2   ;#cloud optical coeffs from AER's newer version v3.9-v4.0 for hu and stamnes
 
+# CCPP configuration
+export output_1st_tstep_rst=".false."                                        #JKH
+
+# Convection Options: 2-SASAS, 3-GF
+if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GFS_v16_gf" ]] ; then
+	export imfdeepcnv=3
+	export imfshalcnv=3
+else
+	export imfdeepcnv=2
+	export imfshalcnv=2
+fi
 
 # Microphysics configuration
 export dnats=0
@@ -112,9 +149,28 @@ elif [ $imp_physics -eq 6 ]; then # WSM6
     export nwat=6
 
 elif [ $imp_physics -eq 8 ]; then # Thompson
-    export ncld=2
-    export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_thompson${tbf}"
     export nwat=6
+    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GFS_v16_thompson" ]] ; then
+        export ncld=5
+        export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_gsd"
+        export ltaerosol=.true.                  
+        export lradar=.true.         
+    
+        ## GSD namelist changes
+        export cal_pre=".false."
+        export random_clds=".false."
+        export effr_in=.true.
+        export ttendlim=0.005
+        export vtdm4_nh_nonmono=0.02
+        export nord=2
+        export dddmp=0.1
+        export d4_bg=0.12
+        export k_split=6
+        export n_split=2
+    else
+        export ncld=2
+        export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_thompson${tbf}"
+    fi
 
 elif [ $imp_physics -eq 11 ]; then # GFDL
     export ncld=5
@@ -166,10 +222,7 @@ if [[ "$OUTPUT_FILE" == "netcdf" ]]; then
         fi
     fi
     if [[ "$machine" == "HERA" ]]; then
-        export OUTPUT_FILETYPES=" 'netcdf_parallel' 'netcdf_parallel' "
-        if [ $RESTILE -le 192 ]; then
-            export OUTPUT_FILETYPES=" 'netcdf_parallel' 'netcdf' "
-        fi
+        export OUTPUT_FILETYPES=" 'netcdf_parallel' 'netcdf' "
     fi
     if [[ "$machine" == "ORION" ]]; then
         export OUTPUT_FILETYPES=" 'netcdf_parallel' 'netcdf_parallel' "
@@ -188,7 +241,11 @@ if [[ "$CDUMP" == "gdas" ]] ; then # GDAS cycle specific parameters
 
     # Variables used in DA cycling
     if [ $QUILTING = ".true." -a $OUTPUT_GRID = "gaussian_grid" ]; then
-        export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da"
+        if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
+          export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da_gsd"
+        else
+          export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da"
+        fi
     else
         export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da_orig"
     fi
@@ -206,7 +263,7 @@ if [[ "$CDUMP" == "gdas" ]] ; then # GDAS cycle specific parameters
     # For IAU, write restarts at beginning of window also
     if [ $DOIAU = "YES" ]; then
        export restart_interval="6 9"
-       if [[ "$SDATE" = "$CDATE" ]]; then export restart_interval="3 6"; fi
+       if [[ "$SDATE" = "$CDATE" && $EXP_WARM_START = ".false." ]]; then export restart_interval="3 6"; fi # Cold starting
     fi
 
     # Choose coupling with wave
@@ -219,7 +276,13 @@ elif [[ "$CDUMP" == "gfs" ]] ; then # GFS cycle specific parameters
 
     # Write more variables to output
     if [ $QUILTING = ".true." -a $OUTPUT_GRID = "gaussian_grid" ]; then
-        export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table"
+        if [ $CCPP_SUITE = "FV3_GSD_v0" ]; then
+            export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_gsd_ruc"
+        elif [ $CCPP_SUITE = "FV3_GSD_noah" ]; then
+            export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_gsd"
+        else
+            export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table"
+        fi
     else
         export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_orig"
     fi
