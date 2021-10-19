@@ -1,0 +1,7 @@
+
+rocotorun -w emcv16opsC768E40.xml -d emcv16opsC768E40.db
+rocotostat -w emcv16opsC768E40.xml -d emcv16opsC768E40.db | m 
+
+
+rocotorun -w /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/FV3GFSwfm/emcv16opsC768E40/emcv16opsC768E40.xml -d /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/FV3GFSwfm/emcv16opsC768E40/emcv16opsC768E40.db
+rocotostat  -w /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/FV3GFSwfm/emcv16opsC768E40/emcv16opsC768E40.xml -d /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/FV3GFSwfm/emcv16opsC768E40/emcv16opsC768E40.db | m 
