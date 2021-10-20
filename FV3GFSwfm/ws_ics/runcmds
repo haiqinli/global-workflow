@@ -1,0 +1,6 @@
+
+rocotorun -w ws_ics.xml -d ws_ics.db
+rocotostat -w ws_ics.xml -d ws_ics.db
+
+rocotorun -w /home/Judy.K.Henderson/scratch/update_jet/FV3GFSwfm/ws_ics/test_ics.xml -d /home/Judy.K.Henderson/scratch/update_jet/FV3GFSwfm/ws_ics/test_ics.db
+rocotostat -w test_ics.xml -d test_ics.db
