@@ -1,0 +1,6 @@
+
+rocotorun -w ws_ics.xml -d ws_ics.db
+rocotostat  -w ws_ics.xml -d ws_ics.db
+
+rocotorun -w /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/FV3GFSwfm/ws_ics/ws_ics.xml -d /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/FV3GFSwfm/ws_ics/ws_ics.db
+rocotostat -w /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/FV3GFSwfm/ws_ics/ws_ics.xml -d /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/FV3GFSwfm/ws_ics/ws_ics.db
