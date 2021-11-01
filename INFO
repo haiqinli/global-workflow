@@ -1,3 +1,30 @@
+01 Nov 2021
+  - extend experiment out to 00Z 09/04/20
+
+17 Oct 2021
+  - extend experiment out to 00Z 09/03/20
+
+08 Oct 2021
+  - experiment completed through 00Z 08/27/20
+
+04 Oct 2021
+  - add SDATE_GFS variable for metp tasks
+
+27 Sep 2021
+  - change versions of modules for prep task
+
+25 Sep 2021
+  - start experiment, emcv16opsC768E4028
+    08/19/20 18Z wsics, C768C384L127, 40 members
+    00Z 08/20/20 - 00Z 08/27/20, 6-hourly, 120h
+    00Z 08/23/20:  start GFS forecasts
+   
 17 Sep 2021
   - created new branch, gslv16_devops, from 31Aug21 feature/ops-orion branch, 04db3e7
+    FV3             :  GFS.v16.0.16
+    GSI             :  gfsda.v16.1.1a
+    gldas           :  gldas_gfsv16_release.v1.13.0
+    ufs-utils       :  ops-gfsv16.0.0
+    UPP             :  upp_gfsv16_release.v1.1.4
+    EMC-verif-global:  verif_global_v2.2.1
 

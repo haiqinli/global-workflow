@@ -16,11 +16,11 @@
 	<!-- Experiment parameters such as name, starting, ending dates -->
 	<!ENTITY PSLOT "emcv16opsC768E40">
 	<!ENTITY SDATE "202008200000">
-	<!ENTITY EDATE "202009030000">
+	<!ENTITY EDATE "202009040000">
 
 	<!-- Starting and ending dates for GFS cycle -->
 	<!ENTITY SDATE_GFS    "202008230000">
-	<!ENTITY EDATE_GFS    "202009030000">
+	<!ENTITY EDATE_GFS    "202009040000">
 	<!ENTITY INTERVAL_GFS "12:00:00">
 
 	<!-- Run Envrionment -->
@@ -47,7 +47,7 @@
 
 	<!-- ROCOTO parameters that control workflow -->
 	<!ENTITY CYCLETHROTTLE "3">
-	<!ENTITY TASKTHROTTLE  "25">
+	<!ENTITY TASKTHROTTLE  "30">
 	<!ENTITY MAXTRIES      "2">
 
 	<!ENTITY QUEUE_PREP_GDAS     "&QUEUE;">
