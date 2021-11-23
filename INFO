@@ -1,26 +1,15 @@
-01 Nov 2021
-  - extend experiment out to 00Z 09/04/20
-
-17 Oct 2021
-  - extend experiment out to 00Z 09/03/20
-
-08 Oct 2021
-  - experiment completed through 00Z 08/27/20
-
-04 Oct 2021
-  - add SDATE_GFS variable for metp tasks
-
-27 Sep 2021
-  - change versions of modules for prep task
-
-25 Sep 2021
-  - start experiment, emcv16opsC768E4028
-    08/19/20 18Z wsics, C768C384L127, 40 members
-    00Z 08/20/20 - 00Z 08/27/20, 6-hourly, 120h
-    00Z 08/23/20:  start GFS forecasts
-   
-17 Sep 2021
-  - created new branch, gslv16_devops, from 31Aug21 feature/ops-orion branch, 04db3e7
+22 Nov 2021
+  - added config.fcst files for IAER=5111 and IAER=1011 
+  - added exglobal_forecast.sh files for before/after 26Aug  (namelist changes)
+  - added exglobal_forecast.sh files for IAER=5111 or IAER=1011
+  - added exglobal_forecast.sh files for GSL namelist parameters
+  - modified default values in field_table_gsd for cloud liquid water number concentration, 
+    cloud ice water number concentration, rain number concentration, and subgrid scale tke
+  - added -c option for checking out and building FV3
+  - added checkout of 18nov gsl/develop branch
+  - added GSL specific python scripts for free forecasts
+17 Nov 2021
+  - created new branch, gslv16_devops_ff, from 01Nov21 gslv16_devops branch, c57142c
     FV3             :  GFS.v16.0.16
     GSI             :  gfsda.v16.1.1a
     gldas           :  gldas_gfsv16_release.v1.13.0

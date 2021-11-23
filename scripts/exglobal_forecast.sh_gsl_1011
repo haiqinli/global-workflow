@@ -906,6 +906,11 @@ cat > input.nml <<EOF
   blocksize = $blocksize
   chksum_debug = $chksum_debug
   dycore_only = $dycore_only
+  fdiag = $FDIAG
+  fhmax = $FHMAX
+  fhout = $FHOUT
+  fhmaxhf = $FHMAX_HF
+  fhouthf = $FHOUT_HF
   $atmos_model_nml
 /
 
@@ -959,6 +964,8 @@ deflate_level=${deflate_level:-1}
   hydrostatic = $hydrostatic
   phys_hydrostatic = $phys_hydrostatic
   use_hydro_pressure = $use_hydro_pressure
+  dz_min = ${dz_min:-"2."}
+  psm_bc = ${psm_bc:-"1"}
   beta = 0.
   a_imp = 1.
   p_fac = 0.1
@@ -971,6 +978,7 @@ deflate_level=${deflate_level:-1}
   fv_sg_adj = ${fv_sg_adj:-"450"}
   d2_bg = 0.
   nord = ${nord:-3}
+  nord_tr = ${nord_tr:-2}
   dddmp = ${dddmp:-0.2}
   d4_bg = ${d4_bg:-0.15}
   vtdm4 = $vtdm4
@@ -1037,6 +1045,7 @@ deflate_level=${deflate_level:-1}
   fhcyc        = $FHCYC
   use_ufo      = ${use_ufo:-".true."}
   pre_rad      = ${pre_rad:-".false."}
+  ncld         = ${ncld:-1}
   imp_physics  = ${imp_physics:-"99"}
   pdfcld       = ${pdfcld:-".false."}
   fhswr        = ${FHSWR:-"3600."}

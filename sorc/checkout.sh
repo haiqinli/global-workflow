@@ -1,12 +1,17 @@
 #!/bin/sh
-set -xue
+#set -xue
+set -x
 
-while getopts "o" option;
+while getopts "oc" option;
 do
  case $option in
   o)
    echo "Received -o flag for optional checkout of GTG, will check out GTG with EMC_post"
    checkout_gtg="YES"
+   ;;
+  c)
+   echo "Received -c flag, check out ufs-weather-model develop branch with CCPP physics"  
+   run_ccpp="YES"
    ;;
   :)
    echo "option -$OPTARG needs an argument"
@@ -24,11 +29,22 @@ echo $topdir
 echo fv3gfs checkout ...
 if [[ ! -d fv3gfs.fd ]] ; then
     rm -f ${topdir}/checkout-fv3gfs.log
-    git clone https://github.com/ufs-community/ufs-weather-model fv3gfs.fd >> ${topdir}/checkout-fv3gfs.log 2>&1
-    cd fv3gfs.fd
-    git checkout GFS.v16.0.16
+    if [ ${run_ccpp:-"NO"} = "NO" ]; then
+        git clone https://github.com/ufs-community/ufs-weather-model fv3gfs.fd >> ${topdir}/checkout-fv3gfs.log 2>&1
+        cd fv3gfs.fd
+        git checkout GFS.v16.0.16
+    else
+      echo ufs-weather-model_18nov_gsldev.fd checkout ...
+      git clone --recursive -b gsl/develop https://github.com/NOAA-GSL/ufs-weather-model ufs-weather-model_18nov_c71001e >> ${topdir}/checkout-18nov.log 2>&1
+      cd ufs-weather-model_18nov_c71001e
+      git checkout c71001e2b488a41b736f403c2ffa26526eaeb77c 
+    fi
     git submodule update --init --recursive
     cd ${topdir}
+    if [ ${run_ccpp:-"NO"} = "NO" ]; then
+      ln -fs ufs-weather-model_18nov_c71001e fv3gfs.fd 
+#JKH      rsync -ax fv3gfs.fd_gsl/ fv3gfs.fd/        ## copy over changes not in FV3 repository
+    fi
 else
     echo 'Skip.  Directory fv3gfs.fd already exists.'
 fi
@@ -63,6 +79,7 @@ if [[ ! -d ufs_utils.fd ]] ; then
     cd ufs_utils.fd
     git checkout ops-gfsv16.0.0
     cd ${topdir}
+#JKH    rsync -ax ufs_utils.fd_gsl/ ufs_utils.fd/        ## copy over changes not in UFS_UTILS repository
 else
     echo 'Skip.  Directory ufs_utils.fd already exists.'
 fi
@@ -86,6 +103,7 @@ if [[ ! -d gfs_post.fd ]] ; then
       cp sorc/post_gtg.fd/gtg.config.gfs parm/gtg.config.gfs
     fi
     cd ${topdir}
+#JKH    rsync -ax gfs_post.fd_gsl/ gfs_post.fd/        ## copy over GSL changes not in EMC_post repository
 else
     echo 'Skip.  Directory gfs_post.fd already exists.'
 fi
@@ -116,6 +134,10 @@ echo aeroconv checkout ...
 if [[ ! -d aeroconv.fd ]] ; then
     rm -f ${topdir}/checkout-aero.log
     git clone https://github.com/NCAR/aeroconv aeroconv.fd >> ${topdir}/checkout-aero.log 2>&1
+    cd aeroconv.fd
+    git checkout 24f6ddc
+    cd ${topdir}
+    ./aero_extract.sh
 else
     echo 'Skip.  Directory aeroconv.fd already exists.'
 fi
