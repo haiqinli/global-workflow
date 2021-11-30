@@ -5,9 +5,9 @@ GITDIR=/scratch1/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops_ff  ## wher
 COMROT=${GITDIR}/FV3GFSrun                                               ## default COMROT directory
 EXPDIR=${GITDIR}/FV3GFSwfm                                               ## default EXPDIR directory
 
-PSLOT=ff_l127
-IDATE=2021112000
-EDATE=2021112000
+PSLOT=gsl_nml_test
+IDATE=2021112400
+EDATE=2021112400
 RESDET=768
 
 ### gfs_cyc 1  00Z only;  gfs_cyc 2  00Z and 12Z

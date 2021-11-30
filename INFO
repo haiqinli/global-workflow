@@ -1,3 +1,15 @@
+29 Nov 2021
+  - added changes for Aug26 ufs-weather-model
+     -- remove fhdiag, fhmax, fhout, fhmaxhf, fhouthf from atmos_model_nml 
+     -- remove ncld from gfs_physics_nml
+     -- add "-n n_tasks" after srun command  (need to add eval to APRUN_FV3 comand)
+  - added GSD archive script
+  - added script to create links to FV3 ICs
+  - added sorc/fv3gfs.fd_gsl directory with additional suite definition files
+  - modified checkout.sh to sync sorc/fv3gfs.fd_gsl to sorc/fv3gfs.fd
+  - created link for config.fcst in ffl127.sh experiment setup script
+  - added new experiment directory for testing new GSL namelist options  (gsl_nml_test)
+  - added new experiment directory for testing original GSL namelist options  (gsl_orignml)
 22 Nov 2021
   - added config.fcst files for IAER=5111 and IAER=1011 
   - added exglobal_forecast.sh files for before/after 26Aug  (namelist changes)

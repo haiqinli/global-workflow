@@ -1,0 +1,12 @@
+24Nov21
+- testing Tanya's namelist changes
+   d2_bg_k2=0.15
+   kord* = 11
+   dz_min=6.
+   vtdm4 = 0.075
+   ttendlin = -999.
+ 
+   dt_atmos=150   (already default in config.fv3)
+
+   dt_inner = 50 (Note! recompile FV3 with 1 sub-cycle around mp_thompson in suite_FV3_GSD_noah.xml)
+

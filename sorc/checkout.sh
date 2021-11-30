@@ -43,7 +43,7 @@ if [[ ! -d fv3gfs.fd ]] ; then
     cd ${topdir}
     if [ ${run_ccpp:-"NO"} = "NO" ]; then
       ln -fs ufs-weather-model_18nov_c71001e fv3gfs.fd 
-#JKH      rsync -ax fv3gfs.fd_gsl/ fv3gfs.fd/        ## copy over changes not in FV3 repository
+      rsync -ax fv3gfs.fd_gsl/ fv3gfs.fd/        ## copy over changes not in FV3 repository
     fi
 else
     echo 'Skip.  Directory fv3gfs.fd already exists.'

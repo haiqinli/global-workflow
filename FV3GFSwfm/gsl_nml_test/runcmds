@@ -1,0 +1,3 @@
+
+rocotorun -w gsl_nml_test.xml -d gsl_nml_test.db
+rocotostat -w gsl_nml_test.xml -d gsl_nml_test.db

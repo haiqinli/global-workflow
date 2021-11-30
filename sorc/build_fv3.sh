@@ -28,6 +28,6 @@ if [ ${RUN_CCPP:-${1:-"NO"}} = "NO" ]; then
  mv -f fv3_1.exe ../NEMS/exe/global_fv3gfs.x
 else
  ./compile.sh "$target" "-DDEBUG=Y -DAPP=ATM -D32BIT=Y -DCCPP_SUITES=FV3_GFS_v16,FV3_GSD_noah" 2 NO NO
- mkdir ../NEMS/exe
+ mkdir -p ../NEMS/exe
  mv -f fv3_2.exe ../NEMS/exe/global_fv3gfs.x
 fi

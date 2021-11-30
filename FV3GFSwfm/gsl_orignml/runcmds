@@ -1,0 +1,3 @@
+
+rocotorun -w gsl_orignml.xml -d gsl_orignml.db
+rocotostat -w gsl_orignml.xml -d gsl_orignml.db
