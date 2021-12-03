@@ -144,7 +144,7 @@ export CASE_ENKF="@CASEENS@"
 export RUN_CCPP="YES"
 #### export CCPP_SUITE="FV3_GFS_v16"       # EMC v16
 #### export CCPP_SUITE="FV3_GSD_v0"        # GSDsuite 
-#### export CCPP_SUITE="FV3_GSD_noah_ugwd" # GSDsuite + NOAH LSM + UGWD
+#### export CCPP_SUITE="FV3_GSD_noah_ugwpv1" # GSDsuite + NOAH LSM + UGWPv1
 export CCPP_SUITE="FV3_GSD_noah"      # GSDsuite + NOAH LSM  
 
 # Surface cycle update frequency
