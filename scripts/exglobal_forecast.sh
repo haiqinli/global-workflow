@@ -67,7 +67,10 @@ NWPROD=${NWPROD:-${NWROOT:-$pwd}}
 HOMEgfs=${HOMEgfs:-$NWPROD}
 FIX_DIR=${FIX_DIR:-$HOMEgfs/fix}
 FIX_AM=${FIX_AM:-$FIX_DIR/fix_am}
+export FIX_AER=${FIX_AER:-$FIX_DIR/fix_aer}
+export FIX_LUT=${FIX_LUT:-$FIX_DIR/fix_lut}
 FIXfv3=${FIXfv3:-$FIX_DIR/fix_fv3_gmted2010}
+FIXugwd=${FIXugwd:-$FIX_DIR/fix_ugwd}
 DATA=${DATA:-$pwd/fv3tmp$$}    # temporary running directory
 ROTDIR=${ROTDIR:-$pwd}         # rotating archive directory
 ICSDIR=${ICSDIR:-$pwd}         # cold start initial conditions
@@ -384,7 +387,10 @@ fi
 for n in $(seq 1 $ntiles); do
   $NLN $FIXfv3/$CASE/${CASE}_grid.tile${n}.nc     $DATA/INPUT/${CASE}_grid.tile${n}.nc
   $NLN $FIXfv3/$CASE/${CASE}_oro_data.tile${n}.nc $DATA/INPUT/oro_data.tile${n}.nc
+  $NLN $FIXugwd/$CASE/${CASE}_oro_data_ls.tile${n}.nc $DATA/INPUT/oro_data_ls.tile${n}.nc
+  $NLN $FIXugwd/$CASE/${CASE}_oro_data_ss.tile${n}.nc $DATA/INPUT/oro_data_ss.tile${n}.nc
 done
+$NLN $FIXugwd/ugwp_limb_tau.nc $DATA/ugwp_limb_tau.nc
 $NLN $FIXfv3/$CASE/${CASE}_mosaic.nc  $DATA/INPUT/grid_spec.nc
 
 # GFS standard input data
@@ -401,6 +407,16 @@ $NLN $FIX_AM/${O3FORC}                         $DATA/global_o3prdlos.f77
 $NLN $FIX_AM/${H2OFORC}                        $DATA/global_h2oprdlos.f77
 $NLN $FIX_AM/global_solarconstant_noaa_an.txt  $DATA/solarconstant_noaa_an.txt
 $NLN $FIX_AM/global_sfc_emissivity_idx.txt     $DATA/sfc_emissivity_idx.txt
+
+## merra2 aerosol climo
+for n in 01 02 03 04 05 06 07 08 09 10 11 12; do
+$NLN $FIX_AER/merra2.aerclim.2003-2014.m${n}.nc $DATA/aeroclim.m${n}.nc
+done
+$NLN $FIX_LUT/optics_BC.v1_3.dat $DATA/optics_BC.dat
+$NLN $FIX_LUT/optics_OC.v1_3.dat $DATA/optics_OC.dat
+$NLN $FIX_LUT/optics_DU.v15_3.dat $DATA/optics_DU.dat
+$NLN $FIX_LUT/optics_SS.v3_3.dat $DATA/optics_SS.dat
+$NLN $FIX_LUT/optics_SU.v1_3.dat $DATA/optics_SU.dat
 
 $NLN $FIX_AM/global_co2historicaldata_glob.txt $DATA/co2historicaldata_glob.txt
 $NLN $FIX_AM/co2monthlycyc.txt                 $DATA/co2monthlycyc.txt
@@ -736,13 +752,16 @@ $NCP $FIELD_TABLE field_table
 
 # copy CCN_ACTIVATE.BIN for Thompson microphysics
 if [ $RUN_CCPP = "YES" ]; then
-if [ "$CCPP_SUITE" = 'FV3_GSD_v0' -o "$CCPP_SUITE" = 'FV3_GSD_noah' ]; then 
+if [ "$CCPP_SUITE" = 'FV3_GSD_v0' -o "$CCPP_SUITE" = 'FV3_GSD_noah' -o "$CCPP_SUITE" = 'FV3_GFS_v16_thompson' -o "$CCPP_SUITE" = 'FV3_GSD_noah_ugwpv1' ]; then 
   $NLN $FIX_AM/CCN_ACTIVATE.BIN  CCN_ACTIVATE.BIN
   $NLN $FIX_AM/freezeH2O.dat  freezeH2O.dat
   $NLN $FIX_AM/qr_acr_qg.dat  qr_acr_qg.dat
   $NLN $FIX_AM/qr_acr_qs.dat  qr_acr_qs.dat
 fi
 fi
+
+# JKH   copy yaml file over
+cp $HOMEgfs/sorc/fv3gfs.fd/tests/parm/fd_nems.yaml fd_nems.yaml
 
 #------------------------------------------------------------------
 rm -f nems.configure
@@ -897,11 +916,6 @@ cat > input.nml <<EOF
   blocksize = $blocksize
   chksum_debug = $chksum_debug
   dycore_only = $dycore_only
-  fdiag = $FDIAG
-  fhmax = $FHMAX
-  fhout = $FHOUT
-  fhmaxhf = $FHMAX_HF
-  fhouthf = $FHOUT_HF
   $atmos_model_nml
 /
 
@@ -1006,18 +1020,26 @@ deflate_level=${deflate_level:-1}
 /
 
 &cires_ugwp_nml
-       knob_ugwp_solver  = ${knob_ugwp_solver:-2}
-       knob_ugwp_source  = ${knob_ugwp_source:-1,1,0,0}
-       knob_ugwp_wvspec  = ${knob_ugwp_wvspec:-1,25,25,25}
-       knob_ugwp_azdir   = ${knob_ugwp_azdir:-2,4,4,4}
-       knob_ugwp_stoch   = ${knob_ugwp_stoch:-0,0,0,0}
-       knob_ugwp_effac   = ${knob_ugwp_effac:-1,1,1,1}
-       knob_ugwp_doaxyz  = ${knob_ugwp_doaxyz:-1}
-       knob_ugwp_doheat  = ${knob_ugwp_doheat:-1}
-       knob_ugwp_dokdis  = ${knob_ugwp_dokdis:-1}
-       knob_ugwp_ndx4lh  = ${knob_ugwp_ndx4lh:-1}
-       knob_ugwp_version = ${knob_ugwp_version:-0}
-       launch_level      = ${launch_level:-54}                   
+       knob_ugwp_solver  = ${knob_ugwp_solver:-2}                                                                             
+       knob_ugwp_source  = ${knob_ugwp_source:-1,1,0,0}                                                                       
+       knob_ugwp_wvspec  = ${knob_ugwp_wvspec:-1,25,25,25}                                                                    
+       knob_ugwp_azdir   = ${knob_ugwp_azdir:-2,4,4,4}                                                                        
+       knob_ugwp_stoch   = ${knob_ugwp_stoch:-0,0,0,0}                                                                        
+       knob_ugwp_effac   = ${knob_ugwp_effac:-1,1,1,1}                                                                        
+       knob_ugwp_doaxyz  = ${knob_ugwp_doaxyz:-1}                                                                             
+       knob_ugwp_doheat  = ${knob_ugwp_doheat:-1}                                                                             
+       knob_ugwp_dokdis  = ${knob_ugwp_dokdis:-2}                                                                             
+       knob_ugwp_ndx4lh  = ${knob_ugwp_ndx4lh:-4}                                                                             
+       knob_ugwp_version = ${knob_ugwp_version:-1}                                                                            
+       knob_ugwp_palaunch = ${knob_ugwp_palaunch:-27500.}                                                                     
+       knob_ugwp_nslope  = ${knob_ugwp_nslope:-0}                                                                             
+       knob_ugwp_lzmax   = ${knob_ugwp_lzmax:-15.750e3}                                                                       
+       knob_ugwp_lzmin   = ${knob_ugwp_lzmin:-0.75e3}                                                                         
+       knob_ugwp_lzstar  = ${knob_ugwp_lzstar:-2.0e3}                                                                         
+       knob_ugwp_taumin  = ${knob_ugwp_taumin:-0.25e-3}                                                                       
+       knob_ugwp_tauamp  = ${knob_ugwp_tauamp:-3.0e-3}                                                                        
+       knob_ugwp_lhmet   = ${knob_ugwp_lhmet:-200.0e3}                                                                        
+       knob_ugwp_orosolv = ${knob_ugwp_orosolv:-'pss-1986'}
 /
 
 &external_ic_nml
@@ -1036,7 +1058,6 @@ deflate_level=${deflate_level:-1}
   fhcyc        = $FHCYC
   use_ufo      = ${use_ufo:-".true."}
   pre_rad      = ${pre_rad:-".false."}
-  ncld         = ${ncld:-1}
   imp_physics  = ${imp_physics:-"99"}
   pdfcld       = ${pdfcld:-".false."}
   fhswr        = ${FHSWR:-"3600."}
@@ -1065,7 +1086,7 @@ deflate_level=${deflate_level:-1}
   cnvcld       = ${cnvcld:-".true."}
   imfshalcnv   = ${imfshalcnv:-"2"}
   imfdeepcnv   = ${imfdeepcnv:-"2"}
-  cdmbgwd      = ${cdmbgwd:-"3.5,0.25"}
+  cdmbgwd      = ${cdmbgwd:-"1.0, 1.0, 1.0, 1.0"}
   prslrd0      = ${prslrd0:-"0."}
   ivegsrc      = ${ivegsrc:-"1"}
   isot         = ${isot:-"1"}
@@ -1092,7 +1113,15 @@ deflate_level=${deflate_level:-1}
   effr_in      = ${effr_in:-".false."}
   cplwav       = ${cplwav:-".false."}
   ldiag_ugwp   = ${ldiag_ugwp:-".false."}
-  do_ugwp      = ${do_ugwp:-".true."}
+  do_ugwp      = ${do_ugwp:-".false."}
+  gwd_opt      = ${gwd_opt:-"2"}  
+  do_ugwp_v0   = ${do_ugwp_v0:-".false."}                                                                                             
+  do_ugwp_v1   = ${do_ugwp_v1:-".true."}                                                                                      
+  do_ugwp_v1_w_gsldrag = ${do_ugwp_v1_w_gsldrag:-".false."}
+  do_ugwp_v1_orog_only = ${do_ugwp_v1_orog_only:-".false."}                                                                    
+  do_gsl_drag_ls_bl = ${do_gsl_drag_ls_bl:-".true."}
+  do_gsl_drag_ss = ${do_gsl_drag_ss:-".true."}                                                                                
+  do_gsl_drag_tofd = ${do_gsl_drag_tofd:-".true."}
   do_tofd      = ${do_tofd:-".true."}
   do_sppt      = ${do_sppt:-".false."}
   do_shum      = ${do_shum:-".false."}
@@ -1104,6 +1133,7 @@ if [ $RUN_CCPP = "YES" ]; then
   iovr         = ${iovr:-"3"}
   ltaerosol    = ${ltaerosol:-".false."}
   lradar       = ${lradar:-".false."}
+  dt_inner     = ${dt_inner:-"150."}
   ttendlim     = ${ttendlim:-"0.005"}
   oz_phys      = ${oz_phys:-".false."}
   oz_phys_2015 = ${oz_phys_2015:-".true."}
@@ -1366,7 +1396,7 @@ $NCP model_configure $memdir
 
 $NCP $FCSTEXECDIR/$FCSTEXEC $DATA/.
 export OMP_NUM_THREADS=$NTHREADS_FV3
-$APRUN_FV3 $DATA/$FCSTEXEC 1>&1 2>&2
+eval $APRUN_FV3 $DATA/$FCSTEXEC 1>&1 2>&2
 export ERR=$?
 export err=$ERR
 $ERRSCRIPT || exit $err

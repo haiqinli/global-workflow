@@ -1,3 +1,5 @@
+08 Dec 2021
+    - create new branch, gslv16_rtdev1, from gslv16_rt
 17 Apr 2021
     - update to 18Mar21 gsl/develop branch, f204bfd, for sorc/fv3gfs_ccpp.fd
     - switch to using chgres_cube to generate FV3 ICs, including aerosol variables

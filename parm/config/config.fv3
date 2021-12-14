@@ -108,9 +108,9 @@ case $case_in in
         export WRTIOBUF="16M"
         ;;
     "C768")
-        if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
+        if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" ]] ; then
           if [ $LEVS = "128" ]; then
-            export DELTIM=100
+            export DELTIM=120
           else
             #JKHexport DELTIM=225
             export DELTIM=180
@@ -125,11 +125,9 @@ case $case_in in
         #JKHexport layout_y_gfs=16
         export layout_y_gfs=12
         export npe_wav=140
-        export npe_wav_gfs=440
+        export npe_wav_gfs=140
         export nth_fv3=4
-        export nth_fv3_gfs=2             ## JKH
-        #JKHexport nth_fv3_gfs=7
-        export cdmbgwd="4.0,0.15,1.0,1.0"  # mountain blocking, ogwd, cgwd, cgwd src scaling
+        export cdmbgwd="1.0,1.0,1.0,1.0"  # mountain blocking, ogwd, cgwd, cgwd src scaling
         export WRITE_GROUP=2
         export WRTTASK_PER_GROUP=$(echo "2*$npe_node_max" |bc)
         export WRITE_GROUP_GFS=2            ## JKH

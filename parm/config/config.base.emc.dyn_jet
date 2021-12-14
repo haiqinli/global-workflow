@@ -58,8 +58,6 @@ export WAFSF="NO"          # WAFS products
 #  use RUNMOS flag (currently in config.vrfy)
 export REALTIME="YES"
 
-# Experiment mode (cycled or free-forecast)
-export MODE="@MODE@" # cycled/free
 
 ####################################################
 # DO NOT ADD MACHINE DEPENDENT STUFF BELOW THIS LINE
@@ -137,15 +135,16 @@ export SENDDBN=${SENDDBN:-"NO"}
 export DBNROOT=${DBNROOT:-${UTILROOT}/fakedbn}
 
 # Resolution specific parameters
-#JKHexport LEVS=128
-export LEVS=65
+export LEVS=128
+#JKHexport LEVS=65
 export CASE="@CASECTL@"
 export CASE_ENKF="@CASEENS@"
 
 # Run with CCPP physics
 export RUN_CCPP="YES"
-#### export CCPP_SUITE="FV3_GFS_v16beta"   # EMC v16beta
+#### export CCPP_SUITE="FV3_GFS_v16"       # EMC v16
 #### export CCPP_SUITE="FV3_GSD_v0"        # GSDsuite 
+#### export CCPP_SUITE="FV3_GSD_noah_ugwpv1" # GSDsuite + NOAH LSM + UGWPv1
 export CCPP_SUITE="FV3_GSD_noah"      # GSDsuite + NOAH LSM  
 
 # Surface cycle update frequency
@@ -210,7 +209,7 @@ else
 fi
 
 # IAU related parameters
-export DOIAU="YES"        # Enable 4DIAU for control with 3 increments
+export DOIAU="NO"        # Enable 4DIAU for control with 3 increments   # JKH
 export IAUFHRS="3,6,9"
 export IAU_FHROT=`echo $IAUFHRS | cut -c1`
 export IAU_DELTHRS=6
@@ -218,8 +217,7 @@ export IAU_OFFSET=6
 export DOIAU_ENKF=${DOIAU:-"YES"}   # Enable 4DIAU for EnKF ensemble
 export IAUFHRS_ENKF="3,6,9"
 export IAU_DELTHRS_ENKF=6
-# Check if cycle is cold starting, DOIAU off, or free-forecast mode
-if [[ "$MODE" = "cycled" && "$SDATE" = "$CDATE" && $EXP_WARM_START = ".false." ]] || [[ "$DOIAU" = "NO" ]] || [[ "$MODE" = "free" && $EXP_WARM_START = ".false." ]] ; then
+if [[ "$SDATE" = "$CDATE" && $EXP_WARM_START = ".false." ]] || [[ "$DOIAU" = "NO" ]] ; then # Cold starting or IAU off
   export IAU_OFFSET=0
   export IAU_FHROT=0
 fi
@@ -233,11 +231,10 @@ export gldas_cyc=00
 
 # run wave component
 export DO_WAVE="NO"                ## JKH
-if [[ "$SDATE" -lt "2019020100" ]]; then DO_WAVE="NO" ; fi # no rtofs in GDA
 export WAVE_CDUMP="both"
 
 # Microphysics Options: 99-ZhaoCarr, 8-Thompson; 6-WSM6, 10-MG, 11-GFDL
-if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" || "$CCPP_SUITE" == "FV3_GFS_v16_thompson" ]] ; then
        export imp_physics=8
 else
        export imp_physics=11

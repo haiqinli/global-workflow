@@ -75,7 +75,7 @@ fi
 
 # PBL/turbulence schemes
 export hybedmf=".false."
-if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" || "$CCPP_SUITE" == "FV3_GFS_v16_mynn" ]] ; then
     export satmedmf=".false."
     export isatmedmf=0
     export shal_cnv=".true."       
@@ -94,7 +94,7 @@ tbf=""
 if [ $satmedmf = ".true." ]; then tbf="_satmedmf" ; fi
 
 # Land surface model. (3--RUCLSM, landice=F;) (2--NoahMP, landice=F); (1--Noah, landice=T)
-if [ $CCPP_SUITE = "FV3_GSD_v0" ]; then
+if [ "$CCPP_SUITE" = "FV3_GSD_v0" ]; then
     export lsm=3
     export lsoil_lsm=9
 else
@@ -106,7 +106,7 @@ if [ $lsm -eq 2 -o $lsm -eq 3 ]; then
     export landice=".false."
 else
     export lheatstrg=".false."    
-    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
+    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" ]] ; then
         export landice=".false."      ##JKH
     else
         export landice=".true."
@@ -114,7 +114,7 @@ else
 fi
 
 # Radiation options 
-export IAER=5111    ;#spectral band mapping method for aerosol optical properties
+export IAER=1011    ;#spectral band mapping method for aerosol optical properties
 export iovr_lw=3    ;#de-correlation length cloud overlap method (Barker, 2008) 
 export iovr_sw=3    ;#de-correlation length cloud overlap method (Barker, 2008) 
 export iovr=3       ;#de-correlation length cloud overlap method (Barker, 2008) 
@@ -124,7 +124,7 @@ export icliq_sw=2   ;#cloud optical coeffs from AER's newer version v3.9-v4.0 fo
 export output_1st_tstep_rst=".false."                                        #JKH
 
 # Convection Options: 2-SASAS, 3-GF
-if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" || "$CCPP_SUITE" == "FV3_GFS_v16_gf" ]] ; then
 	export imfdeepcnv=3
 	export imfshalcnv=3
 else
@@ -150,7 +150,7 @@ elif [ $imp_physics -eq 6 ]; then # WSM6
 
 elif [ $imp_physics -eq 8 ]; then # Thompson
     export nwat=6
-    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
+    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" || "$CCPP_SUITE" == "FV3_GFS_v16_thompson" ]] ; then
         export ncld=5
         export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_gsd"
         export ltaerosol=.true.                  
@@ -160,13 +160,17 @@ elif [ $imp_physics -eq 8 ]; then # Thompson
         export cal_pre=".false."
         export random_clds=".false."
         export effr_in=.true.
-        export ttendlim=0.005
         export vtdm4_nh_nonmono=0.02
         export nord=2
         export dddmp=0.1
         export d4_bg=0.12
-        export k_split=6
-        export n_split=2
+        if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" ]] ; then
+          export k_split=6                     
+          export n_split=2
+          export ttendlim=0.005
+        else
+          export ttendlim=-999.     ## JKH - Thmp subcyc
+        fi
     else
         export ncld=2
         export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_thompson${tbf}"
@@ -174,7 +178,11 @@ elif [ $imp_physics -eq 8 ]; then # Thompson
 
 elif [ $imp_physics -eq 11 ]; then # GFDL
     export ncld=5
-    export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_gfdl${tbf}"
+    if [[ "$CCPP_SUITE" == "FV3_GFS_v16_mynn" ]] ; then
+      export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_gfdl_satmedmf"
+    else
+      export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_gfdl${tbf}"
+    fi
     export nwat=6
     export dnats=1
     export cal_pre=".false."
@@ -241,10 +249,11 @@ if [[ "$CDUMP" == "gdas" ]] ; then # GDAS cycle specific parameters
 
     # Variables used in DA cycling
     if [ $QUILTING = ".true." -a $OUTPUT_GRID = "gaussian_grid" ]; then
-        if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
+        if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" ]] ; then
           export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da_gsd"
         else
-          export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da"
+          #export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da"
+          export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_aod"
         fi
     else
         export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da_orig"
@@ -276,12 +285,12 @@ elif [[ "$CDUMP" == "gfs" ]] ; then # GFS cycle specific parameters
 
     # Write more variables to output
     if [ $QUILTING = ".true." -a $OUTPUT_GRID = "gaussian_grid" ]; then
-        if [ $CCPP_SUITE = "FV3_GSD_v0" ]; then
+        if [[ $CCPP_SUITE == "FV3_GSD_v0" ]]; then
             export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_gsd_ruc"
-        elif [ $CCPP_SUITE = "FV3_GSD_noah" ]; then
+        elif [[ $CCPP_SUITE == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" ]]; then
             export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_gsd"
         else
-            export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table"
+            export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_aod"
         fi
     else
         export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_orig"

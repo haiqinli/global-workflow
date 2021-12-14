@@ -29,25 +29,27 @@ echo $topdir
 echo fv3gfs checkout ...
 if [[ ! -d fv3gfs.fd ]] ; then
     rm -f ${topdir}/checkout-fv3gfs.log
-    #JKHgit clone https://github.com/ufs-community/ufs-weather-model fv3gfs.fd >> ${topdir}/checkout-fv3gfs.log 2>&1
-    #JKHcd fv3gfs.fd
     if [ ${run_ccpp:-"NO"} = "NO" ]; then
         git clone https://github.com/ufs-community/ufs-weather-model fv3gfs.fd >> ${topdir}/checkout-fv3gfs.log 2>&1
         cd fv3gfs.fd
         git checkout GFS.v16.0.16
     else
-##      EMC develop
-##      git checkout 9350745855aebe0790813e0ed2ba5ad680e3f75c
-
-        git clone --recursive -b gsl/develop https://github.com/NOAA-GSL/ufs-weather-model ufs-weather-model_18mar_f204bfd >> ${topdir}/checkout-fv3gfs.log
-g 2>&1
-        cd ufs-weather-model_18mar_f204bfd 
-        git checkout f204bfd922318c6dc39619d1c7f217fe49de7292 
+        echo ufs-weather-model_24nov_gsldev.fd checkout ...
+        if [[ ! -d ufs-weather-model_24nov_0409aa0 ]] ; then
+            rm -f ${topdir}/checkout-fv3gfs.log
+            git clone --recursive -b gsl/develop https://github.com/NOAA-GSL/ufs-weather-model ufs-weather-model_24nov_0409aa0 >> ${topdir}/checkout-fv3gfs.log 2>&1
+            cd ufs-weather-model_24nov_0409aa0
+            git checkout 0409aa0e59c0096ade9a2ae85cdbc42b1cf75de3
+        else
+            echo 'Skip.  Directory ufs-weather-model_24nov_gsldev.fd already exists.'
+        fi
     fi
     git submodule update --init --recursive
     cd ${topdir}
-    ln -fs ufs-weather-model_18mar_f204bfd fv3gfs.fd 
-    rsync -ax fv3gfs.fd_gsl/ fv3gfs.fd/        ## copy over changes not in FV3 repository
+    if [ ${run_ccpp:-"NO"} = "YES" ]; then
+      ln -fs ufs-weather-model_24nov_0409aa0 fv3gfs.fd
+      rsync -avx fv3gfs.fd_gsl/FV3/ fv3gfs.fd/FV3/        ## copy over changes not in FV3 repository
+    fi
 else
     echo 'Skip.  Directory fv3gfs.fd already exists.'
 fi

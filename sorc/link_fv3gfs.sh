@@ -37,12 +37,13 @@ elif [ $machine = "dell" ]; then
 elif [ $machine = "hera" ]; then
     FIX_DIR="/scratch1/NCEPDEV/global/glopara/fix"
 elif [ $machine = "jet" ]; then
-    FIX_DIR="/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix_nco_gfsv16"
+    FIX_DIR="/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix"
 elif [ $machine = "orion" ]; then
-    FIX_DIR="/work/noaa/global/glopara/fix_nco_gfsv16"
+    FIX_DIR="/work/noaa/global/glopara/fix"
 fi
 cd ${pwd}/../fix                ||exit 8
-for dir in fix_aer fix_am fix_chem fix_fv3_gmted2010 fix_gldas fix_lut fix_orog fix_sfc_climo fix_verif fix_wave_gfs ; do
+dirs=`ls $FIX_DIR`
+for dir in $dirs ; do
     if [ -d $dir ]; then
       [[ $RUN_ENVIR = nco ]] && chmod -R 755 $dir
       rm -rf $dir
@@ -79,7 +80,8 @@ cd ${pwd}/../ush                ||exit 8
         $LINK ../sorc/gfs_post.fd/ush/$file                  .
     done
     for file in emcsfc_ice_blend.sh  fv3gfs_driver_grid.sh  fv3gfs_make_orog.sh  global_cycle_driver.sh \
-        emcsfc_snow.sh  fv3gfs_filter_topo.sh  global_cycle.sh fv3gfs_make_grid.sh  ; do
+        emcsfc_snow.sh  fv3gfs_filter_topo.sh  global_cycle.sh \
+        chgres_cube.sh  fv3gfs_make_grid.sh ; do
         $LINK ../sorc/ufs_utils.fd/ush/$file                  .
     done
     for file in gldas_archive.sh  gldas_forcing.sh gldas_get_data.sh  gldas_process_data.sh gldas_liscrd.sh  gldas_post.sh ; do
@@ -226,9 +228,9 @@ $LINK ../sorc/gfs_post.fd/exec/ncep_post gfs_ncep_post
 
 if [ -d ${pwd}/gfs_wafs.fd ]; then 
     for wafsexe in \
-          wafs_awc_wafavn  wafs_blending  wafs_blending_0p25 \
-          wafs_cnvgrib2  wafs_gcip  wafs_grib2_0p25 \
-          wafs_makewafs  wafs_setmissing; do
+          wafs_awc_wafavn.x  wafs_blending.x  wafs_blending_0p25.x \
+          wafs_cnvgrib2.x  wafs_gcip.x  wafs_grib2_0p25.x \
+          wafs_makewafs.x  wafs_setmissing.x ; do
         [[ -s $wafsexe ]] && rm -f $wafsexe
         $LINK ../sorc/gfs_wafs.fd/exec/$wafsexe .
     done
