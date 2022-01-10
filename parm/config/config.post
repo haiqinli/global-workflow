@@ -35,11 +35,6 @@ export nth_postgp=1
 export GFS_DOWNSTREAM="YES"
 #JKHexport downset=2
 export downset=1                             ## JKH  (removes creation of pgrb2b files)
-if [ $machine = "WCOSS_DELL_P3" ]; then
-    export npe_dwn=28
-else
-    export npe_dwn=24
-fi
 
 export GRIBVERSION='grib2'
 export SENDCOM="YES"
