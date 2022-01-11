@@ -1,0 +1,2 @@
+  <!ENTITY % dbi                 SYSTEM  "../hera_xml/dbi.xml">
+  <!ENTITY % metatasks           SYSTEM  "../hera_xml/metatask_defs.xml">

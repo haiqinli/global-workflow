@@ -1,0 +1,10 @@
+  <!ENTITY postncl_task        SYSTEM  "../hera_xml/FV3GFS_PostNCL.xml">
+  <!ENTITY sounding_task       SYSTEM  "../hera_xml/FV3GFS_Soundings.xml">
+  <!ENTITY remapgrib_task      SYSTEM  "../hera_xml/FV3GFS_RemapGrib.xml">
+  <!ENTITY ncldiff_task        SYSTEM  "../hera_xml/FV3GFS_NCLdiff.xml">
+  <!ENTITY nclzip_task         SYSTEM  "../hera_xml/FV3GFS_NCLzip.xml">
+  <!ENTITY ncl_task            SYSTEM  "../hera_xml/FV3GFS_NCL.xml">
+  <!ENTITY nclretro_task       SYSTEM  "../hera_xml/FV3GFS_NCLretro.xml">
+  <!ENTITY surface_task        SYSTEM  "../hera_xml/FV3GFS_Surface.xml">
+  <!ENTITY ac_verif_task       SYSTEM  "../hera_xml/Global_Verif.xml">
+  <!ENTITY ac_verif_file_task     SYSTEM  "../hera_xml/GFSVerifFileBackfill.xml">

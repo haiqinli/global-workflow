@@ -1,0 +1,13 @@
+rocotorun -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/xml/rt_ufscam_l127_dev1_ncl.xml -d ~/rt_dbfiles/rt_ufscam_l127_dev1_ncl.db
+rocotostat -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/xml/rt_ufscam_l127_dev1_ncl.xml -d ~/rt_dbfiles/rt_ufscam_l127_dev1_ncl.db -c  `date --date='4 days ago' +%Y%m%d0000`: | m
+
+rocotorun -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/xml/ufscam_l127_dev1_ncl.xml -d ~/retro_dbfiles/ufscam_l127_dev1_ncl.db
+rocotostat  -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/xml/ufscam_l127_dev1_ncl.xml -d ~/retro_dbfiles/ufscam_l127_dev1_ncl.db | m
+
+
+rocotorun -w ncl_2core.xml -d ncl_2core.db
+rocotostat -w ncl_2core.xml -d ncl_2core.db
+
+rocotorun -w ncl_1node.xml -d ncl_1node.db
+rocotostat -w ncl_1node.xml -d ncl_1node.db
+
