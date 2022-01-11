@@ -1,0 +1,8 @@
+rocotorun  -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/rt_ufscam_l127_dev1/rt_ufscam_l127_icsonly.xml -d /home/rtfim/rt_dbfiles/rt_ufscam_l127_icsonly.db
+rocotostat  -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/rt_ufscam_l127_dev1/rt_ufscam_l127_icsonly.xml -d /home/rtfim/rt_dbfiles/rt_ufscam_l127_icsonly.db -c  `date --date='4 days ago' +%Y%m%d0000`: | m
+
+rocotorun  -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/rt_ufscam_l127_dev1/rt_ufscam_l127_dev1.xml -d /home/rtfim/rt_dbfiles/rt_ufscam_l127_dev1.db
+rocotostat -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/rt_ufscam_l127_dev1/rt_ufscam_l127_dev1.xml -d /home/rtfim/rt_dbfiles/rt_ufscam_l127_dev1.db  -c `date --date='4 days ago' +%Y%m%d0000`: | m
+
+rocotorun  -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/rt_ufscam_l127_dev1/ufscam_l127_dev1.xml -d /home/rtfim/retro_dbfiles/ufscam_l127_dev1.db
+rocotostat   -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/rt_ufscam_l127_dev1/ufscam_l127_dev1.xml -d /home/rtfim/retro_dbfiles/ufscam_l127_dev1.db
