@@ -34,20 +34,20 @@ if [[ ! -d fv3gfs.fd ]] ; then
         cd fv3gfs.fd
         git checkout GFS.v16.0.16
     else
-        echo ufs-weather-model_24nov_gsldev.fd checkout ...
-        if [[ ! -d ufs-weather-model_24nov_0409aa0 ]] ; then
-            rm -f ${topdir}/checkout-fv3gfs.log
-            git clone --recursive -b gsl/develop https://github.com/NOAA-GSL/ufs-weather-model ufs-weather-model_24nov_0409aa0 >> ${topdir}/checkout-fv3gfs.log 2>&1
-            cd ufs-weather-model_24nov_0409aa0
-            git checkout 0409aa0e59c0096ade9a2ae85cdbc42b1cf75de3
+        echo ufs-weather-model_15dec_gsldev.fd checkout ...
+        if [[ ! -d ufs-weather-model_15dec_dbdb629 ]] ; then
+            rm -f ${topdir}/checkout-15dec.log
+            git clone --recursive -b gsl/develop https://github.com/NOAA-GSL/ufs-weather-model ufs-weather-model_15dec_dbdb629 >> ${topdir}/checkout-fv3gfs.log 2>&1
+            cd ufs-weather-model_15dec_dbdb629 
+            git checkout dbdb629ec64a8312c9a4a58649f366ac0757c04b
         else
-            echo 'Skip.  Directory ufs-weather-model_24nov_gsldev.fd already exists.'
+            echo 'Skip.  Directory ufs-weather-model_15dec_gsldev.fd already exists.'
         fi
     fi
     git submodule update --init --recursive
     cd ${topdir}
     if [ ${run_ccpp:-"NO"} = "YES" ]; then
-      ln -fs ufs-weather-model_24nov_0409aa0 fv3gfs.fd
+      ln -fs ufs-weather-model_15dec_dbdb629 fv3gfs.fd
       rsync -avx fv3gfs.fd_gsl/FV3/ fv3gfs.fd/FV3/        ## copy over changes not in FV3 repository
     fi
 else

@@ -56,6 +56,8 @@ export new_o3forc="YES"
 # do_ugwp=T: use unified CGWD and OGWD, and turbulent orographic form drag (TOFD)
 # do_ugwp=F: use unified CGWD but old OGWD, TOFD is not uded.
 export do_ugwp=".false."
+export do_ugwp_v0=".true."
+export do_ugwp_v1=".false."
 export do_tofd=".true."
 export launch_level=$(echo "$LEVS/2.35" |bc)
 
@@ -63,7 +65,7 @@ if [ $LEVS = "128" ]; then export n_sponge=42; fi   #127 layer
 if [ $LEVS = "65" ]; then export n_sponge=23; fi    # 64 layer
 #JKHexport  n_sponge=42
 export  d2_bg_k1=0.20
-export  d2_bg_k2=0.04
+export  d2_bg_k2=0.15                 ### JKH - 10dec
 
 # Sponge layer settings for L127
 if [ $LEVS = "128" -a "$CDUMP" = "gdas" ]; then
@@ -75,7 +77,7 @@ fi
 
 # PBL/turbulence schemes
 export hybedmf=".false."
-if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" || "$CCPP_SUITE" == "FV3_GFS_v16_mynn" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_mynn" ]] ; then
     export satmedmf=".false."
     export isatmedmf=0
     export shal_cnv=".true."       
@@ -106,7 +108,7 @@ if [ $lsm -eq 2 -o $lsm -eq 3 ]; then
     export landice=".false."
 else
     export lheatstrg=".false."    
-    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" ]] ; then
+    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" ]] ; then
         export landice=".false."      ##JKH
     else
         export landice=".true."
@@ -124,7 +126,7 @@ export icliq_sw=2   ;#cloud optical coeffs from AER's newer version v3.9-v4.0 fo
 export output_1st_tstep_rst=".false."                                        #JKH
 
 # Convection Options: 2-SASAS, 3-GF
-if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" || "$CCPP_SUITE" == "FV3_GFS_v16_gf" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_gf" ]] ; then
 	export imfdeepcnv=3
 	export imfshalcnv=3
 else
@@ -150,7 +152,7 @@ elif [ $imp_physics -eq 6 ]; then # WSM6
 
 elif [ $imp_physics -eq 8 ]; then # Thompson
     export nwat=6
-    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" || "$CCPP_SUITE" == "FV3_GFS_v16_thompson" ]] ; then
+    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_thompson" ]] ; then
         export ncld=5
         export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_gsd"
         export ltaerosol=.true.                  
@@ -160,17 +162,27 @@ elif [ $imp_physics -eq 8 ]; then # Thompson
         export cal_pre=".false."
         export random_clds=".false."
         export effr_in=.true.
-        export vtdm4_nh_nonmono=0.02
-        export nord=2
+        export vtdm4_nh_nonmono=0.03                   ###  JKH - 10dec
+        export nord=3                                  ###  JKH - 10dec
         export dddmp=0.1
         export d4_bg=0.12
-        if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" ]] ; then
+        export dt_inner=40.                            ### JKH - 10dec
+        if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" ]] ; then
           export k_split=6                     
           export n_split=2
-          export ttendlim=0.005
+          #JKH-10dec export ttendlim=0.005
+          export ttendlim=-999.                        ###  JKH - 10dec
         else
           export ttendlim=-999.     ## JKH - Thmp subcyc
         fi
+
+        export kord_tm=-11          ###  JKH - 10dec
+        export kord_mt=11           ###  JKH - 10dec
+        export kord_wz=11           ###  JKH - 10dec
+        export kord_tr=11           ###  JKH - 10dec
+        export d_con_nonmono=0.5    ###  JKH - 10dec
+        export hord_mt_nh_nonmono=6 ###  JKH - 10dec
+        export hord_xx_nh_nonmono=6 ###  JKH - 10dec
     else
         export ncld=2
         export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_thompson${tbf}"
@@ -230,7 +242,8 @@ if [[ "$OUTPUT_FILE" == "netcdf" ]]; then
         fi
     fi
     if [[ "$machine" == "HERA" ]]; then
-        export OUTPUT_FILETYPES=" 'netcdf_parallel' 'netcdf' "
+        #JKHexport OUTPUT_FILETYPES=" 'netcdf_parallel' 'netcdf' "
+        export OUTPUT_FILETYPES=" 'netcdf' 'netcdf' "
     fi
     if [[ "$machine" == "ORION" ]]; then
         export OUTPUT_FILETYPES=" 'netcdf_parallel' 'netcdf_parallel' "
@@ -249,7 +262,7 @@ if [[ "$CDUMP" == "gdas" ]] ; then # GDAS cycle specific parameters
 
     # Variables used in DA cycling
     if [ $QUILTING = ".true." -a $OUTPUT_GRID = "gaussian_grid" ]; then
-        if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" ]] ; then
+        if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" ]] ; then
           export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da_gsd"
         else
           #export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da"
@@ -287,7 +300,7 @@ elif [[ "$CDUMP" == "gfs" ]] ; then # GFS cycle specific parameters
     if [ $QUILTING = ".true." -a $OUTPUT_GRID = "gaussian_grid" ]; then
         if [[ $CCPP_SUITE == "FV3_GSD_v0" ]]; then
             export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_gsd_ruc"
-        elif [[ $CCPP_SUITE == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" ]]; then
+        elif [[ $CCPP_SUITE == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" ]]; then
             export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_gsd"
         else
             export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_aod"

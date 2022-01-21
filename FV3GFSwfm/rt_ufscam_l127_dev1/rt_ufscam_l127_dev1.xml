@@ -64,9 +64,8 @@
 	<!ENTITY NATIVE_FCST_GFS    "--export=NONE">
 
 	<!ENTITY QUEUE_POST_GFS     "&QUEUE;">
-	<!ENTITY WALLTIME_POST_GFS  "00:30:00">
-	<!ENTITY RESOURCES_POST_GFS "<nodes>6:ppn=20:tpp=1</nodes>">
-	<!ENTITY RESOURCES_POST_GFS "<nodes>10:ppn=12:tpp=1</nodes>">
+	<!ENTITY WALLTIME_POST_GFS  "00:10:00">
+	<!ENTITY RESOURCES_POST_GFS "<nodes>2:ppn=12:tpp=1</nodes>">
 	<!ENTITY NATIVE_POST_GFS    "--export=NONE">
 
 	<!ENTITY QUEUE_VRFY_GFS     "&QUEUE;">

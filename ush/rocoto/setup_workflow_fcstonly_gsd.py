@@ -100,6 +100,8 @@ def get_definitions(base):
     strings.append('\t<!ENTITY PSLOT    "%s">\n' % base['PSLOT'])
     strings.append('\t<!ENTITY CDUMP    "%s">\n' % base['CDUMP'])
     strings.append('\t<!ENTITY CASE     "%s">\n' % base['CASE'])
+    strings.append('\t<!ENTITY COMPONENT "atmos">\n')
+    strings.append('\t<!ENTITY ATCFNAME "">\n')
     strings.append('\n')
     strings.append('\t<!-- Experiment parameters such as starting, ending dates -->\n')
     strings.append('\t<!ENTITY SDATE    "%s">\n' % base['SDATE'].strftime('%Y%m%d%H%M'))
@@ -321,13 +323,32 @@ def get_workflow(dict_configs, cdump='gdas'):
 
     # fcst
     deps = []
-    data = '&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT/sfc_data.tile6.nc'
+    data = '&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/INPUT'
+    dep_dict = {'type': 'data', 'data': data}
+    deps.append(rocoto.add_dependency(dep_dict))
+    dependencies = rocoto.create_dependency(dep=deps)
+
+    deps = []
+    data = '&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/aero_done'
     dep_dict = {'type':'data', 'data':data}
     deps.append(rocoto.add_dependency(dep_dict))
-    data = '&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/RESTART/@Y@m@d.@H0000.sfcanl_data.tile6.nc'
+    data = '&ICSDIR;/@Y@m@d@H/gfs/&CASE;/INPUT/chgres_done'
     dep_dict = {'type':'data', 'data':data}
     deps.append(rocoto.add_dependency(dep_dict))
-    dependencies = rocoto.create_dependency(dep_condition='or', dep=deps)
+    dependencies2 = rocoto.create_dependency(dep_condition='or', dep=deps)
+
+    deps = []
+    data = '&ICSDIR;/@Y@m@d@H/&CDUMP;/&CASE;/INPUT/sfc_data.tile6.nc'
+    dep_dict = {'type':'data', 'data':data}
+    deps.append(rocoto.add_dependency(dep_dict))
+    data = '&ICSDIR;/@Y@m@d@H/&CDUMP;/&CASE;/INPUT/gfs_data.tile6.nc'
+    dep_dict = {'type':'data', 'data':data}
+    deps.append(rocoto.add_dependency(dep_dict))
+    deps = rocoto.create_dependency(dep_condition='and', dep=deps)
+    data = '&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/RESTART/@Y@m@d.@H0000.sfcanl_data.tile6.nc'
+    dep_dict = {'type':'data', 'data':data}
+    deps.append(rocoto.add_dependency(dep_dict))
+    dependencies3 = rocoto.create_dependency(dep_condition='or', dep=deps)
 
     if do_wave in ['Y', 'YES'] and do_wave_cdump in ['GFS', 'BOTH']:
         deps = []
@@ -337,17 +358,22 @@ def get_workflow(dict_configs, cdump='gdas'):
 
     deps = []
     deps.append(dependencies)
+    deps.append(dependencies2)
+    deps.append(dependencies3)
     if do_wave in ['Y', 'YES'] and do_wave_cdump in ['GFS', 'BOTH']:
         deps.append(dependencies2)
     dependencies = rocoto.create_dependency(dep_condition='and', dep=deps)
 
-    task = wfu.create_wf_task('fcst', cdump=cdump, envar=envars, dependency=dependencies)
+    ROTDIR = rocoto.create_envar(name='ROTDIR', value='&ROTDIR;')
+    fcstenvars = envars + [ROTDIR]
+
+    task = wfu.create_wf_task('fcst', cdump=cdump, envar=fcstenvars, dependency=dependencies)
     tasks.append(task)
     tasks.append('\n')
 
     # post
     deps = []
-    data = '&ROTDIR;/%s.@Y@m@d/@H/atmos/%s.t@Hz.log#dep#.txt' % (cdump, cdump)
+    data = '&ROTDIR;/%s.@Y@m@d/@H/&COMPONENT;/%s.t@Hz.log#dep#.txt' % (cdump, cdump)
     dep_dict = {'type': 'data', 'data': data}
     deps.append(rocoto.add_dependency(dep_dict))
     dependencies = rocoto.create_dependency(dep=deps)

@@ -1,32 +1,24 @@
-08 Dec 2021
+18 Jan 2022
+    - change from ugwpv1 SDF to unified_ugwp SDF
+11 Jan 2022
+    - added NCL images in realtime
+10 Jan 2022
+    - added snapshot fluxes to grib2 files
+       (postcntrl_gfs_two.xml is used when WRITE_DOPOST=.true.)
+    - EMC updates
+        added flag to launcher command to prepend task number to lines in stdout/err (#493)
+        fixed HERA slurm resource assignment issue (#495)
+04 Jan 2022
+    - added diag_table_aod, updated bug fixes for MYNN
+    - changed default values in field_table_gsd to 0.0 for
+       ice_nc, rain_nc, water_nc, sgs_tke variables
+21 Dec 2021
+    - update to 15dec21 gsl/develop branch, dbdb629
+      add updated MYNN routines
+      turn off GF shallow scheme
+14 Dec 2021
     - create new branch, gslv16_rtdev1, from gslv16_rt
-17 Apr 2021
-    - update to 18Mar21 gsl/develop branch, f204bfd, for sorc/fv3gfs_ccpp.fd
-    - switch to using chgres_cube to generate FV3 ICs, including aerosol variables
-       ufs_utils:  GeorgeGayno-NOAA/UFS_UTILS:feature/gdas_init.v16
-12 Jan 2021
-    - update to 04Jan21 global-workflow develop branch, ef8b641
-         post:       upp_gfsv16_release.v1.1.1
-         ufs_utils:  ops-gfsv16.0.0
-    - update to 18Dec20 gsl/develop branch, 57a8258, for sorc/fv3gfs_ccpp.fd
-      effective 00Z 13 Jan 2021
-30 Nov 2020
-    - change n_sponge=23 for L64 runs, effective 00Z 01 Dec 2020
-24 Aug 2020
-    - corrected labeling of nta_ulwf plots
-19 Aug 2020
-    - update to new NCL graphic routines
-      * NOAA logo
-      * new domains
-18 Aug 2020
-    - updated to 13Aug gsd/develop branch,  for sorc/fv3gfs_ccpp.fd
-15 Jul 2020
-    - updated to 08Jul gsd/develop branch, 04b3ad2, for sorc/fv3gfs_ccpp.fd + GF modifications
-08 Jul 2020
-    - updated to 29Jun gsd/develop branch, 27a8a07, for sorc/fv3gfs_ccpp.fd
-01 July 2020
-    - merge 23Jun20 portorion branch, ed6b279, into gsd-ccpp-jet
-    - additional updates for running on jet
-17 June 2020
-    - created new branch, gsd-ccpp-jet, from 15Jun20 port2orion branch, ed6b279
-    - using 09Jun gsd/develop branch for sorc/fv3gfs_ccpp.fd
+      use 24nov21 gsl/develop branch, 0409aa0
+      v5 namelist
+      FV3_GSD_noah_ugwpv1 SDF
+  
