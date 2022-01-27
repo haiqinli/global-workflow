@@ -67,6 +67,8 @@ NWPROD=${NWPROD:-${NWROOT:-$pwd}}
 HOMEgfs=${HOMEgfs:-$NWPROD}
 FIX_DIR=${FIX_DIR:-$HOMEgfs/fix}
 FIX_AM=${FIX_AM:-$FIX_DIR/fix_am}
+export FIX_AER=${FIX_AER:-$FIX_DIR/fix_aer}
+export FIX_LUT=${FIX_LUT:-$FIX_DIR/fix_lut}
 FIXfv3=${FIXfv3:-$FIX_DIR/fix_fv3_gmted2010}
 DATA=${DATA:-$pwd/fv3tmp$$}    # temporary running directory
 ROTDIR=${ROTDIR:-$pwd}         # rotating archive directory
@@ -394,6 +396,16 @@ $NLN $FIX_AM/${O3FORC}                         $DATA/global_o3prdlos.f77
 $NLN $FIX_AM/${H2OFORC}                        $DATA/global_h2oprdlos.f77
 $NLN $FIX_AM/global_solarconstant_noaa_an.txt  $DATA/solarconstant_noaa_an.txt
 $NLN $FIX_AM/global_sfc_emissivity_idx.txt     $DATA/sfc_emissivity_idx.txt
+
+## merra2 aerosol climo
+for n in 01 02 03 04 05 06 07 08 09 10 11 12; do
+$NLN $FIX_AER/merra2.aerclim.2003-2014.m${n}.nc $DATA/aeroclim.m${n}.nc
+done
+$NLN $FIX_LUT/optics_BC.v1_3.dat $DATA/optics_BC.dat
+$NLN $FIX_LUT/optics_OC.v1_3.dat $DATA/optics_OC.dat
+$NLN $FIX_LUT/optics_DU.v15_3.dat $DATA/optics_DU.dat
+$NLN $FIX_LUT/optics_SS.v3_3.dat $DATA/optics_SS.dat
+$NLN $FIX_LUT/optics_SU.v1_3.dat $DATA/optics_SU.dat
 
 $NLN $FIX_AM/global_co2historicaldata_glob.txt $DATA/co2historicaldata_glob.txt
 $NLN $FIX_AM/co2monthlycyc.txt                 $DATA/co2monthlycyc.txt
@@ -739,7 +751,6 @@ fi
 
 # JKH   copy yaml file over
 cp $HOMEgfs/sorc/fv3gfs.fd/tests/parm/fd_nems.yaml fd_nems.yaml
-#cp $HOMEgfs/sorc/thompson_subcyc/tests/parm/fd_nems.yaml fd_nems.yaml
 
 #------------------------------------------------------------------
 rm -f nems.configure
@@ -834,6 +845,7 @@ quilting:                $QUILTING
 write_groups:            ${WRITE_GROUP:-1}
 write_tasks_per_group:   ${WRTTASK_PER_GROUP:-24}
 output_history:          ${OUTPUT_HISTORY:-".true."}
+write_nsflip:            ${WRITE_NSFLIP:-".false."}
 write_dopost:            ${WRITE_DOPOST:-".false."}
 num_files:               ${NUM_FILES:-2}
 filename_base:           'atm' 'sfc'
@@ -894,11 +906,6 @@ cat > input.nml <<EOF
   blocksize = $blocksize
   chksum_debug = $chksum_debug
   dycore_only = $dycore_only
-  fdiag = $FDIAG
-  fhmax = $FHMAX
-  fhout = $FHOUT
-  fhmaxhf = $FHMAX_HF
-  fhouthf = $FHOUT_HF
   $atmos_model_nml
 /
 
@@ -1030,7 +1037,6 @@ deflate_level=${deflate_level:-1}
   fhcyc        = $FHCYC
   use_ufo      = ${use_ufo:-".true."}
   pre_rad      = ${pre_rad:-".false."}
-  ncld         = ${ncld:-1}
   imp_physics  = ${imp_physics:-"99"}
   pdfcld       = ${pdfcld:-".false."}
   fhswr        = ${FHSWR:-"3600."}
@@ -1360,7 +1366,7 @@ $NCP model_configure $memdir
 
 $NCP $FCSTEXECDIR/$FCSTEXEC $DATA/.
 export OMP_NUM_THREADS=$NTHREADS_FV3
-$APRUN_FV3 $DATA/$FCSTEXEC 1>&1 2>&2
+eval $APRUN_FV3 $DATA/$FCSTEXEC 1>&1 2>&2
 export ERR=$?
 export err=$ERR
 $ERRSCRIPT || exit $err
