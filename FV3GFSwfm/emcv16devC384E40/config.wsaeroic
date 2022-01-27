@@ -1,0 +1,11 @@
+#!/bin/ksh -x
+
+########## config.wsaeroic ##########
+# add aerosol variables to ws ICs
+
+echo "BEGIN: config.wsaeroic"
+
+# Get task specific resources
+. $EXPDIR/config.resources wsaeroic
+
+echo "END: config.wsaeroic"
