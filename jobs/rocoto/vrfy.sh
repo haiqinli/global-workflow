@@ -43,8 +43,10 @@ export COMPONENT=${COMPONENT:-atmos}
 export CDATEm1=$($NDATE -24 $CDATE)
 export PDYm1=$(echo $CDATEm1 | cut -c1-8)
 
+export pid=${pid:-$$}
+export jobid=${job}.${pid}
 export COMIN="$ROTDIR/$CDUMP.$PDY/$cyc/$COMPONENT"
-export DATAROOT="$RUNDIR/$CDATE/$CDUMP/vrfy"
+export DATAROOT="$RUNDIR/$CDATE/$CDUMP/vrfy.${jobid}"
 [[ -d $DATAROOT ]] && rm -rf $DATAROOT
 mkdir -p $DATAROOT
 
@@ -53,6 +55,7 @@ mkdir -p $DATAROOT
 echo
 echo "=============== START TO GENERATE QUARTER DEGREE GRIB1 FILES ==============="
 if [ $MKPGB4PRCP = "YES" -a $CDUMP = "gfs" ]; then
+    if [ ! -d $ARCDIR ]; then mkdir $ARCDIR ; fi
     nthreads_env=${OMP_NUM_THREADS:-1} # get threads set in env
     export OMP_NUM_THREADS=1
     cd $COMIN

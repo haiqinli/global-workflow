@@ -25,8 +25,8 @@ export CDATE=2017030806
 # Specify whether the run is production or development
 #############################################################
 export RUN_ENVIR=para
-export PDY=`echo $CDATE | cut -c1-8`
-export cyc=`echo $CDATE | cut -c9-10`
+export PDY=$(echo $CDATE | cut -c1-8)
+export cyc=$(echo $CDATE | cut -c9-10)
 export job=gdas_analysis_high_${cyc}
 export pid=${pid:-$$}
 export jobid=${job}.${pid}
@@ -40,7 +40,7 @@ export DATAROOT=/gpfs/hps/stmp/$LOGNAME/test
 export gdas_ver=v14.1.0
 export global_shared_ver=v14.1.0
 export crtm_ver=2.2.4
-export prod_envir_ver=1.0.1
+export prod_envir_ver=1.1.0
 export grib_util_ver=1.0.3
 export prod_util_ver=1.0.6
 export util_shared_ver=1.0.3

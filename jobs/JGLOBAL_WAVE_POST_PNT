@@ -84,7 +84,7 @@ export CFP_VERBOSE=1
 export FHMAX_WAV_PNT=${FHMAX_WAV}
 export DOSPC_WAV='YES' # Spectral post
 export DOBLL_WAV='YES' # Bulletin post
-export DOBNDPNT_WAV='NO'  #not boundary points  
+export DOBNDPNT_WAV='NO'  #not boundary points
 
 
 # Execute the Script  

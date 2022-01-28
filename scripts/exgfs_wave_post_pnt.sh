@@ -45,7 +45,7 @@
   # if ensemble; waveMEMB var empty in deterministic
   export WAV_MOD_TAG=${CDUMP}wave${waveMEMB}
 
-  postmsg "$jlogfile" "HAS BEGUN on `hostname`"
+  postmsg "$jlogfile" "HAS BEGUN on $(hostname)"
 
   msg="Starting WAVE PNT POSTPROCESSOR SCRIPT for $WAV_MOD_TAG"
   postmsg "$jlogfile" "$msg"
@@ -56,7 +56,7 @@
   echo '                     *** WAVE PNT POSTPROCESSOR SCRIPT ***'
   echo '                     *************************************'
   echo ' '
-  echo "Starting at : `date`"
+  echo "Starting at : $(date)"
   echo '-------------'
   echo ' '
   [[ "$LOUD" = YES ]] && set -x
@@ -129,7 +129,7 @@
       [[ "$LOUD" = YES ]] && set -x
 
       cp -f $COMIN/rundata/${CDUMP}wave.mod_def.${grdID} mod_def.$grdID
-      iloop=`expr $iloop + 1`
+      iloop=$(expr $iloop + 1)
     fi
   done
 
@@ -158,22 +158,22 @@
 
   rm -f buoy.loc
 
-  if [ -f $FIXwave/wave_${NET}.buoys ]
+  if [ -f $PARMwave/wave_${NET}.buoys ]
   then
-    cp -f $FIXwave/wave_${NET}.buoys buoy.loc.temp
+    cp -f $PARMwave/wave_${NET}.buoys buoy.loc.temp
     if [ "$DOBNDPNT_WAV" = YES ]; then
       #only do boundary points
       sed -n '/^\$.*/!p' buoy.loc.temp | grep IBP > buoy.loc
     else
-      #exclude boundary points   
+      #exclude boundary points
       sed -n '/^\$.*/!p' buoy.loc.temp | grep -v IBP > buoy.loc
-    fi 
+    fi
   fi
 
   if [ -s buoy.loc ]
   then
     set +x
-    echo "   buoy.loc and buoy.ibp copied and processed ($FIXwave/wave_${NET}.buoys)."
+    echo "   buoy.loc and buoy.ibp copied and processed ($PARMwave/wave_${NET}.buoys)."
     [[ "$LOUD" = YES ]] && set -x
   else
     set +x
@@ -192,9 +192,9 @@
 
 # 1.d Input template files
 
-  if [ -f $FIXwave/ww3_outp_spec.inp.tmpl ]
+  if [ -f $PARMwave/ww3_outp_spec.inp.tmpl ]
   then
-    cp -f $FIXwave/ww3_outp_spec.inp.tmpl ww3_outp_spec.inp.tmpl
+    cp -f $PARMwave/ww3_outp_spec.inp.tmpl ww3_outp_spec.inp.tmpl
   fi
 
   if [ -f ww3_outp_spec.inp.tmpl ]
@@ -216,9 +216,9 @@
     DOBLL_WAV='NO'
   fi
 
-  if [ -f $FIXwave/ww3_outp_bull.inp.tmpl ]
+  if [ -f $PARMwave/ww3_outp_bull.inp.tmpl ]
   then
-    cp -f $FIXwave/ww3_outp_bull.inp.tmpl ww3_outp_bull.inp.tmpl
+    cp -f $PARMwave/ww3_outp_bull.inp.tmpl ww3_outp_bull.inp.tmpl
   fi
 
   if [ -f ww3_outp_bull.inp.tmpl ]
@@ -243,8 +243,8 @@
 
   if [ "$DOSPC_WAV" = 'YES' ] || [ "$DOBLL_WAV" = 'YES' ]
   then
-    ymdh=`$NDATE -${WAVHINDH} $CDATE`
-    tstart="`echo $ymdh | cut -c1-8` `echo $ymdh | cut -c9-10`0000"
+    ymdh=$($NDATE -${WAVHINDH} $CDATE)
+    tstart="$(echo $ymdh | cut -c1-8) $(echo $ymdh | cut -c9-10)0000"
     dtspec=3600.            # default time step (not used here)
     sed -e "s/TIME/$tstart/g" \
         -e "s/DT/$dtspec/g" \
@@ -299,17 +299,17 @@
       exit $err
     fi
 
-# Create new buoy_log.ww3 
+# Create new buoy_log.ww3
     cat buoy.loc | awk '{print $3}' | sed 's/'\''//g' > ibp_tags
     grep -F -f ibp_tags buoy_log.ww3 > buoy_log.tmp
     rm -f buoy_log.dat
     mv buoy_log.tmp buoy_log.dat
 
-    grep -F -f ibp_tags buoy_lst.loc >  buoy_tmp1.loc
+    grep -F -f ibp_tags buoy_lst.loc > buoy_tmp1.loc
     #sed    '$d' buoy_tmp1.loc > buoy_tmp2.loc
-    buoys=`awk '{ print $1 }' buoy_tmp1.loc`
-    Nb=`wc buoy_tmp1.loc | awk '{ print $1 }'`
-    rm -f buoy_tmp1.loc 
+    buoys=$(awk '{ print $1 }' buoy_tmp1.loc)
+    Nb=$(wc buoy_tmp1.loc | awk '{ print $1 }')
+    rm -f buoy_tmp1.loc
 
     if [ -s buoy_log.dat ]
     then
@@ -336,7 +336,7 @@
 
   set +x
   echo ' '
-  echo "   Input files read and processed at : `date`"
+  echo "   Input files read and processed at : $(date)"
   echo ' ' 
   echo '   Data summary : '
   echo '   ---------------------------------------------'
@@ -363,8 +363,8 @@
   fhr=$FHMIN_WAV
   while [ $fhr -le $FHMAX_WAV_PNT ]; do
     
-    echo "   Creating the wave point scripts at : `date`"
-    ymdh=`$NDATE $fhr $CDATE`
+    echo "   Creating the wave point scripts at : $(date)"
+    ymdh=$($NDATE $fhr $CDATE)
     YMD=$(echo $ymdh | cut -c1-8)
     HMS="$(echo $ymdh | cut -c9-10)0000"
     YMDHMS=${YMD}${HMS}
@@ -474,12 +474,12 @@
     done
   fi
 
-  wavenproc=`wc -l cmdfile | awk '{print $1}'`
-  wavenproc=`echo $((${wavenproc}<${NTASKS}?${wavenproc}:${NTASKS}))`
+  wavenproc=$(wc -l cmdfile | awk '{print $1}')
+  wavenproc=$(echo $((${wavenproc}<${NTASKS}?${wavenproc}:${NTASKS})))
 
   set +x
   echo ' '
-  echo "   Executing the wave point scripts at : `date`"
+  echo "   Executing the wave point scripts at : $(date)"
   echo '   ------------------------------------'
   echo ' '
   [[ "$LOUD" = YES ]] && set -x
@@ -516,7 +516,7 @@
 
   cd $DATA
 
-  echo "Before create cmdfile for cat bouy : `date`"
+  echo "Before create cmdfile for cat bouy : $(date)"
   rm -f cmdfile.bouy
   touch cmdfile.bouy
   chmod 744 cmdfile.bouy
@@ -566,12 +566,12 @@
     done
   fi
 
-  wavenproc=`wc -l cmdfile.bouy | awk '{print $1}'`
-  wavenproc=`echo $((${wavenproc}<${NTASKS}?${wavenproc}:${NTASKS}))`
+  wavenproc=$(wc -l cmdfile.bouy | awk '{print $1}')
+  wavenproc=$(echo $((${wavenproc}<${NTASKS}?${wavenproc}:${NTASKS})))
 
   set +x
   echo ' '
-  echo "   Executing the boundary point cat script at : `date`"
+  echo "   Executing the boundary point cat script at : $(date)"
   echo '   ------------------------------------'
   echo ' '
   [[ "$LOUD" = YES ]] && set -x
@@ -624,19 +624,19 @@
 
   if [ ${CFP_MP:-"NO"} = "YES" ]; then nm=0; fi
 
-  if [ ${CFP_MP:-"NO"} = "YES" ]; then
+  if [ ${CFP_MP:-"NO"} = "YES" ] && [ "$DOBLL_WAV" = "YES" ]; then
     if [ "$DOBNDPNT_WAV" = YES ]; then
-      if [ "$DOSPC_WAV" = YES ]; then 
+      if [ "$DOSPC_WAV" = YES ]; then
         echo "$nm $USHwave/wave_tar.sh $WAV_MOD_TAG ibp $Nb > ${WAV_MOD_TAG}_spec_tar.out 2>&1 "   >> cmdtarfile
         nm=$(( nm + 1 ))
-      fi 
+      fi
       if [ "$DOBLL_WAV" = YES ]; then
         echo "$nm $USHwave/wave_tar.sh $WAV_MOD_TAG ibpbull $Nb > ${WAV_MOD_TAG}_spec_tar.out 2>&1 "   >> cmdtarfile
         nm=$(( nm + 1 ))
         echo "$nm $USHwave/wave_tar.sh $WAV_MOD_TAG ibpcbull $Nb > ${WAV_MOD_TAG}_spec_tar.out 2>&1 "   >> cmdtarfile
         nm=$(( nm + 1 ))
-      fi 
-    else 
+      fi
+    else
       if [ "$DOSPC_WAV" = YES ]; then
         echo "$nm $USHwave/wave_tar.sh $WAV_MOD_TAG spec $Nb > ${WAV_MOD_TAG}_spec_tar.out 2>&1 "   >> cmdtarfile
         nm=$(( nm + 1 ))
@@ -646,7 +646,7 @@
         nm=$(( nm + 1 ))
         echo "$nm $USHwave/wave_tar.sh $WAV_MOD_TAG cbull $Nb > ${WAV_MOD_TAG}_spec_tar.out 2>&1 "   >> cmdtarfile
         nm=$(( nm + 1 ))
-      fi 
+      fi
     fi
   else
     if [ "$DOBNDPNT_WAV" = YES ]; then
@@ -657,7 +657,7 @@
         echo "$USHwave/wave_tar.sh $WAV_MOD_TAG ibpbull $Nb > ${WAV_MOD_TAG}_spec_tar.out 2>&1 "   >> cmdtarfile
         echo "$USHwave/wave_tar.sh $WAV_MOD_TAG ibpcbull $Nb > ${WAV_MOD_TAG}_spec_tar.out 2>&1 "   >> cmdtarfile
       fi
-    else 
+    else
       if [ "$DOSPC_WAV" = YES ]; then
         echo "$USHwave/wave_tar.sh $WAV_MOD_TAG spec $Nb > ${WAV_MOD_TAG}_spec_tar.out 2>&1 "   >> cmdtarfile
       fi
@@ -668,12 +668,12 @@
     fi
   fi
 
-  wavenproc=`wc -l cmdtarfile | awk '{print $1}'`
-  wavenproc=`echo $((${wavenproc}<${NTASKS}?${wavenproc}:${NTASKS}))`
+  wavenproc=$(wc -l cmdtarfile | awk '{print $1}')
+  wavenproc=$(echo $((${wavenproc}<${NTASKS}?${wavenproc}:${NTASKS})))
 
   set +x
   echo ' '
-  echo "   Executing the wave_tar scripts at : `date`"
+  echo "   Executing the wave_tar scripts at : $(date)"
   echo '   ------------------------------------'
   echo ' '
   [[ "$LOUD" = YES ]] && set -x
@@ -711,7 +711,7 @@
 
   set +x
   echo ' '
-  echo "Ending at : `date`"
+  echo "Ending at : $(date)"
   echo '-----------'
   echo ' '
   echo '                     *** End of MWW3 pnt postprocessor ***'

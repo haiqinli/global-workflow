@@ -42,7 +42,7 @@ cd $DATA
 
 export cyc=${cyc:-00}
 export cycle=${cycle:-t${cyc}z}
- 
+
 # Set PDY
 setpdy.sh
 . PDY
@@ -71,7 +71,7 @@ mkdir -p $COMOUT/station
 
 env | sort
 
-# Set wave model ID tag to include member number 
+# Set wave model ID tag to include member number
 # if ensemble; waveMEMB var empty in deterministic
 # Set wave model ID tag to include member number
 # if ensemble; waveMEMB var empty in deterministic
@@ -82,13 +82,13 @@ export WAV_MOD_TAG=${CDUMP}wave${waveMEMB}
 
 export CFP_VERBOSE=1
 
-export FHMAX_WAV_PNT=180 
+export FHMAX_WAV_PNT=180
 if [ $FHMAX_WAV -lt $FHMAX_WAV_PNT ] ; then export FHMAX_WAV_IBP=$FHMAX_WAV ; fi
 export DOSPC_WAV='NO' # Spectral post
 export DOBLL_WAV='YES' # Bulletin post
-export DOBNDPNT_WAV='YES'  #boundary points  
+export DOBNDPNT_WAV='YES'  #boundary points
 
-# Execute the Script  
+# Execute the Script
 $HOMEgfs/scripts/exgfs_wave_post_pnt.sh
 err=$?
 if [ $err -ne 0 ]; then
