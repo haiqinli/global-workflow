@@ -8,6 +8,7 @@ if [ $# -ne 1 ]; then
 
     echo "Must specify an input task argument to set resource variables!"
     echo "argument can be any one of the following:"
+    echo "getic init"
     echo "anal analcalc analdiag gldas fcst post vrfy metp arch echgres"
     echo "eobs ediag eomg eupd ecen esfc efcs epos earc"
     echo "waveinit waveprep wavepostsbs wavepostbndpnt wavepostbndpntbll wavepostpnt"
@@ -30,7 +31,13 @@ if [[ "$machine" = "WCOSS_DELL_P3" ]]; then
 elif [[ "$machine" = "WCOSS_C" ]]; then
    export npe_node_max=24
 elif [[ "$machine" = "JET" ]]; then
-   export npe_node_max=24
+   if [[ "$PARTITION_BATCH" = "xjet" ]]; then
+     export npe_node_max=24
+   elif [[ "$PARTITION_BATCH" = "vjet" || "$PARTITION_BATCH" = "sjet" ]]; then
+     export npe_node_max=16
+   elif [[ "$PARTITION_BATCH" = "kjet" ]]; then
+     export npe_node_max=40
+   fi
 elif [[ "$machine" = "HERA" ]]; then
    export npe_node_max=40
 elif [[ "$machine" = "ORION" ]]; then
@@ -192,6 +199,16 @@ elif [ $step = "post" ]; then
     export nth_post=1
     export npe_node_post=12
     export npe_node_dwn=$npe_node_max
+    if [ $machine = "WCOSS_DELL_P3" ]; then
+      export npe_dwn=28
+    else
+      export npe_dwn=24
+    fi
+    if [ "$WRITE_DOPOST" = ".true." ]; then 
+      export npe_post=$npe_dwn
+      export wtime_post="00:10:00"
+      export wtime_post_gfs="00:10:00"
+    fi
     if [[ "$machine" = "WCOSS_DELL_P3" ]]; then export npe_node_post=28 ; fi
     if [[ "$machine" == "WCOSS_C" ]]; then export memory_post="3072M"; fi
 
@@ -273,6 +290,13 @@ elif [ $step = "echgres" ]; then
     export npe_echgres=3
     export nth_echgres=$npe_node_max
     export npe_node_echgres=1
+
+elif [ $step = "init" ]; then
+
+    export wtime_init="00:30:00"
+    export npe_init=24
+    export nth_init=1
+    export npe_node_init=6
 
 elif [ $step = "arch" -o $step = "earc" -o $step = "getic" ]; then
 
