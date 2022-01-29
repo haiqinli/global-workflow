@@ -151,7 +151,12 @@ export DO_WAVE="NO"
 export DO_OCN="NO"
 export DO_ICE="NO"
 export DO_AERO="NO"
-export CCPP_SUITE="FV3_GFS_v16"
+export CCPP_SUITE="FV3_GFS_v16"       # GFS v16
+#### export CCPP_SUITE="FV3_GSD_v0"        # GSDsuite
+#### export CCPP_SUITE="FV3_GSD_noah"      # GSDsuite + NOAH LSM
+#### export CCPP_SUITE="FV3_GFS_v16_gf"         # GFS v16 + GF
+#### export CCPP_SUITE="FV3_GFS_v16_mynn"       # GFS v16 + MYNN
+#### export CCPP_SUITE="FV3_GFS_v16_thompson"       # GFS v16 + THMP
 export WAVE_CDUMP="" # When to include wave suite: gdas, gfs, or both
 export confignamevarfornems="atm" # For APP=ATM
 export cplwav2atm=".false."

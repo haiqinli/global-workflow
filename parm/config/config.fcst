@@ -98,7 +98,13 @@ export rf_cutoff=7.5e2
 export d2_bg_k1=0.20
 export d2_bg_k2=0.04
 export dz_min=2
-export n_sponge=42
+if [ $LEVS = "128" ]; then export n_sponge=42; fi   #127 layer
+if [ $LEVS = "65" ]; then
+  if [ "CCPP_SUITE" = "FV3_GSD_V0" -o "CCPP_SUITE" = "FV3_GSD_noah" ]; then 
+    export n_sponge=23
+  elif
+    export n_sponge=42
+  fi
 if [ $LEVS = "128" -a "$CDUMP" = "gdas" ]; then
    export tau=5.0
    export rf_cutoff=1.0e3
@@ -126,25 +132,25 @@ fi
 tbf=""
 if [ $satmedmf = ".true." ]; then tbf="_satmedmf" ; fi
 
-# Land surface model. (3--RUCLSM, landice=F;) (2--NoahMP, landice=F); (1--Noah, landice=T)
-if [ "$CCPP_SUITE" = "FV3_GSD_v0" ]; then
-    export lsm=3
-    export lsoil_lsm=9
-else
-    export lsm=1
-fi
-
-if [ $lsm -eq 2 -o $lsm -eq 3 ]; then
-    export lheatstrg=".false."
-    export landice=".false."
-else
-    export lheatstrg=".false."    
-    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
-        export landice=".false."      ##JKH
-    else
-        export landice=".true."
-    fi
-fi
+#JKH# Land surface model. (3--RUCLSM, landice=F;) (2--NoahMP, landice=F); (1--Noah, landice=T)
+#JKHif [ "$CCPP_SUITE" = "FV3_GSD_v0" ]; then
+#JKH    export lsm=3
+#JKH    export lsoil_lsm=9
+#JKHelse
+#JKH    export lsm=1
+#JKHfi
+#JKH
+#JKHif [ $lsm -eq 2 -o $lsm -eq 3 ]; then
+#JKH    export lheatstrg=".false."
+#JKH    export landice=".false."
+#JKHelse
+#JKH    export lheatstrg=".false."    
+#JKH    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
+#JKH        export landice=".false."      ##JKH
+#JKH    else
+#JKH        export landice=".true."
+#JKH    fi
+#JKHfi
 
 # Radiation options 
 export IAER=1011    ; #spectral band mapping method for aerosol optical properties
@@ -159,6 +165,15 @@ export IALB=${IALB:-1}
 export IEMS=${IEMS:-1}
 export ISOL=2
 export ICO2=2
+
+# Convection Options: 2-SASAS, 3-GF
+if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GFS_v16_gf" ]] ; then
+        export imfdeepcnv=3
+        export imfshalcnv=3
+else
+        export imfdeepcnv=2
+        export imfshalcnv=2
+fi
 
 # Microphysics configuration
 export dnats=0

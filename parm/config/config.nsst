@@ -12,7 +12,7 @@ export NST_MODEL=2
 
 # nstf_name(2) : NST_SPINUP : 0 = OFF, 1 = ON,
 export NST_SPINUP=0
-if [[ "$CDATE" -lt "2017072000" ]]; then
+if [[ "$CDATE" -lt "2017072000" || "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
     export NST_SPINUP=1
 fi
 
