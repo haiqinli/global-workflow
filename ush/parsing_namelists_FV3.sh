@@ -95,6 +95,15 @@ if [ $cpl = .true. ]; then
 EOF
 fi
 
+# GSL
+if [ "$CCPP_SUITE" = 'FV3_RAP_cires_ugwp' -o "$CCPP_SUITE" = 'FV3_RAP_noah_sfcdiff_unified_ugwp' ]; then
+  cat >> input.nml << EOF
+  dz_min =  ${dz_min:-"2"}    
+  psm_bc = ${psm_bc:-"1"}    
+  nord_tr = ${nord_tr:-"2"} 
+EOF
+fi
+
 cat >> input.nml << EOF
   grid_type = -1
   make_nh = $make_nh
@@ -190,7 +199,7 @@ case "${CCPP_SUITE:-}" in
   oz_phys_2015 = .true.
 EOF
   ;;
-  "FV3_GSD_v0")
+  "FV3_RAP_*")
   cat >> input.nml << EOF
   iovr         = ${iovr:-"3"}
   ltaerosol    = ${ltaerosol:-".F."}

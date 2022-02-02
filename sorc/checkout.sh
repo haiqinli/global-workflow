@@ -29,11 +29,15 @@ mkdir -p ${logdir}
 
 echo ufs-weather-model checkout ...
 if [[ ! -d ufs_model.fd ]] ; then
-    git clone https://github.com/ufs-community/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
+    #JKHgit clone https://github.com/ufs-community/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
+    git clone https://github.com/NOAA_GSL/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
     cd ufs_model.fd
     git checkout ${ufs_model_hash:-release/P8a}
     git submodule update --init --recursive
     cd ${topdir}
+    if [[ -d ufs_model.fd_gsl ]] ; then
+       rsync -avx ufs_model.fd_gsl/ ufs_model.fd/        ## copy over GSL changes not in UFS repository
+    fi
 else
     echo 'Skip.  Directory ufs_model.fd already exists.'
 fi 
@@ -79,6 +83,9 @@ if [[ ! -d gfs_post.fd ]] ; then
     cd gfs_post.fd
     git checkout c939eae
     git submodule update --init CMakeModules
+    if [[ -d gfs_post.fd_gsl ]] ; then
+       rsync -avx gfs_post.fd_gsl/ gfs_post.fd/        ## copy over GSL changes not in UPP repository
+    fi
     ################################################################################
     # checkout_gtg
     ## yes: The gtg code at NCAR private repository is available for ops. GFS only.

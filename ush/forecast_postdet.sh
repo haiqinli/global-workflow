@@ -200,7 +200,7 @@ EOF
     exit 2
   fi
 
-  # Scan suite file to determine whether it uses Noah-MP
+  # Scan suite file to determine whether it uses Noah-MP  ( Noah-MP #2, RUC-LSM #3, Noah #1 )
   if [ $(grep noahmpdrv ${_suite_file} | wc -l ) -gt 0 ]; then
     lsm="2"
     lheatstrg=".true."
@@ -217,10 +217,31 @@ EOF
     iopt_snf=${iopt_snf:-"4"}
     iopt_tbot=${iopt_tbot:-"2"}
     iopt_stc=${iopt_stc:-"3"}
+  elif [ $(grep lsm_ruc ${_suite_file} | wc -l ) -gt 0 ]; then 
+    lsm="3"
+    lsoil_lsm=9
+    lheatstrg=".false."
+    landice=".false."
+#JKH    iopt_dveg=${iopt_dveg:-"2"}
+#JKH    iopt_crs=${iopt_crs:-"1"}
+#JKH    iopt_btr=${iopt_btr:-"1"}
+#JKH    iopt_run=${iopt_run:-"1"}
+#JKH    iopt_sfc=${iopt_sfc:-"1"}
+#JKH    iopt_frz=${iopt_frz:-"1"}
+#JKH    iopt_inf=${iopt_inf:-"1"}
+#JKH    iopt_rad=${iopt_rad:-"1"}
+#JKH    iopt_alb=${iopt_alb:-"2"}
+#JKH    iopt_snf=${iopt_snf:-"4"}
+#JKH    iopt_tbot=${iopt_tbot:-"2"}
+#JKH    iopt_stc=${iopt_stc:-"1"}
   else
     lsm="1"
     lheatstrg=".false."
-    landice=".true."
+    if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" ]] ; then   ## JKH
+      landice=".false."
+    else
+      landice=".true."
+    fi
     iopt_dveg=${iopt_dveg:-"1"}
     iopt_crs=${iopt_crs:-"1"}
     iopt_btr=${iopt_btr:-"1"}
@@ -525,7 +546,7 @@ EOF
   #------------------------------------------------------------------
   # make symbolic links to write forecast files directly in memdir
   cd $DATA
-  if [ "$CCPP_SUITE" = 'FV3_GSD_v0' -o "$CCPP_SUITE" = 'FV3_GSD_noah' ]; then
+  if [ "$CCPP_SUITE" = 'FV3_RAP_cires_ugwp' -o "$CCPP_SUITE" = 'FV3_RAP_noah_sfcdiff_unified_ugwp' ]; then
     $NLN $FIX_AM/CCN_ACTIVATE.BIN  CCN_ACTIVATE.BIN
     $NLN $FIX_AM/freezeH2O.dat  freezeH2O.dat
     $NLN $FIX_AM/qr_acr_qg.dat  qr_acr_qg.dat
@@ -629,6 +650,7 @@ data_out_GFS() {
       fi
     elif [ $CDUMP = "gfs" ]; then
       $NCP $DATA/input.nml $ROTDIR/${CDUMP}.${PDY}/${cyc}/atmos/
+      $NCP $DATA/model_configure $ROTDIR/${CDUMP}.${PDY}/${cyc}/atmos/    # GSL
     fi
   fi
 
