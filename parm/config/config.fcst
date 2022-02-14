@@ -102,9 +102,10 @@ if [ $LEVS = "128" ]; then export n_sponge=42; fi   #127 layer
 if [ $LEVS = "65" ]; then
   if [ "CCPP_SUITE" = "FV3_RAP_cires_ugwp" -o "CCPP_SUITE" = "FV3_RAP_noah_sfcdiff_unified_ugwp" ]; then 
     export n_sponge=23
-  elif
+  else
     export n_sponge=42
   fi
+fi
 if [ $LEVS = "128" -a "$CDUMP" = "gdas" ]; then
    export tau=5.0
    export rf_cutoff=1.0e3

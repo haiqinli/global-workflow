@@ -32,13 +32,13 @@ if [[ ! -d ufs_model.fd ]] ; then
     #JKHgit clone https://github.com/ufs-community/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
     git clone https://github.com/NOAA-GSL/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
     cd ufs_model.fd
-    git checkout ${ufs_model_hash:-release/P8a}
-    #JKH   15dec21 gsl/develop branch
+    #JKH  15Dec21 branch, dbdb629ec64a8312c9a4a58649f366ac0757c04b
+    git checkout ${ufs_model_hash:-dbdb629}
     git submodule update --init --recursive
+    cd ${topdir}
     if [[ -d ufs_model.fd_gsl ]]; then
         rsync -avx ufs_model.fd_gsl/ ufs_model.fd/        ## copy over changes not in UFS repository
     fi
-    cd ${topdir}
 else
     echo 'Skip.  Directory ufs_model.fd already exists.'
 fi 
@@ -60,7 +60,7 @@ if [[ ! -d gldas.fd ]] ; then
     rm -f ${topdir}/checkout-gldas.log
     git clone https://github.com/NOAA-EMC/GLDAS.git gldas.fd >> ${logdir}/checkout-gldas.fd.log 2>&1
     cd gldas.fd
-    git checkout gldas_gfsv16_release.v1.15.0
+    git checkout gldas_gfsv16_release.v.1.28.0
     cd ${topdir}
 else
     echo 'Skip.  Directory gldas.fd already exists.'
@@ -69,9 +69,9 @@ fi
 echo ufs_utils checkout ...
 if [[ ! -d ufs_utils.fd ]] ; then
     rm -f ${topdir}/checkout-ufs_utils.log
-    git clone --recursive https://github.com/NOAA-EMC/UFS_UTILS.git ufs_utils.fd >> ${logdir}/checkout-ufs_utils.fd.log 2>&1
+    git clone --recursive https://github.com/ufs-community/UFS_UTILS.git ufs_utils.fd >> ${logdir}/checkout-ufs_utils.fd.log 2>&1
     cd ufs_utils.fd
-    git checkout ufs_utils_1_6_0
+    git checkout 26cd024
     cd ${topdir}
 else
     echo 'Skip.  Directory ufs_utils.fd already exists.'
@@ -84,9 +84,6 @@ if [[ ! -d gfs_post.fd ]] ; then
     cd gfs_post.fd
     git checkout c939eae
     git submodule update --init CMakeModules
-    if [[ -d gfs_post.fd_gsl ]] ; then
-       rsync -avx gfs_post.fd_gsl/ gfs_post.fd/        ## copy over GSL changes not in UPP repository
-    fi
     ################################################################################
     # checkout_gtg
     ## yes: The gtg code at NCAR private repository is available for ops. GFS only.
@@ -100,6 +97,9 @@ if [[ ! -d gfs_post.fd ]] ; then
       cp sorc/post_gtg.fd/gtg.config.gfs parm/gtg.config.gfs
     fi
     cd ${topdir}
+    if [[ -d gfs_post.fd_gsl ]] ; then
+       rsync -avx gfs_post.fd_gsl/ gfs_post.fd/        ## copy over GSL changes not in UPP repository
+    fi
 else
     echo 'Skip.  Directory gfs_post.fd already exists.'
 fi
