@@ -30,14 +30,15 @@ mkdir -p ${logdir}
 echo ufs-weather-model checkout ...
 if [[ ! -d ufs_model.fd ]] ; then
     #JKHgit clone https://github.com/ufs-community/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
-    git clone https://github.com/NOAA_GSL/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
+    git clone https://github.com/NOAA-GSL/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
     cd ufs_model.fd
     git checkout ${ufs_model_hash:-release/P8a}
+    #JKH   15dec21 gsl/develop branch
     git submodule update --init --recursive
-    cd ${topdir}
-    if [[ -d ufs_model.fd_gsl ]] ; then
-       rsync -avx ufs_model.fd_gsl/ ufs_model.fd/        ## copy over GSL changes not in UFS repository
+    if [[ -d ufs_model.fd_gsl ]]; then
+        rsync -avx ufs_model.fd_gsl/ ufs_model.fd/        ## copy over changes not in UFS repository
     fi
+    cd ${topdir}
 else
     echo 'Skip.  Directory ufs_model.fd already exists.'
 fi 
