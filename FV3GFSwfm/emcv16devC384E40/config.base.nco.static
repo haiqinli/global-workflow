@@ -14,7 +14,7 @@ export RUN_ENVIR="nco"
 # Account, queue, etc.
 export ACCOUNT="GFS-T2O"
 export QUEUE="prod"
-export QUEUE_ARCH="dev_transfer"
+export QUEUE_SERVICE="dev_transfer"
 
 # Project to use in mass store:
 HPSS_PROJECT=emc-global
@@ -50,6 +50,7 @@ export DO_BUFRSND="YES"    # BUFR sounding products
 export DO_GEMPAK="YES"     # GEMPAK products
 export DO_AWIPS="YES"      # AWIPS products
 export WAFSF="YES"         # WAFS products
+export DO_VRFY="NO"        # VRFY step
 
 # NO for retrospective parallel; YES for real-time parallel
 export REALTIME="YES"
@@ -124,6 +125,10 @@ export LEVS=128
 export CASE="C768"
 export CASE_ENKF="C384"
 
+# Run with CCPP physics
+export RUN_CCPP="YES"
+export CCPP_SUITE="FV3_GFS_v16"
+
 # Surface cycle update frequency
 if [[ "$CDUMP" == "gdas" ]] ; then
    export FHCYC=1
@@ -168,6 +173,7 @@ export QUILTING=".true."
 export OUTPUT_GRID="gaussian_grid"
 export OUTPUT_FILE="netcdf"
 export WRITE_DOPOST=".true."
+export WRITE_NSFLIP=".true."
 
 # suffix options depending on file format
 if [ $OUTPUT_FILE = "netcdf" ]; then
@@ -183,10 +189,10 @@ fi
 # IAU related parameters
 export DOIAU="YES"        # Enable 4DIAU for control with 3 increments
 export IAUFHRS="3,6,9"
-export IAU_FHROT=`echo $IAUFHRS | cut -c1`
+export IAU_FHROT=$(echo $IAUFHRS | cut -c1)
 export IAU_DELTHRS=6
 export IAU_OFFSET=6
-export DOIAU_ENKF="YES"   # Enable 4DIAU for EnKF ensemble
+export DOIAU_ENKF=${DOIAU:-"YES"}   # Enable 4DIAU for EnKF ensemble
 export IAUFHRS_ENKF="3,6,9"
 export IAU_DELTHRS_ENKF=6
 if [[ "$SDATE" = "$CDATE" ]]; then

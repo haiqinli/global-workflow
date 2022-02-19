@@ -18,7 +18,7 @@ GFS_CYC=2             ## 0:  none  1: 00Z  2: 00Z,12Z  4: 00Z,06Z,12Z,18Z
 ### note default RESDET=384 RESENS=192 NENS=20  CCPP_SUITE=FV3_GFS_v16 START=cold GFS_CYC=1
 ###./setup_expt.py --pslot $PSLOT --configdir $CONFIGDIR --idate $IDATE --edate $EDATE --comrot $COMROT --expdir $EXPDIR [ --icsdir $ICSDIR --resdet $RESDET --resens $RESENS --nens $NENS --gfs_cyc $GFS_CYC ]
 
-./setup_expt_gsd.py --pslot $PSLOT  \
+./setup_expt_gsl.py --pslot $PSLOT  \
        --idate $IDATE --edate $EDATE \
        --configdir $GITDIR/parm/config \
        --resdet=$RESDET --resens $RESENS --gfs_cyc $GFS_CYC \
