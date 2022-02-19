@@ -10,7 +10,7 @@
 		rahul.mahajan@noaa.gov
 
 	NOTES:
-		This workflow was automatically generated at 2022-01-13 23:43:16.477605
+		This workflow was automatically generated at 2022-02-15 02:29:00.169160
 	-->
 
 	<!-- Experiment parameters such as name, starting, ending dates -->
@@ -27,18 +27,19 @@
 	<!ENTITY RUN_ENVIR "emc">
 
 	<!-- Experiment and Rotation directory -->
-	<!ENTITY EXPDIR "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/FV3GFSwfm/emcv16devC384E40">
-	<!ENTITY ROTDIR "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/FV3GFSrun/emcv16devC384E40">
+	<!ENTITY EXPDIR "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops_14feb22/FV3GFSwfm/emcv16devC384E40">
+	<!ENTITY ROTDIR "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops_14feb22/FV3GFSrun/emcv16devC384E40">
 
 	<!-- Directories for driving the workflow -->
-	<!ENTITY HOMEgfs  "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops">
-	<!ENTITY JOBS_DIR "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/jobs/rocoto">
+	<!ENTITY HOMEgfs  "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops_14feb22">
+	<!ENTITY JOBS_DIR "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops_14feb22/jobs/rocoto">
 	<!ENTITY DMPDIR   "/scratch1/NCEPDEV/global/glopara/dump">
 
 	<!-- Machine related entities -->
 	<!ENTITY ACCOUNT    "gsd-fv3-test">
 	<!ENTITY QUEUE      "batch">
 	<!ENTITY QUEUE_SERVICE "service">
+	<!ENTITY PARTITION_BATCH "hera">
 	<!ENTITY PARTITION_SERVICE "service">
 	<!ENTITY SCHEDULER  "slurm">
 
@@ -51,42 +52,51 @@
 	<!ENTITY MAXTRIES      "2">
 
 	<!ENTITY QUEUE_PREP_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_PREP_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_PREP_GDAS  "00:45:00">
 	<!ENTITY RESOURCES_PREP_GDAS "<nodes>2:ppn=2:tpp=1</nodes>">
+	<!ENTITY MEMORY_PREP_GDAS    "40G">
 	<!ENTITY NATIVE_PREP_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_ANAL_GDAS     "&QUEUE;">
-	<!ENTITY WALLTIME_ANAL_GDAS  "02:30:00">
-	<!ENTITY RESOURCES_ANAL_GDAS "<nodes>40:ppn=4:tpp=10</nodes>">
+	<!ENTITY PARTITION_ANAL_GDAS "&PARTITION_BATCH;">
+	<!ENTITY WALLTIME_ANAL_GDAS  "01:00:00">
+	<!ENTITY RESOURCES_ANAL_GDAS "<nodes>50:ppn=8:tpp=5</nodes>">
 	<!ENTITY NATIVE_ANAL_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_ANALCALC_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_ANALCALC_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_ANALCALC_GDAS  "00:10:00">
 	<!ENTITY RESOURCES_ANALCALC_GDAS "<nodes>4:ppn=40:tpp=1</nodes>">
 	<!ENTITY NATIVE_ANALCALC_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_ANALDIAG_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_ANALDIAG_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_ANALDIAG_GDAS  "00:10:00">
 	<!ENTITY RESOURCES_ANALDIAG_GDAS "<nodes>3:ppn=40:tpp=1</nodes>">
 	<!ENTITY NATIVE_ANALDIAG_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_GLDAS_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_GLDAS_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_GLDAS_GDAS  "00:10:00">
 	<!ENTITY RESOURCES_GLDAS_GDAS "<nodes>3:ppn=40:tpp=1</nodes>">
 	<!ENTITY NATIVE_GLDAS_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_FCST_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_FCST_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_FCST_GDAS  "00:30:00">
-	<!ENTITY RESOURCES_FCST_GDAS "<nodes>33:ppn=10:tpp=4</nodes>">
+	<!ENTITY RESOURCES_FCST_GDAS "<nodes>17:ppn=20:tpp=2</nodes>">
 	<!ENTITY NATIVE_FCST_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_POST_GDAS     "&QUEUE;">
-	<!ENTITY WALLTIME_POST_GDAS  "00:20:00">
-	<!ENTITY WALLTIME_POST_GDAS  "02:00:00">
-	<!ENTITY RESOURCES_POST_GDAS "<nodes>10:ppn=12:tpp=1</nodes>">
+	<!ENTITY PARTITION_POST_GDAS "&PARTITION_BATCH;">
+	<!ENTITY WALLTIME_POST_GDAS  "00:10:00">
+	<!ENTITY RESOURCES_POST_GDAS "<nodes>2:ppn=12:tpp=1</nodes>">
+	<!ENTITY MEMORY_POST_GDAS    "40G">
 	<!ENTITY NATIVE_POST_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_VRFY_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_VRFY_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_VRFY_GDAS  "03:00:00">
 	<!ENTITY RESOURCES_VRFY_GDAS "<nodes>3:ppn=1:tpp=1</nodes>">
 	<!ENTITY MEMORY_VRFY_GDAS    "16384M">
@@ -100,41 +110,49 @@
 	<!ENTITY NATIVE_ARCH_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_EOBS_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_EOBS_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_EOBS_GDAS  "00:15:00">
 	<!ENTITY RESOURCES_EOBS_GDAS "<nodes>5:ppn=20:tpp=2</nodes>">
 	<!ENTITY NATIVE_EOBS_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_EDIAG_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_EDIAG_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_EDIAG_GDAS  "00:06:00">
 	<!ENTITY RESOURCES_EDIAG_GDAS "<nodes>2:ppn=40:tpp=1</nodes>">
 	<!ENTITY NATIVE_EDIAG_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_EUPD_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_EUPD_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_EUPD_GDAS  "00:30:00">
 	<!ENTITY RESOURCES_EUPD_GDAS "<nodes>100:ppn=1:tpp=40</nodes>">
 	<!ENTITY NATIVE_EUPD_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_ECHGRES_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_ECHGRES_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_ECHGRES_GDAS  "00:10:00">
 	<!ENTITY RESOURCES_ECHGRES_GDAS "<nodes>3:ppn=1:tpp=40</nodes>">
 	<!ENTITY NATIVE_ECHGRES_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_ECEN_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_ECEN_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_ECEN_GDAS  "00:10:00">
 	<!ENTITY RESOURCES_ECEN_GDAS "<nodes>4:ppn=20:tpp=2</nodes>">
 	<!ENTITY NATIVE_ECEN_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_ESFC_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_ESFC_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_ESFC_GDAS  "00:06:00">
 	<!ENTITY RESOURCES_ESFC_GDAS "<nodes>2:ppn=40:tpp=1</nodes>">
 	<!ENTITY NATIVE_ESFC_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_EFCS_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_EFCS_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_EFCS_GDAS  "00:40:00">
 	<!ENTITY RESOURCES_EFCS_GDAS "<nodes>10:ppn=20:tpp=2</nodes>">
 	<!ENTITY NATIVE_EFCS_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_EPOS_GDAS     "&QUEUE;">
+	<!ENTITY PARTITION_EPOS_GDAS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_EPOS_GDAS  "00:15:00">
 	<!ENTITY RESOURCES_EPOS_GDAS "<nodes>14:ppn=6:tpp=6</nodes>">
 	<!ENTITY NATIVE_EPOS_GDAS    "--export=NONE">
@@ -147,32 +165,39 @@
 	<!ENTITY NATIVE_EARC_GDAS    "--export=NONE">
 
 	<!ENTITY QUEUE_PREP_GFS     "&QUEUE;">
+	<!ENTITY PARTITION_PREP_GFS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_PREP_GFS  "00:45:00">
 	<!ENTITY RESOURCES_PREP_GFS "<nodes>2:ppn=2:tpp=1</nodes>">
+	<!ENTITY MEMORY_PREP_GFS    "40G">
 	<!ENTITY NATIVE_PREP_GFS    "--export=NONE">
 
 	<!ENTITY QUEUE_ANAL_GFS     "&QUEUE;">
-	<!ENTITY WALLTIME_ANAL_GFS  "02:30:00">
-	<!ENTITY RESOURCES_ANAL_GFS "<nodes>40:ppn=4:tpp=10</nodes>">
+	<!ENTITY PARTITION_ANAL_GFS "&PARTITION_BATCH;">
+	<!ENTITY WALLTIME_ANAL_GFS  "01:00:00">
+	<!ENTITY RESOURCES_ANAL_GFS "<nodes>50:ppn=8:tpp=5</nodes>">
 	<!ENTITY NATIVE_ANAL_GFS    "--export=NONE">
 
 	<!ENTITY QUEUE_ANALCALC_GFS     "&QUEUE;">
+	<!ENTITY PARTITION_ANALCALC_GFS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_ANALCALC_GFS  "00:10:00">
 	<!ENTITY RESOURCES_ANALCALC_GFS "<nodes>4:ppn=40:tpp=1</nodes>">
 	<!ENTITY NATIVE_ANALCALC_GFS    "--export=NONE">
 
 	<!ENTITY QUEUE_FCST_GFS     "&QUEUE;">
-	<!ENTITY WALLTIME_FCST_GFS  "04:00:00">
-	<!ENTITY RESOURCES_FCST_GFS "<nodes>37:ppn=10:tpp=4</nodes>">
+	<!ENTITY PARTITION_FCST_GFS "&PARTITION_BATCH;">
+	<!ENTITY WALLTIME_FCST_GFS  "06:00:00">
+	<!ENTITY RESOURCES_FCST_GFS "<nodes>19:ppn=20:tpp=2</nodes>">
 	<!ENTITY NATIVE_FCST_GFS    "--export=NONE">
 
 	<!ENTITY QUEUE_POST_GFS     "&QUEUE;">
-	<!ENTITY WALLTIME_POST_GFS  "01:00:00">
-	<!ENTITY WALLTIME_POST_GFS  "06:00:00">
-	<!ENTITY RESOURCES_POST_GFS "<nodes>10:ppn=12:tpp=1</nodes>">
+	<!ENTITY PARTITION_POST_GFS "&PARTITION_BATCH;">
+	<!ENTITY WALLTIME_POST_GFS  "00:10:00">
+	<!ENTITY RESOURCES_POST_GFS "<nodes>2:ppn=12:tpp=1</nodes>">
+	<!ENTITY MEMORY_POST_GFS    "40G">
 	<!ENTITY NATIVE_POST_GFS    "--export=NONE">
 
 	<!ENTITY QUEUE_VRFY_GFS     "&QUEUE;">
+	<!ENTITY PARTITION_VRFY_GFS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_VRFY_GFS  "06:00:00">
 	<!ENTITY RESOURCES_VRFY_GFS "<nodes>1:ppn=1:tpp=1</nodes>">
 	<!ENTITY MEMORY_VRFY_GFS    "16384M">
@@ -185,12 +210,8 @@
 	<!ENTITY MEMORY_ARCH_GFS    "2048M">
 	<!ENTITY NATIVE_ARCH_GFS    "--export=NONE">
 
-	<!ENTITY QUEUE_POSTSND_GFS     "&QUEUE;">
-	<!ENTITY WALLTIME_POSTSND_GFS  "02:00:00">
-	<!ENTITY RESOURCES_POSTSND_GFS "<nodes>20:ppn=2:tpp=1</nodes>">
-	<!ENTITY NATIVE_POSTSND_GFS    "--export=NONE">
-
 	<!ENTITY QUEUE_METP_GFS     "&QUEUE;">
+	<!ENTITY PARTITION_METP_GFS "&PARTITION_BATCH;">
 	<!ENTITY WALLTIME_METP_GFS  "06:00:00">
 	<!ENTITY RESOURCES_METP_GFS "<nodes>1:ppn=4:tpp=1</nodes>">
 	<!ENTITY NATIVE_METP_GFS    "--export=NONE">
@@ -215,9 +236,10 @@
 	<jobname><cyclestr>&PSLOT;_gdasprep_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_PREP_GDAS;</queue>
+	<partition>&PARTITION_PREP_GDAS;</partition>
 	&RESOURCES_PREP_GDAS;
 	<walltime>&WALLTIME_PREP_GDAS;</walltime>
-	
+	<memory>&MEMORY_PREP_GDAS;</memory>
 	<native>&NATIVE_PREP_GDAS;</native>
 
 	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gdasprep.log</cyclestr></join>
@@ -248,6 +270,7 @@
 	<jobname><cyclestr>&PSLOT;_gdasanal_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_ANAL_GDAS;</queue>
+	<partition>&PARTITION_ANAL_GDAS;</partition>
 	&RESOURCES_ANAL_GDAS;
 	<walltime>&WALLTIME_ANAL_GDAS;</walltime>
 	
@@ -280,6 +303,7 @@
 	<jobname><cyclestr>&PSLOT;_gdasanalcalc_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_ANALCALC_GDAS;</queue>
+	<partition>&PARTITION_ANALCALC_GDAS;</partition>
 	&RESOURCES_ANALCALC_GDAS;
 	<walltime>&WALLTIME_ANALCALC_GDAS;</walltime>
 	
@@ -314,6 +338,7 @@
 	<jobname><cyclestr>&PSLOT;_gdasanaldiag_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_ANALDIAG_GDAS;</queue>
+	<partition>&PARTITION_ANALDIAG_GDAS;</partition>
 	&RESOURCES_ANALDIAG_GDAS;
 	<walltime>&WALLTIME_ANALDIAG_GDAS;</walltime>
 	
@@ -349,6 +374,7 @@
 	<jobname><cyclestr>&PSLOT;_gdasgldas_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_GLDAS_GDAS;</queue>
+	<partition>&PARTITION_GLDAS_GDAS;</partition>
 	&RESOURCES_GLDAS_GDAS;
 	<walltime>&WALLTIME_GLDAS_GDAS;</walltime>
 	
@@ -384,6 +410,7 @@
 	<jobname><cyclestr>&PSLOT;_gdasfcst_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_FCST_GDAS;</queue>
+	<partition>&PARTITION_FCST_GDAS;</partition>
 	&RESOURCES_FCST_GDAS;
 	<walltime>&WALLTIME_FCST_GDAS;</walltime>
 	
@@ -411,7 +438,7 @@
 
 <metatask name="gdaspost">
 
-	<var name="grp">000 001 002 003 004 005 006 007 008 009 010</var>
+	<var name="grp">anl _f000-f000 _f001-f001 _f002-f002 _f003-f003 _f004-f004 _f005-f005 _f006-f006 _f007-f007 _f008-f008 _f009-f009</var>
 	<var name="dep">anl f000 f001 f002 f003 f004 f005 f006 f007 f008 f009</var>
 	<var name="lst">anl f000 f001 f002 f003 f004 f005 f006 f007 f008 f009</var>
 
@@ -422,9 +449,10 @@
 		<jobname><cyclestr>&PSLOT;_gdaspost#grp#_@H</cyclestr></jobname>
 		<account>&ACCOUNT;</account>
 		<queue>&QUEUE_POST_GDAS;</queue>
+		<partition>&PARTITION_POST_GDAS;</partition>
 		&RESOURCES_POST_GDAS;
 		<walltime>&WALLTIME_POST_GDAS;</walltime>
-		
+		<memory>&MEMORY_POST_GDAS;</memory>
 		<native>&NATIVE_POST_GDAS;</native>
 
 		<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gdaspost#grp#.log</cyclestr></join>
@@ -459,6 +487,7 @@
 	<jobname><cyclestr>&PSLOT;_gdasvrfy_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_VRFY_GDAS;</queue>
+	<partition>&PARTITION_VRFY_GDAS;</partition>
 	&RESOURCES_VRFY_GDAS;
 	<walltime>&WALLTIME_VRFY_GDAS;</walltime>
 	<memory>&MEMORY_VRFY_GDAS;</memory>
@@ -508,7 +537,6 @@
 	<dependency>
 		<and>
 			<taskdep task="gdasvrfy"/>
-			<streq><left>&ARCHIVE_TO_HPSS;</left><right>YES</right></streq>
 		</and>
 	</dependency>
 
@@ -521,6 +549,7 @@
 	<jobname><cyclestr>&PSLOT;_gdaseobs_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_EOBS_GDAS;</queue>
+	<partition>&PARTITION_EOBS_GDAS;</partition>
 	&RESOURCES_EOBS_GDAS;
 	<walltime>&WALLTIME_EOBS_GDAS;</walltime>
 	
@@ -553,6 +582,7 @@
 	<jobname><cyclestr>&PSLOT;_gdasediag_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_EDIAG_GDAS;</queue>
+	<partition>&PARTITION_EDIAG_GDAS;</partition>
 	&RESOURCES_EDIAG_GDAS;
 	<walltime>&WALLTIME_EDIAG_GDAS;</walltime>
 	
@@ -582,6 +612,7 @@
 	<jobname><cyclestr>&PSLOT;_gdaseupd_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_EUPD_GDAS;</queue>
+	<partition>&PARTITION_EUPD_GDAS;</partition>
 	&RESOURCES_EUPD_GDAS;
 	<walltime>&WALLTIME_EUPD_GDAS;</walltime>
 	
@@ -617,6 +648,7 @@
 		<jobname><cyclestr>&PSLOT;_gdasecen#grp#_@H</cyclestr></jobname>
 		<account>&ACCOUNT;</account>
 		<queue>&QUEUE_ECEN_GDAS;</queue>
+		<partition>&PARTITION_ECEN_GDAS;</partition>
 		&RESOURCES_ECEN_GDAS;
 		<walltime>&WALLTIME_ECEN_GDAS;</walltime>
 		
@@ -656,6 +688,7 @@
 	<jobname><cyclestr>&PSLOT;_gdasesfc_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_ESFC_GDAS;</queue>
+	<partition>&PARTITION_ESFC_GDAS;</partition>
 	&RESOURCES_ESFC_GDAS;
 	<walltime>&WALLTIME_ESFC_GDAS;</walltime>
 	
@@ -695,6 +728,7 @@
 		<jobname><cyclestr>&PSLOT;_gdasefcs#grp#_@H</cyclestr></jobname>
 		<account>&ACCOUNT;</account>
 		<queue>&QUEUE_EFCS_GDAS;</queue>
+		<partition>&PARTITION_EFCS_GDAS;</partition>
 		&RESOURCES_EFCS_GDAS;
 		<walltime>&WALLTIME_EFCS_GDAS;</walltime>
 		
@@ -733,6 +767,7 @@
 	<jobname><cyclestr>&PSLOT;_gdasechgres_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_ECHGRES_GDAS;</queue>
+	<partition>&PARTITION_ECHGRES_GDAS;</partition>
 	&RESOURCES_ECHGRES_GDAS;
 	<walltime>&WALLTIME_ECHGRES_GDAS;</walltime>
 	
@@ -771,6 +806,7 @@
 		<jobname><cyclestr>&PSLOT;_gdasepos#grp#_@H</cyclestr></jobname>
 		<account>&ACCOUNT;</account>
 		<queue>&QUEUE_EPOS_GDAS;</queue>
+		<partition>&PARTITION_EPOS_GDAS;</partition>
 		&RESOURCES_EPOS_GDAS;
 		<walltime>&WALLTIME_EPOS_GDAS;</walltime>
 		
@@ -841,9 +877,10 @@
 	<jobname><cyclestr>&PSLOT;_gfsprep_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_PREP_GFS;</queue>
+	<partition>&PARTITION_PREP_GFS;</partition>
 	&RESOURCES_PREP_GFS;
 	<walltime>&WALLTIME_PREP_GFS;</walltime>
-	
+	<memory>&MEMORY_PREP_GFS;</memory>
 	<native>&NATIVE_PREP_GFS;</native>
 
 	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsprep.log</cyclestr></join>
@@ -874,6 +911,7 @@
 	<jobname><cyclestr>&PSLOT;_gfsanal_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_ANAL_GFS;</queue>
+	<partition>&PARTITION_ANAL_GFS;</partition>
 	&RESOURCES_ANAL_GFS;
 	<walltime>&WALLTIME_ANAL_GFS;</walltime>
 	
@@ -906,6 +944,7 @@
 	<jobname><cyclestr>&PSLOT;_gfsanalcalc_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_ANALCALC_GFS;</queue>
+	<partition>&PARTITION_ANALCALC_GFS;</partition>
 	&RESOURCES_ANALCALC_GFS;
 	<walltime>&WALLTIME_ANALCALC_GFS;</walltime>
 	
@@ -939,6 +978,7 @@
 	<jobname><cyclestr>&PSLOT;_gfsfcst_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_FCST_GFS;</queue>
+	<partition>&PARTITION_FCST_GFS;</partition>
 	&RESOURCES_FCST_GFS;
 	<walltime>&WALLTIME_FCST_GFS;</walltime>
 	
@@ -965,9 +1005,9 @@
 
 <metatask name="gfspost">
 
-	<var name="grp">000 001 002 003 004 005 006 007 008 009 010 011 012 013 014 015 016 017 018 019 020 021 </var>
-	<var name="dep">anl f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120 </var>
-	<var name="lst">anl f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120 </var>
+	<var name="grp">anl _f000-f000 _f006-f006 _f012-f012 _f018-f018 _f024-f024 _f030-f030 _f036-f036 _f042-f042 _f048-f048 _f054-f054 _f060-f060 _f066-f066 _f072-f072 _f078-f078 _f084-f084 _f090-f090 _f096-f096 _f102-f102 _f108-f108 _f114-f114 _f120-f120</var>
+	<var name="dep">anl f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120</var>
+	<var name="lst">anl f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120</var>
 
 	<task name="gfspost#grp#" cycledefs="gfs" maxtries="&MAXTRIES;">
 
@@ -976,9 +1016,10 @@
 		<jobname><cyclestr>&PSLOT;_gfspost#grp#_@H</cyclestr></jobname>
 		<account>&ACCOUNT;</account>
 		<queue>&QUEUE_POST_GFS;</queue>
+		<partition>&PARTITION_POST_GFS;</partition>
 		&RESOURCES_POST_GFS;
 		<walltime>&WALLTIME_POST_GFS;</walltime>
-		
+		<memory>&MEMORY_POST_GFS;</memory>
 		<native>&NATIVE_POST_GFS;</native>
 
 		<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfspost#grp#.log</cyclestr></join>
@@ -1013,6 +1054,7 @@
 	<jobname><cyclestr>&PSLOT;_gfsvrfy_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
 	<queue>&QUEUE_VRFY_GFS;</queue>
+	<partition>&PARTITION_VRFY_GFS;</partition>
 	&RESOURCES_VRFY_GFS;
 	<walltime>&WALLTIME_VRFY_GFS;</walltime>
 	<memory>&MEMORY_VRFY_GFS;</memory>
@@ -1046,6 +1088,7 @@
 		<jobname><cyclestr>&PSLOT;_gfsmetp#metpcase#_@H</cyclestr></jobname>
 		<account>&ACCOUNT;</account>
 		<queue>&QUEUE_METP_GFS;</queue>
+		<partition>&PARTITION_METP_GFS;</partition>
 		&RESOURCES_METP_GFS;
 		<walltime>&WALLTIME_METP_GFS;</walltime>
 		
@@ -1067,42 +1110,12 @@
 		<dependency>
 			<and>
 				<metataskdep metatask="gfspost"/>
-				<taskdep task="gfsarch" cycle_offset="-&INTERVAL_GFS;"/>
 			</and>
 		</dependency>
 
 	</task>
 
 </metatask>
-
-<task name="gfspostsnd" cycledefs="gfs" maxtries="&MAXTRIES;">
-
-	<command>&JOBS_DIR;/postsnd.sh</command>
-
-	<jobname><cyclestr>&PSLOT;_gfspostsnd_@H</cyclestr></jobname>
-	<account>&ACCOUNT;</account>
-	<queue>&QUEUE_POSTSND_GFS;</queue>
-	&RESOURCES_POSTSND_GFS;
-	<walltime>&WALLTIME_POSTSND_GFS;</walltime>
-	
-	<native>&NATIVE_POSTSND_GFS;</native>
-
-	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfspostsnd.log</cyclestr></join>
-
-	<envar><name>SLURM_SET</name><value>YES</value></envar>
-	<envar><name>RUN_ENVIR</name><value>&RUN_ENVIR;</value></envar>
-	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
-	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
-	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
-	<envar><name>CDUMP</name><value>gfs</value></envar>
-	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
-	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
-
-	<dependency>
-		<taskdep task="gfsfcst"/>
-	</dependency>
-
-</task>
 
 <task name="gfsarch" cycledefs="gfs" maxtries="&MAXTRIES;">
 
@@ -1131,33 +1144,11 @@
 	<dependency>
 		<and>
 			<taskdep task="gfsvrfy"/>
-			<streq><left>&ARCHIVE_TO_HPSS;</left><right>YES</right></streq>
+			<metataskdep metatask="gfsmetp"/>
 		</and>
 	</dependency>
 
 </task>
 
-<task name="firstcyc" cycledefs="first" maxtries="&MAXTRIES;" final="true">
-
-	<command>sleep 1</command>
-
-	<jobname><cyclestr>&PSLOT;_firstcyc_@H</cyclestr></jobname>
-	<account>&ACCOUNT;</account>
-	<queue>&QUEUE;</queue>
-	<partition>&PARTITION_SERVICE;</partition>
-	&RESOURCES_ARCH_GDAS;
-	<walltime>&WALLTIME_ARCH_GDAS;</walltime>
-	<native>&NATIVE_ARCH_GDAS;</native>
-
-	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/firstcyc.log</cyclestr></join>
-
-	<dependency>
-		<and>
-			<datadep><cyclestr offset="24:00:00">&EXPDIR;/logs/@Y@m@d@H.log</cyclestr></datadep>
-			<not><cycleexistdep cycle_offset="-06:00:00"/></not>
-		</and>
-	</dependency>
-
-</task>
 
 </workflow>

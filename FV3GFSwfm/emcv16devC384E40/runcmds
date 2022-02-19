@@ -3,5 +3,5 @@ rocotorun -w emcv16devC384E40.xml -d emcv16devC384E40.db
 rocotostat -w emcv16devC384E40.xml -d emcv16devC384E40.db | m 
 
 
-rocotorun -w /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devdev/FV3GFSwfm/emcv16devC384E40/emcv16devC384E40.xml -d /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devdev/FV3GFSwfm/emcv16devC384E40/emcv16devC384E40.db
-rocotostat  -w /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devdev/FV3GFSwfm/emcv16devC384E40/emcv16devC384E40.xml -d /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devdev/FV3GFSwfm/emcv16devC384E40/emcv16devC384E40.db | m 
+rocotorun -w /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops_14feb22/FV3GFSwfm/emcv16devC384E40/emcv16devC384E40.xml -d /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops_14feb22/FV3GFSwfm/emcv16devC384E40/emcv16devC384E40.db
+rocotostat  -w /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops_14feb22/FV3GFSwfm/emcv16devC384E40/emcv16devC384E40.xml -d /scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops_14feb22/FV3GFSwfm/emcv16devC384E40/emcv16devC384E40.db | m 

@@ -15,19 +15,23 @@ export RUN_ENVIR="emc"
 export ACCOUNT="gsd-fv3-test"
 export QUEUE="batch"
 export QUEUE_SERVICE="service"
-export PARTITION_BATCH=""
+export PARTITION_BATCH="hera"
 
 # Project to use in mass store:
 HPSS_PROJECT=fim                                  ## JKH
 
 # Directories relative to installation areas:
-export HOMEgfs=/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops
+export HOMEgfs=/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops_14feb22
 export PARMgfs=$HOMEgfs/parm
 export FIXgfs=$HOMEgfs/fix
 export USHgfs=$HOMEgfs/ush
 export UTILgfs=$HOMEgfs/util
 export EXECgfs=$HOMEgfs/exec
 export SCRgfs=$HOMEgfs/scripts
+
+export FIXcice=$HOMEgfs/fix/fix_cice
+export FIXmom=$HOMEgfs/fix/fix_mom6
+export FIXreg2grb2=$HOMEgfs/fix/fix_reg2grb2
 
 ########################################################################
 
@@ -47,10 +51,11 @@ export NOSCRUB="$HOMEDIR"
 export BASE_GIT="/scratch1/NCEPDEV/global/glopara/git"
 
 # Toggle to turn on/off GFS downstream processing.
-export DO_BUFRSND="YES"    # BUFR sounding products
+export DO_BUFRSND="NO"     # BUFR sounding products
 export DO_GEMPAK="NO"      # GEMPAK products
 export DO_AWIPS="NO"       # AWIPS products
 export WAFSF="NO"          # WAFS products
+export DO_VRFY="YES"       # VRFY step
 
 # NO for retrospective parallel; YES for real-time parallel
 #  arch.sh uses REALTIME for MOS.  Need to set REALTIME=YES
@@ -71,8 +76,8 @@ export MODE="cycled" # cycled/free
 export FIXgsi="$HOMEgfs/fix/fix_gsi"
 export HOMEfv3gfs="$HOMEgfs/sorc/fv3gfs.fd"
 export HOMEpost="$HOMEgfs"
-export HOMEobsproc_prep="$BASE_GIT/obsproc/obsproc_prep.v5.5.0"
-export HOMEobsproc_network="$BASE_GIT/obsproc/obsproc_global.v3.4.2"
+export HOMEobsproc_prep="$BASE_GIT/obsproc/obsproc_prep.v5.5.0_hpc-stack"
+export HOMEobsproc_network="$BASE_GIT/obsproc/obsproc_global.v3.4.2_hpc-stack"
 export HOMEobsproc_global=$HOMEobsproc_network
 export BASE_VERIF="$BASE_GIT/verif/global/tags/vsdb"
 
@@ -81,8 +86,7 @@ export NCP="/bin/cp -p"
 export NMV="/bin/mv"
 export NLN="/bin/ln -sf"
 export VERBOSE="YES"
-export KEEPDATA="YES"
-#JKHexport KEEPDATA="NO"
+export KEEPDATA="NO"
 export CHGRP_RSTPROD="YES"
 export CHGRP_CMD="chgrp rstprod"
 export NEMSIOGET="$HOMEgfs/exec/nemsio_get"
@@ -96,12 +100,12 @@ export BASE_JOB="$HOMEgfs/jobs/rocoto"
 # EXPERIMENT specific environment parameters
 export SDATE=2020082000
 export FDATE=2020082006
-export EDATE=2020082100
-export EXP_WARM_START=".false."               ####  JKH
+export EDATE=2020082700
+export EXP_WARM_START=".false."
 export assim_freq=6
 export PSLOT="emcv16devC384E40"
-export EXPDIR="/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/FV3GFSwfm/$PSLOT"
-export ROTDIR="/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops/FV3GFSrun/$PSLOT"
+export EXPDIR="/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops_14feb22/FV3GFSwfm/$PSLOT"
+export ROTDIR="/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gslv16_devops_14feb22/FV3GFSrun/$PSLOT"
 export ROTDIR_DUMP="YES"                #Note: A value of "NO" does not currently work
 export DUMP_SUFFIX=""
 if [[ "$CDATE" -ge "2019092100" && "$CDATE" -le "2019110700" ]]; then
@@ -136,26 +140,87 @@ export SENDDBN_NTC=${SENDDBN_NTC:-"NO"}
 export SENDDBN=${SENDDBN:-"NO"}
 export DBNROOT=${DBNROOT:-${UTILROOT}/fakedbn}
 
+# APP settings
+export APP=ATM
+
+# Defaults:
+export DO_COUPLED="NO"
+export DO_WAVE="NO"
+export DO_OCN="NO"
+export DO_ICE="NO"
+export DO_AERO="NO"
+export CCPP_SUITE="FV3_GFS_v16"       # GFS v16
+#### export CCPP_SUITE="FV3_RAP_cires_ugwp"                     # RUC LSM, MYNN, GF, CIRES UGWP
+#### export CCPP_SUITE="FV3_RAP_noah_sfcdiff_unified_ugwp"      # NOAH LSM, MYNN, GF, no GF shallow, Unified UGWP
+#### export CCPP_SUITE="FV3_GFS_v16_gf"         # GFS v16 + GF
+#### export CCPP_SUITE="FV3_GFS_v16_mynn"       # GFS v16 + MYNN
+#### export CCPP_SUITE="FV3_GFS_v16_thompson"   # GFS v16 + THMP
+export WAVE_CDUMP="" # When to include wave suite: gdas, gfs, or both
+export confignamevarfornems="atm" # For APP=ATM
+export cplwav2atm=".false."
+
+case "${APP}" in
+  ATM)
+    echo "APP=ATM; will use defaults"
+    ;;
+  ATMW)
+    export DO_COUPLED="YES"
+    export DO_WAVE="YES"
+    export WAVE_CDUMP="both"
+    export confignamevarfornems="leapfrog_atm_wav"
+    ;;
+  S2S)
+    export DO_COUPLED="YES"
+    export DO_OCN="YES"
+    export DO_ICE="YES"
+    export CCPP_SUITE="FV3_GFS_v16_coupled_nsstNoahmpUGWPv1"
+    export confignamevarfornems="cpld"
+    ;;
+  S2SW)
+    export DO_COUPLED="YES"
+    export DO_WAVE="YES"
+    export DO_OCN="YES"
+    export DO_ICE="YES"
+    export CCPP_SUITE="FV3_GFS_v16_coupled_nsstNoahmpUGWPv1"
+    export WAVE_CDUMP="both"
+    export confignamevarfornems="cpld_wave"
+    export cplwav2atm=".true."
+    source $EXPDIR/config.defaults.s2sw
+    ;;
+  ATMAERO)
+    export DO_COUPLED="YES"
+    export DO_AERO="YES"
+    export confignamevarfornems="atm_aer"
+    ;;
+  *)
+    echo "Unrecognized APP: ${1}"
+    exit 1
+    ;;
+esac
+
+# Set operational resolution
+export OPS_RES="C768" # Do not change
+
 # Resolution specific parameters
 export LEVS=128
 export CASE="C384"
 export CASE_ENKF="C192"
-
-# Run with CCPP physics
-export RUN_CCPP="YES"
-export CCPP_SUITE="FV3_GFS_v16"       # GFS v16
-#### export CCPP_SUITE="FV3_GSD_v0"        # GSDsuite 
-#### export CCPP_SUITE="FV3_GSD_noah"      # GSDsuite + NOAH LSM  
-#### export CCPP_SUITE="FV3_GFS_v16_gf"         # GFS v16 + GF
-#### export CCPP_SUITE="FV3_GFS_v16_mynn"       # GFS v16 + MYNN
-#### export CCPP_SUITE="FV3_GFS_v16_thompson"       # GFS v16 + THMP
+case "$CASE" in
+    "C48") export OCNRES=100;;
+    "C96") export OCNRES=100;;
+    "C192") export OCNRES=050;;
+    "C384") export OCNRES=025;;
+    "C768") export OCNRES=025;;
+    *) export OCNRES=025;;
+esac
+export ICERES=$OCNRES
 
 # Surface cycle update frequency
 if [[ "$CDUMP" == "gdas" ]] ; then
    export FHCYC=1
    export FTSFS=10
 elif [[ "$CDUMP" == "gfs" ]] ; then
-   if [[ "$CCPP_SUITE" == "FV3_GSD_v0" ]] ; then
+   if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" ]] ; then
        export FHCYC=0
    else
        export FHCYC=24
@@ -176,20 +241,20 @@ export gfs_cyc=2 # 0: no GFS cycle, 1: 00Z only, 2: 00Z and 12Z only, 4: all 4 c
 # GFS output and frequency
 export FHMIN_GFS=0
 
-export FHMAX_GFS_00=120
-export FHMAX_GFS_06=120
-export FHMAX_GFS_12=120
-export FHMAX_GFS_18=120
+export FHMAX_GFS_00=${FHMAX_GFS_00:-120}      ## JKH
+export FHMAX_GFS_06=${FHMAX_GFS_06:-120}      ## JKH
+export FHMAX_GFS_12=${FHMAX_GFS_12:-120}      ## JKH
+export FHMAX_GFS_18=${FHMAX_GFS_18:-120}      ## JKH
 export FHMAX_GFS=$(eval echo \${FHMAX_GFS_$cyc})
 
-export FHOUT_GFS=6
-export FHMAX_HF_GFS=0
-export FHOUT_HF_GFS=1
+export FHOUT_GFS=${FHOUT_GFS:-6}
+export FHMAX_HF_GFS=${FHMAX_HF_GFS:-0}
+export FHOUT_HF_GFS=${FHOUT_HF_GFS:-1}
+export STEP_GFS="24"
 export ILPOST=1           # gempak output frequency up to F120
 
 # GFS restart interval in hours
 export restart_interval_gfs=0
-
 
 # I/O QUILTING, true--use Write Component; false--use GFDL FMS
 # if quilting=true, choose OUTPUT_GRID as cubed_sphere_grid in netcdf or gaussian_grid
@@ -215,7 +280,7 @@ fi
 # IAU related parameters
 export DOIAU="YES"        # Enable 4DIAU for control with 3 increments
 export IAUFHRS="3,6,9"
-export IAU_FHROT=`echo $IAUFHRS | cut -c1`
+export IAU_FHROT=$(echo $IAUFHRS | cut -c1)
 export IAU_DELTHRS=6
 export IAU_OFFSET=6
 export DOIAU_ENKF=${DOIAU:-"YES"}   # Enable 4DIAU for EnKF ensemble
@@ -234,13 +299,13 @@ export lobsdiag_forenkf=".true."
 export DO_GLDAS="YES"
 export gldas_cyc=00
 
-# run wave component
-export DO_WAVE="NO"                ## JKH
-if [[ "$SDATE" -lt "2019020100" ]]; then DO_WAVE="NO" ; fi # no rtofs in GDA
-export WAVE_CDUMP="both"
+# if [[ "$SDATE" -lt "2019020100" ]]; then # no rtofs in GDA
+#   export DO_WAVE="NO"
+#   echo "WARNING: Wave suite turned off due to lack of RTOFS in GDA for SDATE"
+# fi
 
 # Microphysics Options: 99-ZhaoCarr, 8-Thompson; 6-WSM6, 10-MG, 11-GFDL
-if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah"  || "$CCPP_SUITE" == "FV3_GFS_v16_thompson" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp"  || "$CCPP_SUITE" == "FV3_GFS_v16_thompson" ]] ; then
        export imp_physics=8
 else
        export imp_physics=11
@@ -293,10 +358,10 @@ export binary_diag=".false."
 
 # Verification options
 export DO_METP="YES"         # Run METPLUS jobs - set METPLUS settings in config.metp
-export DO_VSDB="NO"         # Run VSDB package - set VSDB settings in config.vrfy             ## JKH
+export DO_VSDB="YES"         # Run VSDB package - set VSDB settings in config.vrfy
 
 # Archiving options
-export HPSSARCH="YES" # save data to HPSS archive
+export HPSSARCH="YES"        # save data to HPSS archive
 export ARCH_CYC=00           # Archive data at this cycle for warm_start capability
 export ARCH_WARMICFREQ=4     # Archive frequency in days for warm_start capability
 export ARCH_FCSTICFREQ=1     # Archive frequency in days for gdas and gfs forecast-only capability

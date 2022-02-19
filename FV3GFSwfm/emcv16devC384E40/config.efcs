@@ -45,7 +45,7 @@ export SPPT_LOGIT=".true."
 export SPPT_SFCLIMIT=".true."
 
 if [ $QUILTING = ".true." -a $OUTPUT_GRID = "gaussian_grid" ]; then
-    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" ]] ; then
+    if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" ]] ; then
       export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da_gsd"
     else
       export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da"
@@ -66,7 +66,7 @@ export OUTPUT_FILETYPES="$OUTPUT_FILE"
 if [[ "$OUTPUT_FILE" == "netcdf" ]]; then
     export  ichunk2d=0; export jchunk2d=0
     export  ichunk3d=0; export jchunk3d=0;  export kchunk3d=0
-    RESTILE=`echo $CASE_ENKF |cut -c 2-`
+    RESTILE=$(echo $CASE_ENKF |cut -c 2-)
     if [[ "$machine" == "WCOSS_DELL_P3" ]]; then
         if [ $RESTILE -ge 384 ]; then
             export OUTPUT_FILETYPES=" 'netcdf_parallel' 'netcdf' "
@@ -86,5 +86,15 @@ fi
 
 # wave model
 export cplwav=.false.
+
+# ocean model resolution
+case "$CASE_ENKF" in
+    "C48") export OCNRES=100;;
+    "C96") export OCNRES=100;;
+    "C192") export OCNRES=050;;
+    "C384") export OCNRES=025;;
+    "C768") export OCNRES=025;;
+    *) export OCNRES=025;;
+esac
 
 echo "END: config.efcs"

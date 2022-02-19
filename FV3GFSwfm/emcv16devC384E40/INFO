@@ -1,15 +1,6 @@
-25 Jan 2022
-  ** changed restart_interval in config.efcs and config.fcst based on Kate's commit #427
-    - set restart_interval the same regardless of whether it's cold or warm
-    - use prior cold-start values all the time now
-    - deterministic forecast job restart_interval is now "3 6"
-    - ensemble forecast job restart_interval is now "3 -1"
-19 Jan 2022
-  ** added WRITE_NSFLIP to config.base and exglobal_forecast.sh 
-    - ufs-community:develop branch made commit 10 Aug 2021, 9bbb6d, which restored
-      the North-South flipping capability in the history files
-13 Jan 2022
+
+15 Feb 2022
   ** start experiment
      C384/C192/L127/E40
-     cold start ICs  00Z 08/20/20 
+     cold start ICs  00Z 08/20/20
      GFSv16 SDF
