@@ -34,16 +34,23 @@ if [[ ! -d fv3gfs.fd ]] ; then
         cd fv3gfs.fd
         git checkout GFS.v16.0.16
     else
-        echo ufs-weather-model 18mar gsl/develop checkout ...
-        git clone --recursive -b gsl/develop https://github.com/NOAA-GSL/ufs-weather-model ufs-weather-model_18mar_f204bfd >> ${topdir}/checkout-fv3gfs_18mar.log 2>&1
-        cd ufs-weather-model_18mar_f204bfd
-        git checkout f204bfd922318c6dc39619d1c7f217fe49de7292 
+        echo ufs-weather-model_15dec_gsldev.fd checkout ...
+        if [[ ! -d ufs-weather-model_15dec_dbdb629 ]] ; then
+            rm -f ${topdir}/checkout-15dec.log
+            git clone --recursive -b gsl/develop https://github.com/NOAA-GSL/ufs-weather-model ufs-weather-model_15dec_dbdb629 >> ${topdir}/checkout-fv3gfs.log 2>&1
+            cd ufs-weather-model_15dec_dbdb629 
+            git checkout dbdb629ec64a8312c9a4a58649f366ac0757c04b
+        else
+            echo 'Skip.  Directory ufs-weather-model_15dec_gsldev.fd already exists.'
+        fi
     fi
     git submodule update --init --recursive
     cd ${topdir}
     if [ ${run_ccpp:-"NO"} = "YES" ]; then
-      ln -fs ufs-weather-model_18mar_f204bfd fv3gfs.fd 
-      rsync -ax fv3gfs.fd_gsl/ fv3gfs.fd/        ## copy over changes not in FV3 repository
+      ln -fs ufs-weather-model_15dec_dbdb629 fv3gfs.fd
+      if [[ -d fv3gfs.fd_gsl ]]; then
+        rsync -avx fv3gfs.fd_gsl/ fv3gfs.fd/        ## copy over changes not in fv3gfs.fd repository
+      fi
     fi
 else
     echo 'Skip.  Directory fv3gfs.fd already exists.'
@@ -75,12 +82,13 @@ fi
 echo ufs_utils checkout ...
 if [[ ! -d ufs_utils.fd ]] ; then
     rm -f ${topdir}/checkout-ufs_utils.log
-    git clone https://github.com/NOAA-EMC/UFS_UTILS.git ufs_utils.fd >> ${topdir}/checkout-ufs_utils.fd.log 2>&1
+    git clone --recursive https://github.com/ufs-community/UFS_UTILS.git ufs_utils.fd >> ${logdir}/checkout-ufs_utils.fd.log 2>&1
     cd ufs_utils.fd
-    git checkout ufs_utils_1_4_0
-    git submodule update
+    git checkout 26cd024
     cd ${topdir}
-    rsync -ax ufs_utils.fd_gsl/ ufs_utils.fd/        ## copy over changes not in UFS_UTILS repository
+    if [[ -d ufs_utils.fd_gsl ]]; then
+        rsync -avx ufs_utils.fd_gsl/ ufs_utils.fd/        ## copy over changes not in UFS_UTILS repository
+    fi
 else
     echo 'Skip.  Directory ufs_utils.fd already exists.'
 fi
@@ -104,7 +112,9 @@ if [[ ! -d gfs_post.fd ]] ; then
       cp sorc/post_gtg.fd/gtg.config.gfs parm/gtg.config.gfs
     fi
     cd ${topdir}
-    rsync -ax gfs_post.fd_gsl/ gfs_post.fd/        ## copy over GSL changes not in UPP repository
+    if [[ -d gfs_post.fd_gsl ]]; then
+        rsync -avx gfs_post.fd_gsl/ gfs_post.fd/        ## copy over changes not in UPP repository
+    fi
 else
     echo 'Skip.  Directory gfs_post.fd already exists.'
 fi
