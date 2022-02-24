@@ -47,7 +47,7 @@ export NOSCRUB="@NOSCRUB@"
 export BASE_GIT="@BASE_GIT@"
 
 # Toggle to turn on/off GFS downstream processing.
-export DO_BUFRSND="YES"    # BUFR sounding products
+export DO_BUFRSND="NO"     # BUFR sounding products
 export DO_GEMPAK="NO"      # GEMPAK products
 export DO_AWIPS="NO"       # AWIPS products
 export WAFSF="NO"          # WAFS products
@@ -108,7 +108,7 @@ export RUNDIR="$STMP/RUNDIRS/$PSLOT"
 export DATAROOT="$RUNDIR/$CDATE/$CDUMP"
 export ARCDIR="$NOSCRUB/archive/$PSLOT"
 export ICSDIR="@ICSDIR@"
-export ATARDIR="/BMC/$HPSS_PROJECT/1year/GSL_phys_tst_2021/$PSLOT"
+export ATARDIR="/BMC/$HPSS_PROJECT/1year/GSL_phys_tst_2022/$PSLOT"
 
 # Commonly defined parameters in JJOBS
 export envir=${envir:-"prod"}
@@ -145,7 +145,8 @@ export RUN_CCPP="YES"
 #### export CCPP_SUITE="FV3_GFS_v16"       # EMC v16
 #### export CCPP_SUITE="FV3_GSD_v0"        # GSDsuite 
 #### export CCPP_SUITE="FV3_GSD_noah_ugwpv1" # GSDsuite + NOAH LSM + UGWPv1
-export CCPP_SUITE="FV3_GSD_noah"      # GSDsuite + NOAH LSM  
+export CCPP_SUITE="FV3_GSD_noah_unified_ugwp" # GSDsuite + NOAH LSM + Unified UGWP
+#### export CCPP_SUITE="FV3_GSD_noah"      # GSDsuite + NOAH LSM  
 
 # Surface cycle update frequency
 if [[ "$CDUMP" == "gdas" ]] ; then
@@ -196,6 +197,7 @@ export QUILTING=".true."
 export OUTPUT_GRID="gaussian_grid"
 export OUTPUT_FILE="netcdf"
 export WRITE_DOPOST=".true."     # JKH
+export WRITE_NSFLIP=".true."     # JKH
 
 # suffix options depending on file format
 if [ $OUTPUT_FILE = "netcdf" ]; then
@@ -234,7 +236,7 @@ export DO_WAVE="NO"                ## JKH
 export WAVE_CDUMP="both"
 
 # Microphysics Options: 99-ZhaoCarr, 8-Thompson; 6-WSM6, 10-MG, 11-GFDL
-if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_ugwpv1" || "$CCPP_SUITE" == "FV3_GFS_v16_thompson" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_thompson" ]] ; then
        export imp_physics=8
 else
        export imp_physics=11

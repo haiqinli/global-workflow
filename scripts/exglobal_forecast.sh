@@ -390,7 +390,6 @@ for n in $(seq 1 $ntiles); do
   $NLN $FIXugwd/$CASE/${CASE}_oro_data_ls.tile${n}.nc $DATA/INPUT/oro_data_ls.tile${n}.nc
   $NLN $FIXugwd/$CASE/${CASE}_oro_data_ss.tile${n}.nc $DATA/INPUT/oro_data_ss.tile${n}.nc
 done
-$NLN $FIXugwd/ugwp_limb_tau.nc $DATA/ugwp_limb_tau.nc
 $NLN $FIXfv3/$CASE/${CASE}_mosaic.nc  $DATA/INPUT/grid_spec.nc
 
 # GFS standard input data
@@ -752,12 +751,13 @@ $NCP $FIELD_TABLE field_table
 
 # copy CCN_ACTIVATE.BIN for Thompson microphysics
 if [ $RUN_CCPP = "YES" ]; then
-if [ "$CCPP_SUITE" = 'FV3_GSD_v0' -o "$CCPP_SUITE" = 'FV3_GSD_noah' -o "$CCPP_SUITE" = 'FV3_GFS_v16_thompson' -o "$CCPP_SUITE" = 'FV3_GSD_noah_ugwpv1' ]; then 
-  $NLN $FIX_AM/CCN_ACTIVATE.BIN  CCN_ACTIVATE.BIN
-  $NLN $FIX_AM/freezeH2O.dat  freezeH2O.dat
-  $NLN $FIX_AM/qr_acr_qg.dat  qr_acr_qg.dat
-  $NLN $FIX_AM/qr_acr_qs.dat  qr_acr_qs.dat
-fi
+  if [[ "$CCPP_SUITE" = 'FV3_GSD_v0' ]] || [[ "$CCPP_SUITE" = 'FV3_GSD_noah' ]] || [[ "$CCPP_SUITE" = 'FV3_GFS_v16_thompson' ]] ||
+     [[ "$CCPP_SUITE" = 'FV3_GSD_noah_ugwpv1' ]] || [[ "$CCPP_SUITE" = 'FV3_GSD_noah_unified_ugwp' ]]; then
+     $NLN $FIX_AM/CCN_ACTIVATE.BIN  CCN_ACTIVATE.BIN
+     $NLN $FIX_AM/freezeH2O.dat  freezeH2O.dat
+     $NLN $FIX_AM/qr_acr_qg.dat  qr_acr_qg.dat
+     $NLN $FIX_AM/qr_acr_qs.dat  qr_acr_qs.dat
+  fi
 fi
 
 # JKH   copy yaml file over
@@ -857,6 +857,7 @@ write_groups:            ${WRITE_GROUP:-1}
 write_tasks_per_group:   ${WRTTASK_PER_GROUP:-24}
 output_history:          ${OUTPUT_HISTORY:-".true."}
 write_dopost:            ${WRITE_DOPOST:-".false."}
+write_nsflip:            ${WRITE_NSFLIP:-".false."}
 num_files:               ${NUM_FILES:-2}
 filename_base:           'atm' 'sfc'
 output_grid:             $OUTPUT_GRID
@@ -1020,26 +1021,18 @@ deflate_level=${deflate_level:-1}
 /
 
 &cires_ugwp_nml
-       knob_ugwp_solver  = ${knob_ugwp_solver:-2}                                                                             
-       knob_ugwp_source  = ${knob_ugwp_source:-1,1,0,0}                                                                       
-       knob_ugwp_wvspec  = ${knob_ugwp_wvspec:-1,25,25,25}                                                                    
-       knob_ugwp_azdir   = ${knob_ugwp_azdir:-2,4,4,4}                                                                        
-       knob_ugwp_stoch   = ${knob_ugwp_stoch:-0,0,0,0}                                                                        
-       knob_ugwp_effac   = ${knob_ugwp_effac:-1,1,1,1}                                                                        
-       knob_ugwp_doaxyz  = ${knob_ugwp_doaxyz:-1}                                                                             
-       knob_ugwp_doheat  = ${knob_ugwp_doheat:-1}                                                                             
-       knob_ugwp_dokdis  = ${knob_ugwp_dokdis:-2}                                                                             
-       knob_ugwp_ndx4lh  = ${knob_ugwp_ndx4lh:-4}                                                                             
-       knob_ugwp_version = ${knob_ugwp_version:-1}                                                                            
-       knob_ugwp_palaunch = ${knob_ugwp_palaunch:-27500.}                                                                     
-       knob_ugwp_nslope  = ${knob_ugwp_nslope:-0}                                                                             
-       knob_ugwp_lzmax   = ${knob_ugwp_lzmax:-15.750e3}                                                                       
-       knob_ugwp_lzmin   = ${knob_ugwp_lzmin:-0.75e3}                                                                         
-       knob_ugwp_lzstar  = ${knob_ugwp_lzstar:-2.0e3}                                                                         
-       knob_ugwp_taumin  = ${knob_ugwp_taumin:-0.25e-3}                                                                       
-       knob_ugwp_tauamp  = ${knob_ugwp_tauamp:-3.0e-3}                                                                        
-       knob_ugwp_lhmet   = ${knob_ugwp_lhmet:-200.0e3}                                                                        
-       knob_ugwp_orosolv = ${knob_ugwp_orosolv:-'pss-1986'}
+       knob_ugwp_solver  = ${knob_ugwp_solver:-2}
+       knob_ugwp_source  = ${knob_ugwp_source:-1,1,0,0}
+       knob_ugwp_wvspec  = ${knob_ugwp_wvspec:-1,25,25,25}
+       knob_ugwp_azdir   = ${knob_ugwp_azdir:-2,4,4,4}
+       knob_ugwp_stoch   = ${knob_ugwp_stoch:-0,0,0,0}
+       knob_ugwp_effac   = ${knob_ugwp_effac:-1,1,1,1}
+       knob_ugwp_doaxyz  = ${knob_ugwp_doaxyz:-1}
+       knob_ugwp_doheat  = ${knob_ugwp_doheat:-1}
+       knob_ugwp_dokdis  = ${knob_ugwp_dokdis:-1}
+       knob_ugwp_ndx4lh  = ${knob_ugwp_ndx4lh:-1}
+       knob_ugwp_version = ${knob_ugwp_version:-0}
+       launch_level      = ${launch_level:-54}                   
 /
 
 &external_ic_nml
@@ -1086,7 +1079,7 @@ deflate_level=${deflate_level:-1}
   cnvcld       = ${cnvcld:-".true."}
   imfshalcnv   = ${imfshalcnv:-"2"}
   imfdeepcnv   = ${imfdeepcnv:-"2"}
-  cdmbgwd      = ${cdmbgwd:-"1.0, 1.0, 1.0, 1.0"}
+  cdmbgwd      = ${cdmbgwd:-"4.0,0.15,1.0,1.0"}
   prslrd0      = ${prslrd0:-"0."}
   ivegsrc      = ${ivegsrc:-"1"}
   isot         = ${isot:-"1"}
@@ -1115,11 +1108,11 @@ deflate_level=${deflate_level:-1}
   ldiag_ugwp   = ${ldiag_ugwp:-".false."}
   do_ugwp      = ${do_ugwp:-".false."}
   gwd_opt      = ${gwd_opt:-"2"}  
-  do_ugwp_v0   = ${do_ugwp_v0:-".false."}                                                                                             
-  do_ugwp_v1   = ${do_ugwp_v1:-".true."}                                                                                      
+  do_ugwp_v0   = ${do_ugwp_v0:-".true."}                                                                                             
+  do_ugwp_v1   = ${do_ugwp_v1:-".false."}                                                                                      
   do_ugwp_v1_w_gsldrag = ${do_ugwp_v1_w_gsldrag:-".false."}
   do_ugwp_v1_orog_only = ${do_ugwp_v1_orog_only:-".false."}                                                                    
-  do_gsl_drag_ls_bl = ${do_gsl_drag_ls_bl:-".true."}
+  do_gsl_drag_ls_bl = ${do_gsl_drag_ls_bl:-".false."}
   do_gsl_drag_ss = ${do_gsl_drag_ss:-".true."}                                                                                
   do_gsl_drag_tofd = ${do_gsl_drag_tofd:-".true."}
   do_tofd      = ${do_tofd:-".true."}
@@ -1133,6 +1126,7 @@ if [ $RUN_CCPP = "YES" ]; then
   iovr         = ${iovr:-"3"}
   ltaerosol    = ${ltaerosol:-".false."}
   lradar       = ${lradar:-".false."}
+  dt_inner     = ${dt_inner:-"150."}
   ttendlim     = ${ttendlim:-"0.005"}
   oz_phys      = ${oz_phys:-".false."}
   oz_phys_2015 = ${oz_phys_2015:-".true."}
