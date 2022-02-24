@@ -16,7 +16,7 @@ echo
 ## initialize
 yyyymmdd=`echo $CDATE | cut -c1-8`
 hh=`echo $CDATE | cut -c9-10`
-fv3ic_dir=$ICSDIR/${CDATE}/${CDUMP}/${CASE}
+init_dir=$ICSDIR/${CDATE}/${CDUMP}/${CASE}
 outdir=${ROTDIR}/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}
 
 ## create link to FV3ICS directory
@@ -29,7 +29,7 @@ if [[ ! -d $outdir ]]; then
   fi
 fi
 cd $outdir
-echo "making link to FV3ICS directory:  $fv3ic_dir/INPUT"
-ln -fs $fv3ic_dir/INPUT
+echo "making link to FV3ICS directory:  $init_dir/INPUT"
+ln -fs $init_dir/INPUT
 status=$?
 exit $status

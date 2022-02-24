@@ -49,7 +49,7 @@ if [[ ! -d fv3gfs.fd ]] ; then
     if [ ${run_ccpp:-"NO"} = "YES" ]; then
       ln -fs ufs-weather-model_15dec_dbdb629 fv3gfs.fd
       if [[ -d fv3gfs.fd_gsl ]]; then
-        rsync -avx fv3gfs.fd_gsl/ fv3gfs.fd/        ## copy over changes not in fv3gfs.fd repository
+        rsync -avx fv3gfs.fd_gsl/FV3/ fv3gfs.fd/FV3/        ## copy over changes not in fv3gfs.fd repository
       fi
     fi
 else
@@ -82,7 +82,7 @@ fi
 echo ufs_utils checkout ...
 if [[ ! -d ufs_utils.fd ]] ; then
     rm -f ${topdir}/checkout-ufs_utils.log
-    git clone --recursive https://github.com/ufs-community/UFS_UTILS.git ufs_utils.fd >> ${logdir}/checkout-ufs_utils.fd.log 2>&1
+    git clone --recursive https://github.com/ufs-community/UFS_UTILS.git ufs_utils.fd >> ${topdir}/checkout-ufs_utils.fd.log 2>&1
     cd ufs_utils.fd
     git checkout 26cd024
     cd ${topdir}

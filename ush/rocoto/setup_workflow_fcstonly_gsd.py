@@ -30,7 +30,7 @@ import workflow_utils as wfu
 #taskplan = ['getic', 'fv3ic', 'waveinit', 'waveprep', 'fcst', 'post', 'wavepostsbs', 'wavegempak', 'waveawipsbulls', 'waveawipsgridded', 'wavepost', 'wavestat', 'wafs', 'wafsgrib2', 'wafsblending', 'wafsgcip', 'wafsgrib20p25', 'wafsblending0p25', 'vrfy', 'metp', 'arch']
 #JKHtaskplan = ['getic', 'fv3ic', 'waveinit', 'waveprep', 'fcst', 'post', 'wavepostsbs', 'wavepostbndpnt', 'wavepostpnt', 'wavegempak', 'waveawipsbulls', 'waveawipsgridded', 'wafs', 'wafsgrib2', 'wafsblending', 'wafsgcip', 'wafsgrib20p25', 'wafsblending0p25', 'vrfy', 'metp', 'arch']
 #taskplan = ['getic', 'fv3ic', 'fcst', 'post', 'vrfy', 'metp', 'arch']
-taskplan = ['fv3ic', 'fcst', 'post', 'vrfy', 'metp', 'arch']
+taskplan = ['init', 'fcst', 'post', 'vrfy', 'metp', 'arch']
 
 def main():
     parser = ArgumentParser(description='Setup XML workflow and CRONTAB for a forecast only experiment.', formatter_class=ArgumentDefaultsHelpFormatter)
@@ -285,7 +285,7 @@ def get_workflow(dict_configs, cdump='gdas'):
 ##JKH    tasks.append(task)
 ##JKH    tasks.append('\n')
 
-    # chgres fv3ic
+    # chgres init
     deps = []
     data = '&ROTDIR;/&CDUMP;.@Y@m@d/@H/INPUT'
     dep_dict = {'type':'data', 'data':data}
@@ -314,7 +314,7 @@ def get_workflow(dict_configs, cdump='gdas'):
     fv3_envars.append(rocoto.create_envar(name='CASE', value='&CASE;'))
     fv3_envars.append(rocoto.create_envar(name='ICSDIR', value='&ICSDIR;'))
 
-    task = wfu.create_wf_task('fv3ic', cdump=cdump, envar=fv3_envars, dependency=dependencies)
+    task = wfu.create_wf_task('init', cdump=cdump, envar=fv3_envars, dependency=dependencies)
     tasks.append(task)
     tasks.append('\n')
 
