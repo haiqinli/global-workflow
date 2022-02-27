@@ -20,16 +20,9 @@ if [ $target = hera ]; then target=hera.intel ; fi
 if [ $target = jet ]; then target=jet.intel ; fi
 if [ $target = orion ]; then target=orion.intel ; fi
 
-cd fv3gfs.fd/
+cd ufs-weather-model_24feb22_a2a6a22
 FV3=$( pwd -P )/FV3
 cd tests/
-
-if [ ${RUN_CCPP:-${1:-"NO"}} = "NO" ]; then
- ./compile.sh "$FV3" "$target" "WW3=Y 32BIT=Y" 1
- mv -f fv3_1.exe ../NEMS/exe/global_fv3gfs.x
-else
- #JKH./compile.sh "$target" "-DAPP=ATM -D32BIT=Y -DCCPP_SUITES=FV3_GFS_v16,FV3_GSD_noah,FV3_GSD_v0,FV3_GSD_noah_unified_ugwp" 2 NO NO
- ./compile.sh "$target" "-DAPP=ATM -D32BIT=Y -DCCPP_SUITES=FV3_GFS_v16,FV3_GSD_noah_unified_ugwp" 2 YES  NO
- mkdir -p ../NEMS/exe
- mv -f fv3_2.exe ../NEMS/exe/global_fv3gfs.x
-fi
+./compile.sh "$target" "-DAPP=ATM -D32BIT=Y -DCCPP_SUITES=FV3_GFS_v16,FV3_GSD_noah_unified_ugwp" 2 YES NO
+mkdir -p ../NEMS/exe
+mv -f fv3_2.exe ../NEMS/exe/global_fv3gfs.x
