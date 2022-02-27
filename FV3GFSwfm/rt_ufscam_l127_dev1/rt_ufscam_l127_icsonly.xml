@@ -67,6 +67,7 @@
 	<!ENTITY QUEUE_INIT_GFS     "&QUEUE_URG;">
 	<!ENTITY WALLTIME_INIT_GFS  "00:15:00">
 	<!ENTITY RESOURCES_INIT_GFS "<nodes>4:ppn=6:tpp=1</nodes>">
+	<!ENTITY MEMORY_INIT_GFS    "100GB">
 	<!ENTITY NATIVE_INIT_GFS    "--export=NONE">
 
 	<!-- END: Resource requirements for the workflow -->
@@ -142,7 +143,7 @@
 	<queue>&QUEUE_INIT_GFS;</queue>
 	&RESOURCES_INIT_GFS;
 	<walltime>&WALLTIME_INIT_GFS;</walltime>
-	
+	<memory>&MEMORY_INIT_GFS;</memory>
 	<native>&NATIVE_INIT_GFS;</native>
 
 	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsinit.log</cyclestr></join>
