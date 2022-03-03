@@ -16,9 +16,6 @@ if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP
 else
   export NST_SPINUP=0
 fi
-#if [[ "$CDATE" = $SDATE ]]; then
-#    export NST_SPINUP=1
-#fi
 
 # nstf_name(3) : NST_RESV (Reserved, NSST Analysis) : 0 = OFF, 1 = ON
 if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" ]] ; then
