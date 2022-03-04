@@ -157,7 +157,7 @@ export ICO2=2
 # Convection Options: 2-SASAS, 3-GF
 if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_gf" ]] ; then
         export imfdeepcnv=3
-        export imfshalcnv=3
+        export imfshalcnv=-1              ## JKH - no shallow GF
 else
         export imfdeepcnv=2
         export imfshalcnv=2

@@ -47,14 +47,16 @@ contains
          end if
          ! *DH temporary
 
-         ! Consistency checks
-         if (.not. (imfshalcnv == imfshalcnv_gf .or.                       &
-        &        imfdeepcnv == imfdeepcnv_gf)) then
-           write(errmsg,'(*(a))') 'Logic error: namelist choice of',       &
-        &    ' convection is different from Grell-Freitas scheme'
-           errflg = 1
-           return
-         end if
+     !   JKH
+!         ! Consistency checks   
+!         if (.not. (imfshalcnv == imfshalcnv_gf .or.                       &
+!        &        imfdeepcnv == imfdeepcnv_gf)) then
+!           write(errmsg,'(*(a))') 'Logic error: namelist choice of',       &
+!        &    ' convection is different from Grell-Freitas scheme'
+!           errflg = 1
+!           return
+!         end if
+     !   JKH
 
       end subroutine cu_gf_driver_init
 
@@ -290,12 +292,11 @@ contains
 !    dx=40075000./float(lonf)
 !    tscl_kf=dx/25000.
 
-!     if (imfshalcnv == 3) then
-!      ishallow_g3 = 1
-!     else
-!      ishallow_g3 = 0
-!     end if
-     ishallow_g3 = 0
+     if (imfshalcnv == 3) then
+      ishallow_g3 = 1
+     else
+      ishallow_g3 = 0
+     end if
      high_resolution=0
      subcenter=0.
      iens=1

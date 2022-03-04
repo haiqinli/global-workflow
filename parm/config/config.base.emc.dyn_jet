@@ -55,7 +55,7 @@ export DO_BUFRSND="NO"     # BUFR sounding products
 export DO_GEMPAK="NO"      # GEMPAK products
 export DO_AWIPS="NO"       # AWIPS products
 export WAFSF="NO"          # WAFS products
-export DO_VRFY="YES"       # VRFY step
+export DO_VRFY="NO"       # VRFY step               ## JKH
 
 # NO for retrospective parallel; YES for real-time parallel
 #  arch.sh uses REALTIME for MOS.  Need to set REALTIME=YES
@@ -150,9 +150,9 @@ export DO_WAVE="NO"
 export DO_OCN="NO"
 export DO_ICE="NO"
 export DO_AERO="NO"
-export CCPP_SUITE="FV3_GFS_v16"                                 # GFS v16
+#### export CCPP_SUITE="FV3_GFS_v16"                            # GFS v16
 #### export CCPP_SUITE="FV3_RAP_cires_ugwp"                     # RUC LSM, MYNN, GF, CIRES UGWP
-#### export CCPP_SUITE="FV3_RAP_noah_sfcdiff_unified_ugwp"      # NOAH LSM, MYNN, GF, no GF shallow, Unified UGWP
+export CCPP_SUITE="FV3_RAP_noah_sfcdiff_unified_ugwp"      # NOAH LSM, MYNN, GF, no GF shallow, Unified UGWP
 #### export CCPP_SUITE="FV3_RAP_noah_sfcdiff_ugwpv1"            # NOAH LSM, MYNN, GF, no GF shallow, UGWPv1
 #### export CCPP_SUITE="FV3_GFS_v16_gf"                         # GFS v16 + GF
 #### export CCPP_SUITE="FV3_GFS_v16_mynn"                       # GFS v16 + MYNN
