@@ -101,6 +101,7 @@ else
   export d2_bg_k2=0.04
 fi
 export dz_min=2
+export dt_inner=40.                            ### JKH - 10dec
 if [ $LEVS = "128" ]; then export n_sponge=42; fi   #127 layer
 if [ $LEVS = "65" ]; then
   if [ "CCPP_SUITE" = "FV3_RAP_cires_ugwp" -o "CCPP_SUITE" = "FV3_RAP_noah_sfcdiff_unified_ugwp" ]; then 
