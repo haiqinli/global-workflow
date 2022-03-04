@@ -8,25 +8,25 @@ echo "BEGIN: config.vrfy"
 # Get task specific resources
 . $EXPDIR/config.resources vrfy
 
-export DO_VSDB=${DO_VSDB:-"NO"}   # Switch to run VSDB package; set in config.base
+export DO_VSDB=${DO_VSDB:-"NO"}  # Switch to run VSDB package; set in config.base
 
-export VDUMP="gfs"                # Verifying dump
-export CDUMPFCST="gdas"           # Fit-to-obs with GDAS/GFS prepbufr
-export CDFNL="gdas"               # Scores verification against GDAS/GFS analysis
+export VDUMP="gfs"               # Verifying dump
+export CDUMPFCST="gdas"          # Fit-to-obs with GDAS/GFS prepbufr
+export CDFNL="gdas"              # Scores verification against GDAS/GFS analysis
 
-export MKPGB4PRCP="NO"           # Make 0.25-deg pgb files in ARCDIR for precip verification
-export VRFYFITS="NO"             # Fit to observations
-export VSDB_STEP1="NO"           # Populate VSDB database
+export MKPGB4PRCP="NO"           # Make 0.25-deg pgb files in ARCDIR for precip verification  ## JKH
+export VRFYFITS="NO"             # Fit to observations                                        ## JKH
+export VSDB_STEP1="NO"           # Populate VSDB database                                     ## JKH
 export VSDB_STEP2="NO"
-export VRFYG2OBS="NO"            # Grid to observations, see note below if turning ON
-export VRFYPRCP="NO"             # Precip threat scores
-export VRFYRAD="NO"              # Radiance data assimilation monitoring
-export VRFYOZN="NO"              # Ozone data assimilation monitoring
-export VRFYMINMON="NO"           # GSI minimization monitoring
+export VRFYG2OBS="NO"            # Grid to observations, see note below if turning ON         ## JKH
+export VRFYPRCP="NO"             # Precip threat scores                                       ## JKH
+export VRFYRAD="NO"              # Radiance data assimilation monitoring                      ## JKH
+export VRFYOZN="NO"              # Ozone data assimilation monitoring                         ## JKH
+export VRFYMINMON="NO"           # GSI minimization monitoring                                ## JKH
 export VRFYTRAK="YES"            # Hurricane track verification
-export VRFYGENESIS="NO"          # Cyclone genesis verification
-export VRFYFSU="NO"               # Cyclone genesis verification (FSU)
-export RUNMOS="NO"                # whether to run entire MOS package
+export VRFYGENESIS="NO"          # Cyclone genesis verification                               ## JKH
+export VRFYFSU="NO"              # Cyclone genesis verification (FSU)
+export RUNMOS="NO"               # whether to run entire MOS package
 
 #-------------------------------------------------
 # Fit to Observations

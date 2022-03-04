@@ -95,9 +95,20 @@ export new_o3forc="YES"
 export tau=10.0
 export rf_cutoff=7.5e2
 export d2_bg_k1=0.20
-export d2_bg_k2=0.04
+if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" ]] ; then
+  export d2_bg_k2=0.15               ###  JKH - 10dec
+else
+  export d2_bg_k2=0.04
+fi
 export dz_min=2
-export n_sponge=42
+if [ $LEVS = "128" ]; then export n_sponge=42; fi   #127 layer
+if [ $LEVS = "65" ]; then
+  if [ "CCPP_SUITE" = "FV3_RAP_cires_ugwp" -o "CCPP_SUITE" = "FV3_RAP_noah_sfcdiff_unified_ugwp" ]; then 
+    export n_sponge=23
+  else
+    export n_sponge=42
+  fi
+fi
 if [ $LEVS = "128" -a "$CDUMP" = "gdas" ]; then
    export tau=5.0
    export rf_cutoff=1.0e3
@@ -107,12 +118,16 @@ fi
 
 # PBL/turbulence schemes
 export hybedmf=".false."
-if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_mynn" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_mynn" ]] ; then
     export satmedmf=".false."
     export isatmedmf=0
     export shal_cnv=".true."       
     export do_mynnedmf=".true."     
-    export do_mynnsfclay=".false."
+    if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" ]] ; then 
+      export do_mynnsfclay=".true."
+    else
+      export do_mynnsfclay=".false."
+    fi
     export icloud_bl=1        
     export bl_mynn_tkeadvect=.true. 
     export bl_mynn_edmf=1        
@@ -139,6 +154,15 @@ export IEMS=${IEMS:-1}
 export ISOL=2
 export ICO2=2
 
+# Convection Options: 2-SASAS, 3-GF
+if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_gf" ]] ; then
+        export imfdeepcnv=3
+        export imfshalcnv=3
+else
+        export imfdeepcnv=2
+        export imfshalcnv=2
+fi
+
 # Microphysics configuration
 export dnats=0
 export cal_pre=".true."
@@ -159,13 +183,13 @@ elif [ $imp_physics -eq 8 ]; then # Thompson
     export ncld=2
     export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_thompson${tbf}"
     export nwat=6
-    if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_thompson" ]] ; then
+    if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_thompson" ]] ; then
         export ncld=5
-        export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_gsd"
+        export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_thompson_aero_tke"
         export ltaerosol=.true.                  
         export lradar=.true.         
     
-        ## GSD namelist changes
+        ## GSL namelist changes
         export cal_pre=".false."
         export random_clds=".false."
         export effr_in=.true.
@@ -174,7 +198,7 @@ elif [ $imp_physics -eq 8 ]; then # Thompson
         export dddmp=0.1
         export d4_bg=0.12
         export dt_inner=40.                            ### JKH - 10dec
-        if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" ]] ; then
+        if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" ]] ; then
           export k_split=6                     
           export n_split=2
           #JKH-10dec export ttendlim=0.005
@@ -262,11 +286,10 @@ if [[ "$CDUMP" == "gdas" ]] ; then # GDAS cycle specific parameters
 
     # Variables used in DA cycling
     if [ $QUILTING = ".true." -a $OUTPUT_GRID = "gaussian_grid" ]; then
-        if [[ "$CCPP_SUITE" == "FV3_GSD_v0" || "$CCPP_SUITE" == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" ]] ; then
-          export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da_gsd"
+        if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" ]] ; then
+          export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da_gsl"
         else
-          #export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da"
-          export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_aod"
+          export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da"
         fi
     else
         export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_da_orig"
@@ -297,12 +320,12 @@ elif [[ "$CDUMP" == "gfs" ]] ; then # GFS cycle specific parameters
 
     # Write more variables to output
     if [ $QUILTING = ".true." -a $OUTPUT_GRID = "gaussian_grid" ]; then
-        if [[ $CCPP_SUITE == "FV3_GSD_v0" ]]; then
-            export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_gsd_ruc"
-        elif [[ $CCPP_SUITE == "FV3_GSD_noah" || "$CCPP_SUITE" == "FV3_GSD_noah_unified_ugwp" ]]; then
-            export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_gsd"
+        if [ $CCPP_SUITE = "FV3_RAP_cires_ugwp" ]; then
+            export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_gsl_ruc"
+        elif [ $CCPP_SUITE = "FV3_RAP_noah_sfcdiff_unified_ugwp" ]; then
+            export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_gsl"
         else
-            export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_aod"
+            export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table"
         fi
     else
         export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_orig"

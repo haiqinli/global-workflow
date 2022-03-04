@@ -200,7 +200,7 @@ EOF
     exit 2
   fi
 
-  # Scan suite file to determine whether it uses Noah-MP
+  # Scan suite file to determine whether it uses Noah-MP  ( Noah-MP #2, RUC-LSM #3, Noah #1 )
   if [ $(grep noahmpdrv ${_suite_file} | wc -l ) -gt 0 ]; then
     lsm="2"
     lheatstrg=".true."
@@ -217,10 +217,19 @@ EOF
     iopt_snf=${iopt_snf:-"4"}
     iopt_tbot=${iopt_tbot:-"2"}
     iopt_stc=${iopt_stc:-"3"}
+  elif [ $(grep lsm_ruc ${_suite_file} | wc -l ) -gt 0 ]; then 
+    lsm="3"
+    lsoil_lsm=9
+    lheatstrg=".false."
+    landice=".false."
   else
     lsm="1"
     lheatstrg=".false."
-    landice=".true."
+    if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" ]] ; then   ## JKH
+      landice=".false."
+    else
+      landice=".true."
+    fi
     iopt_dveg=${iopt_dveg:-"1"}
     iopt_crs=${iopt_crs:-"1"}
     iopt_btr=${iopt_btr:-"1"}
@@ -241,6 +250,18 @@ EOF
     knob_ugwp_version="1"
     OROFIX_ugwd=${OROFIX_ugwd:-"${FIX_DIR}/fix_ugwd"}
     $NLN ${OROFIX_ugwd}/ugwp_limb_tau.nc $DATA/ugwp_limb_tau.nc
+    for n in $(seq 1 $ntiles); do
+      $NLN ${OROFIX_ugwd}/$CASE/${CASE}_oro_data_ls.tile${n}.nc $DATA/INPUT/oro_data_ls.tile${n}.nc
+      $NLN ${OROFIX_ugwd}/$CASE/${CASE}_oro_data_ss.tile${n}.nc $DATA/INPUT/oro_data_ss.tile${n}.nc
+    done
+  # Scan suite file to determine whether it uses Unified UGWP
+  # JKH  -- 'workaround' to get correct settings for unified_ugwp in parsing_namelist_FV3.sh for GSL
+  #         (gwd_opt will be set to "2" in namelist)
+  elif [ $(grep -i unified_ugwp ${_suite_file} | wc -l ) -gt 0 ]; then 
+    gwd_opt="3"                         
+    knob_ugwp_version="0"
+    launch_level=${launch_level:-$(echo "$LEVS/2.35" |bc)}
+    OROFIX_ugwd=${OROFIX_ugwd:-"${FIX_DIR}/fix_ugwd"}
     for n in $(seq 1 $ntiles); do
       $NLN ${OROFIX_ugwd}/$CASE/${CASE}_oro_data_ls.tile${n}.nc $DATA/INPUT/oro_data_ls.tile${n}.nc
       $NLN ${OROFIX_ugwd}/$CASE/${CASE}_oro_data_ss.tile${n}.nc $DATA/INPUT/oro_data_ss.tile${n}.nc
@@ -525,7 +546,7 @@ EOF
   #------------------------------------------------------------------
   # make symbolic links to write forecast files directly in memdir
   cd $DATA
-  if [ "$CCPP_SUITE" = 'FV3_GSD_v0' -o "$CCPP_SUITE" = 'FV3_GSD_noah' ]; then
+  if [ "$CCPP_SUITE" = 'FV3_RAP_cires_ugwp' -o "$CCPP_SUITE" = 'FV3_RAP_noah_sfcdiff_unified_ugwp' ]; then
     $NLN $FIX_AM/CCN_ACTIVATE.BIN  CCN_ACTIVATE.BIN
     $NLN $FIX_AM/freezeH2O.dat  freezeH2O.dat
     $NLN $FIX_AM/qr_acr_qg.dat  qr_acr_qg.dat
@@ -629,6 +650,7 @@ data_out_GFS() {
       fi
     elif [ $CDUMP = "gfs" ]; then
       $NCP $DATA/input.nml $ROTDIR/${CDUMP}.${PDY}/${cyc}/atmos/
+      $NCP $DATA/model_configure $ROTDIR/${CDUMP}.${PDY}/${cyc}/atmos/    # GSL
     fi
   fi
 

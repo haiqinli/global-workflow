@@ -88,6 +88,15 @@ cat > input.nml <<EOF
   npz = $npz
   dz_min =  ${dz_min:-"6"} 
   psm_bc = ${psm_bc:-"0"} 
+# GSL
+if [ "$CCPP_SUITE" = 'FV3_RAP_cires_ugwp' -o "$CCPP_SUITE" = 'FV3_RAP_noah_sfcdiff_unified_ugwp' ]; then
+  cat >> input.nml << EOF
+  dz_min =  ${dz_min:-"2"}    
+  psm_bc = ${psm_bc:-"1"}    
+  nord_tr = ${nord_tr:-"2"} 
+EOF
+fi
+cat >> input.nml << EOF
   grid_type = -1
   make_nh = $make_nh
   fv_debug = ${fv_debug:-".false."}
@@ -182,7 +191,7 @@ case "${CCPP_SUITE:-}" in
   oz_phys_2015 = .true.
 EOF
   ;;
-  "FV3_GSD_v0")
+  "FV3_RAP_*")
   cat >> input.nml << EOF
   iovr         = ${iovr:-"3"}
   ltaerosol    = ${ltaerosol:-".F."}
@@ -194,9 +203,17 @@ EOF
   do_mynnedmf  = ${do_mynnedmf:-".false."}
   do_mynnsfclay = ${do_mynnsfclay:-".false."}
   icloud_bl    = ${icloud_bl:-"1"}
-  bl_mynn_edmf = ${bl_mynn_edmf:-"1"}
-  bl_mynn_tkeadvect=${bl_mynn_tkeadvect:-".true."}
-  bl_mynn_edmf_mom=${bl_mynn_edmf_mom:-"1"}
+  bl_mynn_tkebudget = ${bl_mynn_tkebudget:=".false."}
+  bl_mynn_tkeadvect = ${bl_mynn_tkeadvect:=".true."}
+  bl_mynn_cloudpdf = ${bl_mynn_cloudpdf:="2"}
+  bl_mynn_mixlength = ${bl_mynn_mixlength:="1"}
+  bl_mynn_edmf = ${bl_mynn_edmf:="1"}
+  bl_mynn_edmf_mom = ${bl_mynn_edmf_mom:="1"}
+  bl_mynn_edmf_tke = ${bl_mynn_edmf_tke:="0"}
+  bl_mynn_cloudmix = ${bl_mynn_cloudmix:="1"}
+  bl_mynn_mixqt = ${bl_mynn_mixqt:="0"} 
+  bl_mynn_output = ${bl_mynn_output:="0"} 
+  bl_mynn_closure = ${bl_mynn_closure:="2.6"}
   min_lakeice  = ${min_lakeice:-"0.15"}
   min_seaice   = ${min_seaice:-"0.15"}
   use_cice_alb = ${use_cice_alb:-".false."}
@@ -420,6 +437,36 @@ EOF
   knob_ugwp_orosolv  = ${knob_ugwp_orosolv:-'pss-1986'}
   $cires_ugwp_nml
 /
+EOF
+  ;;
+  3)
+  cat >> input.nml <<EOF
+  gwd_opt      = 2
+  do_ugwp      = .false.
+  do_ugwp_v0   = ${do_ugwp_v0:-".true."}
+  do_ugwp_v1   = ${do_ugwp_v1:-".false."}
+  do_tofd      = ${do_tofd:-".true."}
+  do_gsl_drag_ls_bl    = ${do_gsl_drag_ls_bl:-".false."}
+  do_gsl_drag_ss       = ${do_gsl_drag_ss:-".true."}
+  do_gsl_drag_tofd     = ${do_gsl_drag_tofd:-".true."}
+  $gfs_physics_nml
+/
+&cires_ugwp_nml
+  knob_ugwp_version = ${knob_ugwp_version:-0}
+  knob_ugwp_solver  = ${knob_ugwp_solver:-2}
+  knob_ugwp_source  = ${knob_ugwp_source:-1,1,0,0}
+  knob_ugwp_wvspec  = ${knob_ugwp_wvspec:-1,25,25,25}
+  knob_ugwp_azdir   = ${knob_ugwp_azdir:-2,4,4,4}
+  knob_ugwp_stoch   = ${knob_ugwp_stoch:-0,0,0,0}
+  knob_ugwp_effac   = ${knob_ugwp_effac:-1,1,1,1}
+  knob_ugwp_doaxyz  = ${knob_ugwp_doaxyz:-1}
+  knob_ugwp_doheat  = ${knob_ugwp_doheat:-1}
+  knob_ugwp_dokdis  = ${knob_ugwp_dokdis:-1}
+  knob_ugwp_ndx4lh  = ${knob_ugwp_ndx4lh:-1}
+  launch_level      = ${launch_level:-54}
+  $cires_ugwp_nml
+/
+
 EOF
   ;;
   *)
