@@ -107,7 +107,7 @@ case $case_in in
         export WRTIOBUF=${WRTIOBUF:-"16M"}
         ;;
     "C768")
-        if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" ]] ; then
+        if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_ugwpv1" ]] ; then
           if [ $LEVS = "128" ]; then
             export DELTIM=120
           else

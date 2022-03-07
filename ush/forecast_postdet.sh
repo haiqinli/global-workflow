@@ -225,7 +225,7 @@ EOF
   else
     lsm="1"
     lheatstrg=".false."
-    if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" ]] ; then   ## JKH
+    if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_ugwpv1" ]] ; then   ## JKH
       landice=".false."
     else
       landice=".true."
@@ -546,7 +546,7 @@ EOF
   #------------------------------------------------------------------
   # make symbolic links to write forecast files directly in memdir
   cd $DATA
-  if [ "$CCPP_SUITE" = 'FV3_RAP_cires_ugwp' -o "$CCPP_SUITE" = 'FV3_RAP_noah_sfcdiff_unified_ugwp' ]; then
+  if [ "$CCPP_SUITE" = "FV3_RAP_cires_ugwp" -o "$CCPP_SUITE" = "FV3_RAP_noah_sfcdiff_unified_ugwp" -o "$CCPP_SUITE" = "FV3_RAP_noah_sfcdiff_ugwpv1" ]; then
     $NLN $FIX_AM/CCN_ACTIVATE.BIN  CCN_ACTIVATE.BIN
     $NLN $FIX_AM/freezeH2O.dat  freezeH2O.dat
     $NLN $FIX_AM/qr_acr_qg.dat  qr_acr_qg.dat

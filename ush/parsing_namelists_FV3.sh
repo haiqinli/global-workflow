@@ -90,7 +90,7 @@ cat > input.nml <<EOF
   psm_bc = ${psm_bc:-"0"} 
 EOF
 
-if [ "$CCPP_SUITE" = "FV3_RAP_cires_ugwp" -o "$CCPP_SUITE" = "FV3_RAP_noah_sfcdiff_unified_ugwp" ]; then
+if [ "$CCPP_SUITE" = "FV3_RAP_cires_ugwp" -o "$CCPP_SUITE" = "FV3_RAP_noah_sfcdiff_unified_ugwp" -o "$CCPP_SUITE" = "FV3_RAP_noah_sfcdiff_ugwpv1" ]; then
   cat >> input.nml << EOF
   nord_tr = ${nord_tr:-"2"} 
 EOF
