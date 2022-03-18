@@ -55,7 +55,7 @@ export DO_BUFRSND="NO"     # BUFR sounding products
 export DO_GEMPAK="NO"      # GEMPAK products
 export DO_AWIPS="NO"       # AWIPS products
 export WAFSF="NO"          # WAFS products
-export DO_VRFY="NO"       # VRFY step               ## JKH
+export DO_VRFY="YES"       # VRFY step
 
 # NO for retrospective parallel; YES for real-time parallel
 #  arch.sh uses REALTIME for MOS.  Need to set REALTIME=YES
@@ -252,6 +252,7 @@ export FHMAX_GFS=$(eval echo \${FHMAX_GFS_$cyc})
 export FHOUT_GFS=${FHOUT_GFS:-6}              ## JKH
 export FHMAX_HF_GFS=${FHMAX_HF_GFS:-0}
 export FHOUT_HF_GFS=${FHOUT_HF_GFS:-1}
+export STEP_GFS="24"
 export ILPOST=1           # gempak output frequency up to F120
 
 # GFS restart interval in hours
