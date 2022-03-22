@@ -10,7 +10,7 @@
 		rahul.mahajan@noaa.gov
 
 	NOTES:
-		This workflow was automatically generated at 2022-03-04 19:13:45.056045
+		This workflow was automatically generated at 2022-03-21 23:49:42.797577
 	-->
 
 	<!-- Experiment parameters such as name, cycle, resolution -->
@@ -41,9 +41,7 @@
 	<!ENTITY JOBS_DIR "/scratch2/BMC/gsd-fv3-dev/Judy.K.Henderson/test/gsldev_24feb22_gw-01mar22/jobs/rocoto">
 
 	<!-- Machine related entities -->
-	<!ENTITY ACCOUNT    "gsd-fv3-test">
 	<!ENTITY ACCOUNT    "gsd-fv3-dev">
-	<!ENTITY QUEUE_DEBUG  "debug">
 	<!ENTITY QUEUE      "batch">
 	<!ENTITY QUEUE_SERVICE "service">
 	<!ENTITY PARTITION_BATCH "hera">
@@ -67,10 +65,8 @@
 	<!ENTITY MEMORY_INIT_GFS    "70G">
 	<!ENTITY NATIVE_INIT_GFS    "--export=NONE">
 
-	<!ENTITY QUEUE_FCST_GFS     "&QUEUE_DEBUG;">
 	<!ENTITY QUEUE_FCST_GFS     "&QUEUE;">
 	<!ENTITY PARTITION_FCST_GFS "&PARTITION_BATCH;">
-	<!ENTITY WALLTIME_FCST_GFS  "00:30:00">
 	<!ENTITY WALLTIME_FCST_GFS  "06:00:00">
 	<!ENTITY RESOURCES_FCST_GFS "<nodes>103:ppn=10:tpp=4</nodes>">
 	<!ENTITY NATIVE_FCST_GFS    "--export=NONE">
@@ -118,25 +114,25 @@
 	<envar><name>RUN_ENVIR</name><value>&RUN_ENVIR;</value></envar>
 	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
 	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
-	<envar><name>ICSDIR</name><value>&ICSDIR;</value></envar>
-	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
 	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
 	<envar><name>CDUMP</name><value>&CDUMP;</value></envar>
-	<envar><name>CASE</name><value>&CASE;</value></envar>
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
 	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
+	<envar><name>ICSDIR</name><value>&ICSDIR;</value></envar>
+	<envar><name>ROTDIR</name><value>&ROTDIR;</value></envar>
 	<envar><name>COMPONENT</name><value>&COMPONENT;</value></envar>
+	<envar><name>CASE</name><value>&CASE;</value></envar>
 
 	<dependency>
-               <and>
-                        <not>
-                                <datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/INPUT</cyclestr></datadep>
-                        </not>
-                        <and>
-                                <datadep><cyclestr>&ICSDIR;/@Y@m@d@H/&CDUMP;/&CASE;/INPUT/gfs_data.tile6.nc</cyclestr></datadep>
-                                <datadep><cyclestr>&ICSDIR;/@Y@m@d@H/&CDUMP;/&CASE;/INPUT/sfc_data.tile6.nc</cyclestr></datadep>
-                        </and>
-                </and>
+		<and>
+			<not>
+				<datadep><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/atmos/INPUT</cyclestr></datadep>
+			</not>
+			<and>
+				<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/&CDUMP;/&CASE;/INPUT/gfs_data.tile6.nc</cyclestr></datadep>
+				<datadep><cyclestr>&ICSDIR;/@Y@m@d@H/&CDUMP;/&CASE;/INPUT/sfc_data.tile6.nc</cyclestr></datadep>
+			</and>
+		</and>
 	</dependency>
 
 </task>
@@ -226,6 +222,35 @@
 
 </metatask>
 
+<task name="gfsvrfy" cycledefs="gfs" maxtries="&MAXTRIES;">
+
+	<command>&JOBS_DIR;/vrfy.sh</command>
+
+	<jobname><cyclestr>&PSLOT;_gfsvrfy_@H</cyclestr></jobname>
+	<account>&ACCOUNT;</account>
+	<queue>&QUEUE_VRFY_GFS;</queue>
+	<partition>&PARTITION_VRFY_GFS;</partition>
+	&RESOURCES_VRFY_GFS;
+	<walltime>&WALLTIME_VRFY_GFS;</walltime>
+	
+	<native>&NATIVE_VRFY_GFS;</native>
+
+	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsvrfy.log</cyclestr></join>
+
+	<envar><name>RUN_ENVIR</name><value>&RUN_ENVIR;</value></envar>
+	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
+	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
+	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
+	<envar><name>CDUMP</name><value>&CDUMP;</value></envar>
+	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
+	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
+
+	<dependency>
+		<metataskdep metatask="gfspost"/>
+	</dependency>
+
+</task>
+
 <task name="gfsarch" cycledefs="gfs" maxtries="&MAXTRIES;" final="true">
 
 	<command>&JOBS_DIR;/arch_gsl.sh</command>
@@ -253,6 +278,7 @@
 	<dependency>
 		<and>
 			<metataskdep metatask="gfspost"/>
+			<taskdep task="gfsvrfy"/>
 			<streq><left>&ARCHIVE_TO_HPSS;</left><right>YES</right></streq>
 		</and>
 	</dependency>
