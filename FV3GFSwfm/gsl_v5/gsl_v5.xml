@@ -10,7 +10,7 @@
 		rahul.mahajan@noaa.gov
 
 	NOTES:
-		This workflow was automatically generated at 2022-03-21 23:49:42.797577
+		This workflow was automatically generated at 2022-03-22 00:09:12.019683
 	-->
 
 	<!-- Experiment parameters such as name, cycle, resolution -->
@@ -222,35 +222,6 @@
 
 </metatask>
 
-<task name="gfsvrfy" cycledefs="gfs" maxtries="&MAXTRIES;">
-
-	<command>&JOBS_DIR;/vrfy.sh</command>
-
-	<jobname><cyclestr>&PSLOT;_gfsvrfy_@H</cyclestr></jobname>
-	<account>&ACCOUNT;</account>
-	<queue>&QUEUE_VRFY_GFS;</queue>
-	<partition>&PARTITION_VRFY_GFS;</partition>
-	&RESOURCES_VRFY_GFS;
-	<walltime>&WALLTIME_VRFY_GFS;</walltime>
-	
-	<native>&NATIVE_VRFY_GFS;</native>
-
-	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsvrfy.log</cyclestr></join>
-
-	<envar><name>RUN_ENVIR</name><value>&RUN_ENVIR;</value></envar>
-	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
-	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
-	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
-	<envar><name>CDUMP</name><value>&CDUMP;</value></envar>
-	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
-	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
-
-	<dependency>
-		<metataskdep metatask="gfspost"/>
-	</dependency>
-
-</task>
-
 <task name="gfsarch" cycledefs="gfs" maxtries="&MAXTRIES;" final="true">
 
 	<command>&JOBS_DIR;/arch_gsl.sh</command>
@@ -278,7 +249,6 @@
 	<dependency>
 		<and>
 			<metataskdep metatask="gfspost"/>
-			<taskdep task="gfsvrfy"/>
 			<streq><left>&ARCHIVE_TO_HPSS;</left><right>YES</right></streq>
 		</and>
 	</dependency>
