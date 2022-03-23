@@ -375,7 +375,8 @@ cd $pwd/../parm/config
 if [ $RUN_ENVIR = nco ] ; then
  cp -p config.base.nco.static config.base
 else
- cp -p config.base.emc.dyn config.base
+ ln -fs config.base.emc.dyn_${machine} config.base.emc.dyn
+ cp -p config.base.emc.dyn_${machine} config.base
 fi
 #------------------------------
 
