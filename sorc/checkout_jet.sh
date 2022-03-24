@@ -45,7 +45,7 @@ fi
 
 #JKHecho gsi checkout ...
 #JKHif [[ ! -d gsi.fd ]] ; then
-#JKH    rm -f ${topdir}/checkout-gsi.log
+#JKH    rm -f ${logdir}/checkout-gsi.log
 #JKH    git clone --recursive https://github.com/NOAA-EMC/GSI.git gsi.fd >> ${logdir}/checkout-gsi.log 2>&1
 #JKH    cd gsi.fd
 #JKH    git checkout a62dec6
@@ -57,7 +57,7 @@ fi
 #JKH
 #JKHecho gldas checkout ...
 #JKHif [[ ! -d gldas.fd ]] ; then
-#JKH    rm -f ${topdir}/checkout-gldas.log
+#JKH    rm -f ${logdir}/checkout-gldas.log
 #JKH    git clone https://github.com/NOAA-EMC/GLDAS.git gldas.fd >> ${logdir}/checkout-gldas.fd.log 2>&1
 #JKH    cd gldas.fd
 #JKH    git checkout gldas_gfsv16_release.v.1.28.0
@@ -68,7 +68,7 @@ fi
 
 echo ufs_utils checkout ...
 if [[ ! -d ufs_utils.fd ]] ; then
-    rm -f ${topdir}/checkout-ufs_utils.log
+    rm -f ${logdir}/checkout-ufs_utils.log
     git clone --recursive https://github.com/ufs-community/UFS_UTILS.git ufs_utils.fd >> ${logdir}/checkout-ufs_utils.fd.log 2>&1
     cd ufs_utils.fd
     git checkout 26cd024
@@ -82,7 +82,7 @@ fi
 
 echo UPP checkout ...
 if [[ ! -d gfs_post.fd ]] ; then
-    rm -f ${topdir}/checkout-gfs_post.log
+    rm -f ${logdir}/checkout-gfs_post.log
     git clone https://github.com/NOAA-EMC/UPP.git gfs_post.fd >> ${logdir}/checkout-gfs_post.log 2>&1
     cd gfs_post.fd
     git checkout c939eae
@@ -111,7 +111,7 @@ checkout_wafs=${checkout_wafs:-"NO"}
 if [[ ${checkout_wafs} == "YES" ]] ; then
   echo EMC_gfs_wafs checkout ...
   if [[ ! -d gfs_wafs.fd ]] ; then
-    rm -f ${topdir}/checkout-gfs_wafs.log
+    rm -f ${logdir}/checkout-gfs_wafs.log
     git clone --recursive https://github.com/NOAA-EMC/EMC_gfs_wafs.git gfs_wafs.fd >> ${logdir}/checkout-gfs_wafs.log 2>&1
     cd gfs_wafs.fd
     git checkout c2a29a67d9432b4d6fba99eac7797b81d05202b6
@@ -123,7 +123,7 @@ fi
 
 echo EMC_verif-global checkout ...
 if [[ ! -d verif-global.fd ]] ; then
-    rm -f ${topdir}/checkout-verif-global.log
+    rm -f ${logdir}/checkout-verif-global.log
     git clone --recursive https://github.com/NOAA-EMC/EMC_verif-global.git verif-global.fd >> ${logdir}/checkout-verif-global.log 2>&1
     cd verif-global.fd
     git checkout verif_global_v2.8.0
@@ -134,8 +134,8 @@ fi
 
 #JKHecho aeroconv checkout ...
 #JKHif [[ ! -d aeroconv.fd ]] ; then
-#JKH    rm -f ${topdir}/checkout-aero.log
-#JKH    git clone https://github.com/NCAR/aeroconv aeroconv.fd >> ${topdir}/checkout-aero.log 2>&1
+#JKH    rm -f ${logdir}/checkout-aero.log
+#JKH    git clone https://github.com/NCAR/aeroconv aeroconv.fd >> ${logdir}/checkout-aero.log 2>&1
 #JKH    cd aeroconv.fd
 #JKH    git checkout 24f6ddc
 #JKH    cd ${topdir}
@@ -149,8 +149,8 @@ wfmdir=../FV3GFSwfm
 cd $wfmdir
 
 if [[ ! -d nclvx ]]; then
-    rm -f ${topdir}/checkout-nclvx.log
-    git clone -b realtime/nclvx gerritt:FV3_ESRL nclvx >> ${topdir}/checkout-nclvx.log 2>&1
+    rm -f ${logdir}/checkout-nclvx.log
+    git clone -b realtime/nclvx gerrit:FV3_ESRL nclvx >> ${logdir}/checkout-nclvx.log 2>&1
 else
     echo 'Skip.  Directory nclvx already exists.'
 fi
