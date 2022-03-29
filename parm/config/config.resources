@@ -401,7 +401,16 @@ elif [ $step = "mom6ic" ]; then
     export npe_mom6ic=24
     export npe_node_mom6ic=24
 
-elif [ $step = "arch" -o $step = "earc" -o $step = "getic" ]; then
+## JKH
+elif [ $step = "getic" ]; then
+
+    eval "export wtime_$step='00:10:00'"
+    eval "export npe_$step=1"
+    eval "export npe_node_$step=1"
+    eval "export nth_$step=1"
+
+elif [ $step = "arch" -o $step = "earc" ]; then
+#JKHelif [ $step = "arch" -o $step = "earc" -o $step = "getic" ]; then
 
     eval "export wtime_$step='06:00:00'"
     eval "export npe_$step=1"
