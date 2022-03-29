@@ -151,7 +151,7 @@ class HostInfo:
             'stmp': '$ROTDIR/..',
             'ptmp': '$ROTDIR/..',
             'noscrub': '$HOMEDIR',
-            'account': 'gsd-fv3-dev',
+            'account': 'gsd-fv3',
             'queue': 'batch',
             'queue_service': 'service',
             'partition_batch': 'hera',
