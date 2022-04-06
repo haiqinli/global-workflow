@@ -1,3 +1,8 @@
+06 Apr 2022
+    - update UFS to 29Mar22 gsl/develop branch, c31f633, tag global-29Mar2022
+         v5 namelist
+         unified UGWP
+         no GF shallow convection
 03 Mar 2022
     - update UFS to 24Feb22 gsl/develop branch, a2a6a22, tag global-24Feb2022
          v5 namelist
