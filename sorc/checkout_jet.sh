@@ -33,7 +33,7 @@ if [[ ! -d ufs_model.fd ]] ; then
     git clone https://github.com/NOAA-GSL/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
     cd ufs_model.fd
     #JKH  29Mar22 branch, c31f633385d20dca9062fb16dc98d71677f19d00
-    git checkout ${ufs_model_hash:-c31f633}
+    git checkout ${ufs_model_hash:-global-29Mar2022}
     git submodule update --init --recursive
     cd ${topdir}
 else
