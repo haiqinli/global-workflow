@@ -47,6 +47,12 @@ elif  [[ -f $RETRODIR/${pubsfc_file} ]]; then
   echo "pubatm_file:  $pubatm_file"
   ln -fs $RETRODIR/${pubsfc_file} $sfc_file
   ln -fs $RETRODIR/${pubatm_file} $atm_file 
+elif  [[ -f $EMCDIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${sfc_file} ]]; then
+  echo "linking $EMCDIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}..."
+  echo "sfc_file:  $sfc_file"
+  echo "atm_file:  $atm_file"
+  ln -s $EMCDIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${sfc_file}
+  ln -s $EMCDIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${atm_file}
 elif  [[ -f $RETRODIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${sfc_file} ]]; then
   echo "linking $RETRODIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}..."
   echo "sfc_file:  $sfc_file"

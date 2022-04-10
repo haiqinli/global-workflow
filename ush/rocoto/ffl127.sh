@@ -21,7 +21,7 @@ python3 ./setup_expt.py forecast-only --pslot $PSLOT  --gfs_cyc 1 \
 ## call jobs/rocoto/makeinit_link.sh for init task
 ###sed -i "s/init.sh/makeinit_link.sh/" $EXPDIR/$PSLOT/$PSLOT.xml
 # call jobs/rocoto/getic_gsl.sh for gfsgetic task
-sed -i "s/getic.sh/getic_gsl.sh/" $EXPDIR/$PSLOT/$PSLOT.xml
+sed -i "s/getic.sh/getic_gsl_fv3gfsv16.sh/" $EXPDIR/$PSLOT/$PSLOT.xml
 # call jobs/rocoto/arch_gsl.sh for gfsarch task
 sed -i "s/arch.sh/arch_gsl.sh/" $EXPDIR/$PSLOT/$PSLOT.xml
 
