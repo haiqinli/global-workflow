@@ -555,6 +555,13 @@ elif [ $step = "gempak" ]; then
     export nth_gempak=3
     if [[ "$machine" == "WCOSS_C" ]]; then export memory_gempak="254M"; fi
 
+elif [ $step = "wsaeroic" ]; then
+
+    export wtime_wsaeroic="00:30:00"
+    export npe_wsaeroic=6
+    export npe_node_wsaeroic=3
+    export nth_wsaeroic=1
+
 else
 
     echo "Invalid step = $step, ABORT!"

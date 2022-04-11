@@ -111,7 +111,6 @@ case $case_in in
           if [ $LEVS = "128" ]; then
             export DELTIM=120
           else
-            #JKHexport DELTIM=225
             export DELTIM=180
           fi
         else
@@ -123,8 +122,9 @@ case $case_in in
         fi
         export layout_x=8
         export layout_y=12
-        #JKHexport layout_x_gfs=16
-        export layout_x_gfs=12             ## JKH
+        export layout_x_gfs=16
+        #JKHexport layout_x_gfs=12             ## JKH
+        #JKHexport layout_y_gfs=16
         export layout_y_gfs=12
         export nth_fv3=4
         export nth_fv3_gfs=4
@@ -133,7 +133,7 @@ case $case_in in
         if [[ "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_ugwpv1" ]]; then export cdmbgwd="1.0,1.0,1.0,1.0"; fi
         export WRITE_GROUP=2
         export WRTTASK_PER_GROUP=$(echo "2*$npe_node_max" |bc)
-        export WRITE_GROUP_GFS=2            ## JKH
+        export WRITE_GROUP_GFS=4
         export WRTTASK_PER_GROUP_GFS=$(echo "2*$npe_node_max" |bc)
         export WRTIOBUF="32M"
         ;;

@@ -33,8 +33,7 @@ export npe_postgp=$npe_post
 export nth_postgp=1
 
 export GFS_DOWNSTREAM="YES"
-#JKHexport downset=2
-export downset=1                             ## JKH  (removes creation of pgrb2b files)
+export downset=2
 
 export GRIBVERSION='grib2'
 export SENDCOM="YES"

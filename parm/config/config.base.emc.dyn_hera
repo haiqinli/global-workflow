@@ -280,7 +280,7 @@ else
 fi
 
 # IAU related parameters
-export DOIAU="NO"        # Enable 4DIAU for control with 3 increments   ## JKH
+export DOIAU="YES"        # Enable 4DIAU for control with 3 increments
 export IAUFHRS="3,6,9"
 export IAU_FHROT=$(echo $IAUFHRS | cut -c1)
 export IAU_DELTHRS=6
@@ -298,7 +298,7 @@ fi
 export lobsdiag_forenkf=".true."
 
 # run GLDAS to spin up land ICs
-export DO_GLDAS="YES"
+export DO_GLDAS="NO"            ## JKH
 export gldas_cyc=00
 
 # if [[ "$SDATE" -lt "2019020100" ]]; then # no rtofs in GDA
@@ -359,8 +359,8 @@ export netcdf_diag=".true."
 export binary_diag=".false."
 
 # Verification options
-export DO_METP="NO"         # Run METPLUS jobs - set METPLUS settings in config.metp    ## JKH
-export DO_VSDB="NO"         # Run VSDB package - set VSDB settings in config.vrfy       ## JKH
+export DO_METP="YES"         # Run METPLUS jobs - set METPLUS settings in config.metp
+export DO_VSDB="YES"         # Run VSDB package - set VSDB settings in config.vrfy
 
 # Archiving options
 export HPSSARCH="@HPSSARCH@"        # save data to HPSS archive
