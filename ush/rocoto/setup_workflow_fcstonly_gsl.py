@@ -371,10 +371,10 @@ def get_workflow(dict_configs, cdump='gdas'):
         dependencies1 = rocoto.create_dependency(dep_condition='not', dep=deps1)
 
         deps2 = []
-        data = '&ICSDIR;/@Y@m@d@H/&CDUMP;&/CASE;/INPUT/gfs_data.tile6.nc'
+        data = '&ICSDIR;/@Y@m@d@H/&CDUMP;/&CASE;/INPUT/gfs_data.tile6.nc'
         dep_dict = {'type':'data', 'data':data}
         deps2.append(rocoto.add_dependency(dep_dict))
-        data = '&ICSDIR;/@Y@m@d@H/&CDUMP;&/CASE;/INPUT/sfc_data.tile6.nc'
+        data = '&ICSDIR;/@Y@m@d@H/&CDUMP;/&CASE;/INPUT/sfc_data.tile6.nc'
         dep_dict = {'type':'data', 'data':data}
         deps2.append(rocoto.add_dependency(dep_dict))
         dependencies2 = rocoto.create_dependency(dep_condition='and', dep=deps2)

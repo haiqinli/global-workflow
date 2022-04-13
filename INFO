@@ -1,87 +1,14 @@
-03 Mar 2022
-    - update UFS to 24Feb22 gsl/develop branch, a2a6a22, tag global-24Feb2022
+13 Apr 2022
+    - update UFS to 29Mar22 NOAA-GSL gsl/develop branch, c31f633; tag global-29Mar2022
+18 Mar 2022
+    - Bring gslv16_dev_cyc branch up-to-date with gslv16_dev branch 
+         (07Mar22 branch + 18Mar22 updates)
+    ** 01Mar22 NOAA-EMC/develop branch + GSL updates
+    ** default suite is FV3_RAP_noah_sfcdiff_unified_ugwp
+    ** UFS: tag global-24Feb2022 from NOAA-GSL:gsl/develop branch
          v5 namelist
          unified UGWP
          no GF shallow convection
-    - update to 01Mar22 global-workflow develop branch, a0e23e2
-         post:       c939eae  (10Nov21)
-         ufs_utils:  26cd024  (31Jan22)
-      * sorc/fv3gfs.fd renamed to sorc/ufs_model.fd
-      * scripts/exglobal_forecast.sh broken into modular scripts under ush
-        (forecast_predet.sh, forecast_det.sh, forecast_postdet.sh, parsing_namelists_FV3.sh, 
-         parsing_model_configure_FV3.sh)
-      * adds full coupled model support except aerosols (FV3-WW3-MOM6-CICE)
-      * major pull request #500
-        https://github.com/NOAA-EMC/global-workflow/commit/dd03ed0953bfc65f5a9c85529dd2c95ac0625189  
-    - renaming of files from *gsd* to *gsl*
-        diag_table_da_gsd  =>  diag_table_da_gsl
-        diag_table_gsd     =>  diag_table_gsl
-        diag_table_gsd_ruc =>  diag_table_gsl_ruc
-        field_table_gsd    =>  field_table_thompson_aero_tke
-    - renaming of suite definition files  (SDF)
-        FV3_GSD_v0    =>  FV3_RAP_cires_ugwp
-        FV3_GSD_noah  =>  FV3_RAP_sfcdiff_unified_ugwp
-    - added FV3_RAP_sfcdiff_ugwpv1 SDF
-24 Feb 2022
-    - update UFS to 15dec21 gsl/develop branch, dbdb629
-         v5 namelist
-         unified UGWP
-         no GF shallow convection
-    - update UFS UTILS repository to ufs-community and update branch to 31 Jan 2022 (upgrade to ESMF 8.2.0)
-08 Dec 2021
-    - added diag_table_aod for IAER=1011 option
-03 Dec 2021
-    - added tag gsldev_03dec21_ugwpv1
-      * change FV3_gsd_noah_ugwd to FV3_gsd_noah_ugwpv1 
-02 Dec 2021
-    - added tag gsldev_02dec21_ugwd
-      * added new SDF FV3_gsd_noah_ugwd
-24 Nov 2021
-    - added tag gsldev_18oct21  
-      * update FV3 to 18Oct21 gsl/develop branch
-      * update field_table_gsd with default values of 0.0 for ice_nc, rain_nc, water_nc, sgs_tke variables
-      * set default IAER to 1011
-16 Sep 2021
-    - added tag gsldev_26aug21  
-      * update FV3 to 26Aug21 gsl/develop branch
-      * remove fhdiag, fhmax, fhout, fhmaxhf, fhouthf from atmos_model_nml
-    - added tag gsldev_21jul21  
-      * update FV3 to 21Jul21 gsl/develop branch
-      * updated compilation options
-      * removed ncld from gfs_physics_nml
-      * added "-n n_tasks" after srun command
-   - added tag gsldev_26may21  
-      * update FV3 to 26May21 gsl/develop branch
-      * updated compilation options
-      * copy yaml file to working directory
-15 Sep 2021
-    - added tag gsldev_18mar21
-      * update FV3 to 18mar21 gsl/develop branch
-19 Feb 2021
-    - change HPSS directory to /BMC/fim/1year/GSL_phys_tst_2021
-12 Jan 2021
-    - update to 04Jan21 global-workflow develop branch, ef8b641
-         post:       upp_gfsv16_release.v1.1.1
-         ufs_utils:  ops-gfsv16.0.0
-    - update to 18Dec20 gsl/develop branch, 57a8258, for sorc/fv3gfs_ccpp.fd
-      effective 00Z 13 Jan 2021
-30 Nov 2020
-    - change n_sponge=23 for L64 runs, effective 00Z 01 Dec 2020
-24 Aug 2020
-    - corrected labeling of nta_ulwf plots
-19 Aug 2020
-    - update to new NCL graphic routines
-      * NOAA logo
-      * new domains
-18 Aug 2020
-    - updated to 13Aug gsd/develop branch,  for sorc/fv3gfs_ccpp.fd
-15 Jul 2020
-    - updated to 08Jul gsd/develop branch, 04b3ad2, for sorc/fv3gfs_ccpp.fd + GF modifications
-08 Jul 2020
-    - updated to 29Jun gsd/develop branch, 27a8a07, for sorc/fv3gfs_ccpp.fd
-01 July 2020
-    - merge 23Jun20 portorion branch, ed6b279, into gsd-ccpp-jet
-    - additional updates for running on jet
-17 June 2020
-    - created new branch, gsd-ccpp-jet, from 15Jun20 port2orion branch, ed6b279
-    - using 09Jun gsd/develop branch for sorc/fv3gfs_ccpp.fd
+         FV3_RAP_noah_sfcdiff_unified_ugwp (default CCPP suite)
+11 Mar 2022
+    - created new branch, gslv16_dev_cyc, from gslv16_dev 23feb branch, ac7c8dd

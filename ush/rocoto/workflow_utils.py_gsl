@@ -150,7 +150,7 @@ class HostInfo:
             'stmp': '/scratch1/BMC/gsd-fv3-dev/NCEPDEV/stmp3/$USER',
             'ptmp': '/scratch1/BMC/gsd-fv3-dev/NCEPDEV/stmp4/$USER',
             'noscrub': '$HOMEDIR',
-            'account': 'gsd-fv3-dev',
+            'account': 'gsd-fv3-test',
             'queue': 'batch',
             'queue_service': 'service',
             'partition_batch': 'hera',
@@ -158,7 +158,7 @@ class HostInfo:
             'chgrp_cmd': 'chgrp rstprod',
             'hpssarch': 'YES',
             'localarch': 'NO',
-            'atardir': '/BMC/$HPSS_PROJECT/1year/GSL_phys_tst_2022/$PSLOT',
+            'atardir': '/BMC/$HPSS_PROJECT/2year/GSLcyc_2022/$PSLOT',
              }
 
         return info

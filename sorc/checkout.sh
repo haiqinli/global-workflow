@@ -32,13 +32,10 @@ if [[ ! -d ufs_model.fd ]] ; then
     #JKHgit clone https://github.com/ufs-community/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
     git clone https://github.com/NOAA-GSL/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
     cd ufs_model.fd
-    #JKH  24Feb22 branch, a2a6a22b865d471a2814712ea80bef946d30bd2d
-    git checkout ${ufs_model_hash:-global-24Feb2022}
+    #JKH  29Mar22 branch, c31f633385d20dca9062fb16dc98d71677f19d00
+    git checkout ${ufs_model_hash:-global-29Mar2022}
     git submodule update --init --recursive
     cd ${topdir}
-    if [[ -d ufs_model.fd_gsl ]]; then
-        rsync -avx ufs_model.fd_gsl/ ufs_model.fd/        ## copy over GSL changes not in UFS repository
-    fi
 else
     echo 'Skip.  Directory ufs_model.fd already exists.'
 fi 
@@ -132,16 +129,16 @@ else
     echo 'Skip. Directory verif-global.fd already exist.'
 fi
 
-#JKHecho aeroconv checkout ...
-#JKHif [[ ! -d aeroconv.fd ]] ; then
-#JKH    rm -f ${topdir}/checkout-aero.log
-#JKH    git clone https://github.com/NCAR/aeroconv aeroconv.fd >> ${topdir}/checkout-aero.log 2>&1
-#JKH    cd aeroconv.fd
-#JKH    git checkout 24f6ddc
-#JKH    cd ${topdir}
-#JKH    ./aero_extract.sh
-#JKHelse
-#JKH    echo 'Skip.  Directory aeroconv.fd already exists.'
-#JKHfi
+echo aeroconv checkout ...
+if [[ ! -d aeroconv.fd ]] ; then
+    rm -f ${topdir}/checkout-aero.log
+    git clone https://github.com/NCAR/aeroconv aeroconv.fd >> ${topdir}/checkout-aero.log 2>&1
+    cd aeroconv.fd
+    git checkout 24f6ddc
+    cd ${topdir}
+    ./aero_extract.sh
+else
+    echo 'Skip.  Directory aeroconv.fd already exists.'
+fi
 
 exit 0
