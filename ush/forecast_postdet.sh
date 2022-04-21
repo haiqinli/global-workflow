@@ -648,6 +648,8 @@ data_out_GFS() {
           $NCP $file $memdir/RESTART/$file
         done
       fi
+      $NCP $DATA/input.nml $ROTDIR/${CDUMP}.${PDY}/${cyc}/atmos/          # GSL
+      $NCP $DATA/model_configure $ROTDIR/${CDUMP}.${PDY}/${cyc}/atmos/    # GSL
     elif [ $CDUMP = "gfs" ]; then
       $NCP $DATA/input.nml $ROTDIR/${CDUMP}.${PDY}/${cyc}/atmos/
       $NCP $DATA/model_configure $ROTDIR/${CDUMP}.${PDY}/${cyc}/atmos/    # GSL
