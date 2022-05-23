@@ -3,10 +3,10 @@
 #############################################
 
 # ESMF #
-logKindFlag:            ESMF_LOGKIND_MULTI
+  logKindFlag:            ESMF_LOGKIND_MULTI
 
 # EARTH #
-EARTH_component_list: MED ATM OCN ICE WAV
+EARTH_component_list: MED ATM CHM OCN ICE WAV
 EARTH_attributes::
   Verbosity = 0
 ::
@@ -24,6 +24,13 @@ ATM_attributes::
   DumpFields = @[DumpFields]
   ProfileMemory = false
   OverwriteSlice = true
+::
+
+# CHM #
+CHM_model:                      @[chm_model]
+CHM_petlist_bounds:             @[chm_petlist_bounds]
+CHM_attributes::
+  Verbosity = 0
 ::
 
 # OCN #
@@ -75,7 +82,11 @@ runSeq::
      WAV -> ATM :srcMaskValues=1
      ATM -> WAV
      ICE -> WAV
-     ATM
+     ATM phase1
+     ATM -> CHM
+     CHM
+     CHM -> ATM
+     ATM phase2
      ICE
      WAV
      ATM -> MED :remapMethod=redist
