@@ -122,23 +122,9 @@ if [ $gwd_opt -eq 2 ]; then
     #export  do_ugwp_v1_orog_only=".false."
   
     #--used for UFS p8b 
-##JKH    export knob_ugwp_version=0
-##JKH    export do_ugwp=".false."
-##JKH    export do_tofd=".false."
-##JKH    export do_ugwp_v0=".true."
-##JKH    export do_ugwp_v1=".false."
-##JKH    export do_ugwp_v0_orog_only=".false."
-##JKH    export do_ugwp_v0_nst_only=".false."
-##JKH    export do_gsl_drag_ls_bl=".false."
-##JKH    export do_gsl_drag_ss=".true."
-##JKH    export do_gsl_drag_tofd=".true."
-##JKH    export do_ugwp_v1_orog_only=".false."
-##JKH    export launch_level=$(echo "$LEVS/2.35" |bc)
-
-    #--used for GSL suite
     export knob_ugwp_version=0
     export do_ugwp=".false."
-    export do_tofd="true."
+    export do_tofd=".false."
     export do_ugwp_v0=".true."
     export do_ugwp_v1=".false."
     export do_ugwp_v0_orog_only=".false."
@@ -148,6 +134,20 @@ if [ $gwd_opt -eq 2 ]; then
     export do_gsl_drag_tofd=".true."
     export do_ugwp_v1_orog_only=".false."
     export launch_level=$(echo "$LEVS/2.35" |bc)
+
+    #--used for GSL suite
+##JKH    export knob_ugwp_version=0
+##JKH    export do_ugwp=".false."
+##JKH    export do_tofd="true."
+##JKH    export do_ugwp_v0=".true."
+##JKH    export do_ugwp_v1=".false."
+##JKH    export do_ugwp_v0_orog_only=".false."
+##JKH    export do_ugwp_v0_nst_only=".false."
+##JKH    export do_gsl_drag_ls_bl=".false."
+##JKH    export do_gsl_drag_ss=".true."
+##JKH    export do_gsl_drag_tofd=".true."
+##JKH    export do_ugwp_v1_orog_only=".false."
+##JKH    export launch_level=$(echo "$LEVS/2.35" |bc)
 fi
 
 
@@ -217,9 +217,12 @@ export isubc_lw=2
 export iopt_sfc="3"
 
 # Convection Options: 2-SASAS, 3-GF
-if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_gf" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" ]] ; then
     export imfdeepcnv=3
     export imfshalcnv=-1              ## JKH - no shallow GF
+elif [[ "$CCPP_SUITE" == "FV3_GFS_v16_gf" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf" ]] ; then 
+    export imfdeepcnv=3
+    export imfshalcnv=3              
 else
     export imfdeepcnv=2
     export imfshalcnv=2
