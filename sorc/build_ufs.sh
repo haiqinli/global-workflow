@@ -3,7 +3,7 @@ set -eux
 
 # Build ATMW by default
 APP="ATMW"
-CCPP_SUITES="FV3_GFS_v16,FV3_GFS_v16_RRTMGP,FV3_GFS_v16_ugwpv1,FV3_RAP_noah_sfcdiff_unified_ugwp,FV3_GFS_v17_p8"
+CCPP_SUITES="FV3_GFS_v16,FV3_GFS_v16_ugwpv1,FV3_RAP_noah_sfcdiff_unified_ugwp,FV3_GFS_v17_p8,FV3_GFS_v17_p8_gf,FV3_GFS_v17_p8_mynn"
 
 while getopts "c" option; do
   case "${option}" in
