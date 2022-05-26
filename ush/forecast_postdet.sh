@@ -250,7 +250,10 @@ EOF
 
   # Files for GWD
   OROFIX_ugwd=${OROFIX_ugwd:-"${FIX_DIR}/fix_ugwd"}
-  $NLN ${OROFIX_ugwd}/ugwp_limb_tau.nc $DATA/ugwp_limb_tau.nc
+  if [[ "$CCPP_SUITE" != "FV3_RAP_cires_ugwp" && "$CCPP_SUITE" != "FV3_RAP_noah_sfcdiff_unified_ugwp" && "$CCPP_SUITE" != "FV3_RAP_noah_sfcdiff_ugwpv1" ]] ; then   ## JKH
+
+    $NLN ${OROFIX_ugwd}/ugwp_limb_tau.nc $DATA/ugwp_limb_tau.nc
+  fi
   for n in $(seq 1 $ntiles); do
     $NLN ${OROFIX_ugwd}/$CASE/${CASE}_oro_data_ls.tile${n}.nc $DATA/INPUT/oro_data_ls.tile${n}.nc
     $NLN ${OROFIX_ugwd}/$CASE/${CASE}_oro_data_ss.tile${n}.nc $DATA/INPUT/oro_data_ss.tile${n}.nc
@@ -513,12 +516,6 @@ EOF
   #------------------------------------------------------------------
   # make symbolic links to write forecast files directly in memdir
   cd $DATA
-  if [ "$CCPP_SUITE" = "FV3_RAP_cires_ugwp" -o "$CCPP_SUITE" = "FV3_RAP_noah_sfcdiff_unified_ugwp" -o "$CCPP_SUITE" = "FV3_RAP_noah_sfcdiff_ugwpv1" ]; then
-    $NLN $FIX_AM/CCN_ACTIVATE.BIN  CCN_ACTIVATE.BIN
-    $NLN $FIX_AM/freezeH2O.dat  freezeH2O.dat
-    $NLN $FIX_AM/qr_acr_qg.dat  qr_acr_qg.dat
-    $NLN $FIX_AM/qr_acr_qs.dat  qr_acr_qs.dat
-  fi
 
   affix="nc"
   if [ "$OUTPUT_FILE" = "nemsio" ]; then

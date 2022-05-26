@@ -183,10 +183,14 @@ fi
 
 # PBL/turbulence schemes
 export hybedmf=".false."
-if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_mynn" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" ]] ; then
    export satmedmf=".false."
    export isatmedmf=0
-   export shal_cnv=".true."       
+   if [[ "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" ]] ; then 
+     export shal_cnv=".false."       
+   else
+     export shal_cnv=".true."       
+   fi
    export do_mynnedmf=".true."     
    if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" ]] ; then 
      export do_mynnsfclay=".true."
@@ -225,7 +229,11 @@ elif [[ "$CCPP_SUITE" == "FV3_GFS_v16_gf" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf
     export imfshalcnv=3              
 else
     export imfdeepcnv=2
-    export imfshalcnv=2
+    if [[ "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" ]] ; then 
+      export imfshalcnv=-1
+    else
+      export imfshalcnv=2
+    fi
 fi
 
 # Microphysics configuration
