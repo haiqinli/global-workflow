@@ -144,6 +144,10 @@ fi
 
 export ens_tracker_ver=v1.1.15.4
 export HOMEens_tracker=$BASE_GIT/TC_tracker/TC_tracker.${ens_tracker_ver}
+##  JKH
+if [ $machine = "JET" ] ; then                            
+    export HOMEens_tracker=$HOMEgfs/sorc/ens_tracker.${ens_tracker_ver}
+fi
 
 if [ "$VRFYTRAK" = "YES" ]; then
 
@@ -155,7 +159,12 @@ if [ "$VRFYTRAK" = "YES" ]; then
         export FHOUT_CYCLONE=6            
         export FHMAX_CYCLONE=$(( FHMAX_GFS<240 ? FHMAX_GFS : 240 ))
     fi
-    export COMINsyn=${COMINsyn:-${COMROOT}/gfs/prod/syndat}
+    ##  JKH
+    if [ $machine = "JET" ]; then
+        export COMINsyn=${COMINsyn:-/mnt/lfs4/HFIP/hwrf-data/hwrf-input/SYNDAT-PLUS}
+    else
+        export COMINsyn=${COMINsyn:-${COMROOT}/gfs/prod/syndat}
+    fi
 fi
 
 
