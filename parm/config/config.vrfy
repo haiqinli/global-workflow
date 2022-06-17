@@ -8,11 +8,11 @@ echo "BEGIN: config.vrfy"
 # Get task specific resources
 . $EXPDIR/config.resources vrfy
 
-export DO_VSDB=${DO_VSDB:-"NO"}  # Switch to run VSDB package; set in config.base
+export DO_VSDB=${DO_VSDB:-"NO"}   # Switch to run VSDB package; set in config.base
 
-export VDUMP="gfs"               # Verifying dump
-export CDUMPFCST="gdas"          # Fit-to-obs with GDAS/GFS prepbufr
-export CDFNL="gdas"              # Scores verification against GDAS/GFS analysis
+export VDUMP="gfs"                # Verifying dump
+export CDUMPFCST="gdas"           # Fit-to-obs with GDAS/GFS prepbufr
+export CDFNL="gdas"               # Scores verification against GDAS/GFS analysis
 
 export MKPGB4PRCP="NO"           # Make 0.25-deg pgb files in ARCDIR for precip verification  ## JKH
 export VRFYFITS="NO"             # Fit to observations                                        ## JKH
@@ -144,6 +144,10 @@ fi
 
 export ens_tracker_ver=v1.1.15.4
 export HOMEens_tracker=$BASE_GIT/TC_tracker/TC_tracker.${ens_tracker_ver}
+##  JKH
+if [ $machine = "JET" ] ; then                            
+    export HOMEens_tracker=$HOMEgfs/sorc/ens_tracker.${ens_tracker_ver}
+fi
 
 if [ "$VRFYTRAK" = "YES" ]; then
 
@@ -155,7 +159,12 @@ if [ "$VRFYTRAK" = "YES" ]; then
         export FHOUT_CYCLONE=6            
         export FHMAX_CYCLONE=$(( FHMAX_GFS<240 ? FHMAX_GFS : 240 ))
     fi
-    export COMINsyn=${COMINsyn:-${COMROOT}/gfs/prod/syndat}
+    ##  JKH
+    if [ $machine = "JET" ]; then
+        export COMINsyn=${COMINsyn:-/mnt/lfs4/HFIP/hwrf-data/hwrf-input/SYNDAT-PLUS}
+    else
+        export COMINsyn=${COMINsyn:-${COMROOT}/gfs/prod/syndat}
+    fi
 fi
 
 

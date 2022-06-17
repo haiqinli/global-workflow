@@ -32,13 +32,13 @@ if [[ ! -d ufs_model.fd ]] ; then
     #JKHgit clone https://github.com/ufs-community/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
     git clone https://github.com/NOAA-GSL/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
     cd ufs_model.fd
-    #JKH  29Mar22 branch, c31f633385d20dca9062fb16dc98d71677f19d00 
-    git checkout ${ufs_model_hash:-global-29Mar2022}
+    #JKH  23May22 branch, 7b0be423e92a4bf7f9913d3c4195a776060d90dc
+    git checkout ${ufs_model_hash:-7b0be42}
     git submodule update --init --recursive
     cd ${topdir}
-   # if [[ -d ufs_model.fd_gsl ]]; then
-   #     rsync -avx ufs_model.fd_gsl/ ufs_model.fd/        ## copy over GSL changes not in UFS repository
-   # fi
+    if [[ -d ufs_model.fd_gsl ]]; then
+        rsync -avx ufs_model.fd_gsl/ ufs_model.fd/        ## copy over GSL changes not in UFS repository
+    fi
 else
     echo 'Skip.  Directory ufs_model.fd already exists.'
 fi 
@@ -71,7 +71,7 @@ if [[ ! -d ufs_utils.fd ]] ; then
     rm -f ${topdir}/checkout-ufs_utils.log
     git clone --recursive https://github.com/ufs-community/UFS_UTILS.git ufs_utils.fd >> ${logdir}/checkout-ufs_utils.fd.log 2>&1
     cd ufs_utils.fd
-    git checkout 26cd024
+    git checkout 04ad17e
     cd ${topdir}
     if [[ -d ufs_utils.fd_gsl ]]; then
         rsync -avx ufs_utils.fd_gsl/ ufs_utils.fd/        ## copy over GSL changes not in UFS_UTILS repository
@@ -85,7 +85,7 @@ if [[ ! -d gfs_post.fd ]] ; then
     rm -f ${topdir}/checkout-gfs_post.log
     git clone https://github.com/NOAA-EMC/UPP.git gfs_post.fd >> ${logdir}/checkout-gfs_post.log 2>&1
     cd gfs_post.fd
-    git checkout c939eae
+    git checkout upp_v10.0.11
     git submodule update --init CMakeModules
     ################################################################################
     # checkout_gtg

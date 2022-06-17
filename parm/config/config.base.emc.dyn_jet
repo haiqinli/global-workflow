@@ -150,9 +150,12 @@ export DO_WAVE="NO"
 export DO_OCN="NO"
 export DO_ICE="NO"
 export DO_AERO="NO"
+export CCPP_SUITE="FV3_GFS_v17_p8"                              # GFS v17 prototype p8
+#### export CCPP_SUITE="FV3_GFS_v17_p8_gf"                           # GFS v17 prototype p8 + GF
+#### export CCPP_SUITE="FV3_GFS_v17_p8_mynn"                         # GFS v17 prototype p8 + MYNN
 #### export CCPP_SUITE="FV3_GFS_v16"                            # GFS v16
 #### export CCPP_SUITE="FV3_RAP_cires_ugwp"                     # RUC LSM, MYNN, GF, CIRES UGWP
-export CCPP_SUITE="FV3_RAP_noah_sfcdiff_unified_ugwp"      # NOAH LSM, MYNN, GF, no GF shallow, Unified UGWP
+#### export CCPP_SUITE="FV3_RAP_noah_sfcdiff_unified_ugwp"      # NOAH LSM, MYNN, GF, no GF shallow, Unified UGWP
 #### export CCPP_SUITE="FV3_RAP_noah_sfcdiff_ugwpv1"            # NOAH LSM, MYNN, GF, no GF shallow, UGWPv1
 #### export CCPP_SUITE="FV3_GFS_v16_gf"                         # GFS v16 + GF
 #### export CCPP_SUITE="FV3_GFS_v16_mynn"                       # GFS v16 + MYNN
@@ -307,11 +310,7 @@ export gldas_cyc=00
 # fi
 
 # Microphysics Options: 99-ZhaoCarr, 8-Thompson; 6-WSM6, 10-MG, 11-GFDL
-if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_ugwpv1" || "$CCPP_SUITE" == "FV3_GFS_v16_thompson" ]] ; then
-       export imp_physics=8
-else
-       export imp_physics=11
-fi
+export imp_physics=8
 
 # Shared parameters
 # Hybrid related
