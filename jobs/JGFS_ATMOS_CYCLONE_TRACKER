@@ -128,8 +128,7 @@ export loopnum=1
 
 #-----------input data checking -----------------
 ${USHens_tracker}/data_check_gfs.sh
-# exit code 6 = missing data of opportunity
-if [ $? -eq 6 ]; then exit; fi
+export err=$?; err_chk
 #------------------------------------------------
 
 machine=${machine:-$(echo ${SITE})}
@@ -147,9 +146,6 @@ elif [ $machine = HERA ]; then # For HERA
   ${USHens_tracker}/extrkr_gfs.sh ${loopnum} ${cmodel} ${CDATE} ${pert} ${DATA}
 elif [ $machine = ORION ]; then # For ORION
   machine=orion
-  ${USHens_tracker}/extrkr_gfs.sh ${loopnum} ${cmodel} ${CDATE} ${pert} ${DATA}
-elif [ $machine = JET ]; then # For JET
-  machine=jet
   ${USHens_tracker}/extrkr_gfs.sh ${loopnum} ${cmodel} ${CDATE} ${pert} ${DATA}
 fi
 export err=$?; err_chk
