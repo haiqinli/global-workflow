@@ -1,4 +1,4 @@
-#!/bin/ksh  -x
+#!/bin/bash -x
 
 ## this script makes links to FV3GFS netcdf files under /public and copies over GFS analysis file for verification
 ##   /home/rtfim/UFS_CAMSUITE/FV3GFSrun/FV3ICS/YYYYMMDDHH/gfs
