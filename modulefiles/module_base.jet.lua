@@ -8,7 +8,7 @@ load(pathJoin("hpc", "1.1.0"))
 load(pathJoin("hpc-intel", "18.0.5.274"))
 load(pathJoin("hpc-impi", "2018.4.274"))
 
-load(hpss)
+load("hpss")
 load(pathJoin("nco", "4.9.1"))
 load(pathJoin("gempak", "7.4.2"))
 
@@ -28,6 +28,6 @@ load(pathJoin("wgrib2", "2.0.8"))
 
 load(pathJoin("cdo", "1.9.5"))
 
-load(rocoto)
+load("rocoto")
 
 whatis("Description: GFS run environment")
