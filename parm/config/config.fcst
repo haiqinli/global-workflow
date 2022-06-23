@@ -296,6 +296,8 @@ elif [ $imp_physics -eq 8 ]; then # Thompson
         export ltaerosol=".false."
         export lradar=".false."
         export dt_inner=$((DELTIM/2))
+        export sedi_semi=.true.
+        export decfl=10
         export hord_mt_nh_nonmono=5
         export hord_xx_nh_nonmono=5
         export vtdm4_nh_nonmono=0.02
