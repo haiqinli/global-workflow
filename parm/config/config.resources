@@ -386,6 +386,8 @@ elif [ $step = "init" ]; then
     export npe_node_init=6
     if [ $machine = "WCOSS_DELL_P3" ]; then
         export memory_init="10G"
+    elif [ $machine = "JET" ]; then
+        export memory_init="50G"
     else
         export memory_init="70G"
     fi
