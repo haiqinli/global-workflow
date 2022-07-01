@@ -203,7 +203,7 @@ EOF
   # Scan suite file to determine whether it uses Noah-MP  ( Noah-MP #2, RUC-LSM #3, Noah #1 )
   if [ $(grep noahmpdrv ${_suite_file} | wc -l ) -gt 0 ]; then
     lsm="2"
-    lheatstrg=".true."
+    lheatstrg=".false."
     landice=".false."
     iopt_dveg=${iopt_dveg:-"4"}
     iopt_crs=${iopt_crs:-"2"}
@@ -226,7 +226,7 @@ EOF
     landice=".false."
   else
     lsm="1"
-    lheatstrg=".false."
+    lheatstrg=".true."
     if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_ugwpv1" ]] ; then   ## JKH
       landice=".false."
     else
