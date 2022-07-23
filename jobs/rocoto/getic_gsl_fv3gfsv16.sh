@@ -37,17 +37,17 @@ atm_file=`echo $pubatm_file | cut -d. -f2-`
 echo "pubsfc_file:  $pubsfc_file"
 echo "pubatm_file:  $pubatm_file"
 
-if [[ -f $PUBDIR/${pubsfc_file} ]]; then
-  echo "linking $PUBDIR...."
-  ln -fs $PUBDIR/${pubsfc_file} $sfc_file
-  ln -fs $PUBDIR/${pubatm_file} $atm_file
-elif  [[ -f $RETRODIR/${pubsfc_file} ]]; then
+if  [[ -f $RETRODIR/${pubatm_file} ]]; then
   echo "linking $RETRODIR...."
   echo "pubsfc_file:  $pubsfc_file"
   echo "pubatm_file:  $pubatm_file"
   ln -fs $RETRODIR/${pubsfc_file} $sfc_file
   ln -fs $RETRODIR/${pubatm_file} $atm_file 
-elif  [[ -f $RETRODIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${sfc_file} ]]; then
+elif [[ -f $PUBDIR/${pubatm_file} ]]; then
+  echo "linking $PUBDIR...."
+  ln -fs $PUBDIR/${pubsfc_file} $sfc_file
+  ln -fs $PUBDIR/${pubatm_file} $atm_file
+elif  [[ -f $RETRODIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${atm_file} ]]; then
   echo "linking $RETRODIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}..."
   echo "sfc_file:  $sfc_file"
   echo "atm_file:  $atm_file"

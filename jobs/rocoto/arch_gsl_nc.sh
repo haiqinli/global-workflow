@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/ksh -x
 
 ###############################################################
 ## Abstract:
@@ -52,6 +52,7 @@ if [ $HPSSARCH = "YES" ]; then
       fi
 
       ## netcdf files ##
+#JKH      if [ -f *f???.nc ]; then
       if [ -f g*atmf000.nc ]; then
         # archive netcdf files (gfs.t00z.atmfHHH.nc, gfs.t00z.sfcfHHH.nc, gfs.t00z.logfHHH.txt )
         htar -P -cvf $ATARDIR/$YYYY/$CDATE/gfs_nc.tar gfs*.nc gfs.*log*.txt
@@ -64,16 +65,16 @@ if [ $HPSSARCH = "YES" ]; then
         
       # archive GRIB2 files (gfs.t00z.pgrb2.0p25.fHHH, gfs.t00z.pgrb2.0p50.fHHH) 
       #   and tracker files (tctrk.atcf.YYYYMMDDHH.gcp1.txt)
-      if [ -f tctrk.atcf.${CDATE}.${ATCFNAME}.txt ]; then
-        htar -P -cvf $ATARDIR/$YYYY/$CDATE/gfs_pgrb2.tar gfs.*pgrb2.0p25* gfs.*pgrb2.0p5* tctrk.atcf.${CDATE}.${ATCFNAME}.txt
-      else
-        htar -P -cvf $ATARDIR/$YYYY/$CDATE/gfs_pgrb2.tar gfs.*pgrb2.0p25* gfs.*pgrb2.0p5* 
-      fi
-      status=$?
-      if [ $status -ne 0 ]; then
-        echo "HTAR $CDATE gfs_pgrb2.tar failed"
-        exit $status
-      fi
+#JKH      if [ -f tctrk.atcf.${CDATE}.${ATCFNAME}.txt ]; then
+#JKH        htar -P -cvf $ATARDIR/$YYYY/$CDATE/gfs_pgrb2.tar gfs.*pgrb2.0p25* gfs.*pgrb2.0p5* tctrk.atcf.${CDATE}.${ATCFNAME}.txt
+#JKH      else
+#JKH        htar -P -cvf $ATARDIR/$YYYY/$CDATE/gfs_pgrb2.tar gfs.*pgrb2.0p25* gfs.*pgrb2.0p5* 
+#JKH      fi
+#JKH      status=$?
+#JKH      if [ $status -ne 0 ]; then
+#JKH        echo "HTAR $CDATE gfs_pgrb2.tar failed"
+#JKH        exit $status
+#JKH      fi
       
   fi
 
