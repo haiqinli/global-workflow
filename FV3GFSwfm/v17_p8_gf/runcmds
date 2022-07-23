@@ -1,0 +1,4 @@
+
+rocotorun  -w v17_p8_gf_nores.xml -d ~/rt_dbfiles/v17_p8_gf_nores.db
+rocotostat -w v17_p8_gf_nores.xml -d ~/rt_dbfiles/v17_p8_gf_nores.db
+

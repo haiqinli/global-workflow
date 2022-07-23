@@ -1,4 +1,0 @@
- 
-rocotorun -w gsl_v5.xml -d gsl_v5.db
-rocotostat -w gsl_v5.xml -d gsl_v5.db
-

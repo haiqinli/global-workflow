@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<!DOCTYPE workflow [
+<!ENTITY FV3GFS_HOME "/home/rtfim/GFSv17p8_HFIP">
+<!ENTITY PSLOT "rt_v17_p8_gf">
+<!ENTITY ATCFNAME "GFP8">
+<!-- tracker name --><!ENTITY MODL "FV3-CCPP_GFSv17p8_gf">
+<!-- plot name;  needs to have 'FV3' in name for NCL --><!ENTITY RES "0p25">
+<!ENTITY FCST_INTERVAL "6">
+<!ENTITY FCST_LENGTH "168">
+<!-- set this to 3 character str - ex. 96 would be 096 - used for final FV3GFS_GF verification file required --><!ENTITY FCST_LENGTH_STR "168">
+<!-- External parameter entites --><!ENTITY % SITES SYSTEM "all_sites.xml">
+<!ENTITY % jet SYSTEM "../jet_xml/jet.xml">
+<!ENTITY % jet_retro SYSTEM "../jet_xml/jet_retro.xml">
+<!ENTITY % hera SYSTEM "../hera_xml/hera.xml">
+<!ENTITY % hera_retro SYSTEM "../hera_xml/hera_retro.xml">
+<!ENTITY % TASKS SYSTEM "all_tasks.xml">
+<!ENTITY nclzip_task SYSTEM "../jet_xml/FV3GFS_NCLzip.xml">
+<!ENTITY nclzip_retro_task SYSTEM "../jet_xml/FV3GFS_NCLzip_retro.xml">
+<!ENTITY remapgrib_res_task SYSTEM "../jet_xml/FV3GFS_RemapGrib_res.xml">
+<!ENTITY remapgrib_task SYSTEM "../jet_xml/FV3GFS_RemapGrib.xml">
+<!ENTITY ncl_res_task SYSTEM "../jet_xml/FV3GFS_NCL_res.xml">
+<!ENTITY ncl_task SYSTEM "../jet_xml/FV3GFS_NCL.xml">
+<!ENTITY nclfim_task SYSTEM "../jet_xml/FV3GFS_NCLFim.xml">
+<!ENTITY hfipPlot_task SYSTEM "../jet_xml/FV3GFS_HfipPlots.xml">
+<!ENTITY hfipPlotG1_task SYSTEM "../jet_xml/FV3GFS_HfipPlotsG1.xml">
+<!ENTITY % DEFS SYSTEM "all_defs.xml">
+<!ENTITY % dbi SYSTEM "../jet_xml/dbi.xml">
+<!ENTITY % metatasks SYSTEM "../jet_xml/metatask_defs.xml">
+<!ENTITY RESERVATION_POST "judy_post1_00">
+<!-- jet.xml --><!ENTITY SCHEDULER "slurm">
+<!ENTITY RES_PROJECT "rtgsd-fv3-hfip">
+<!ENTITY PROJECT "gsd-fv3-dev">
+<!ENTITY PE "batch">
+<!ENTITY SERVICE "service">
+<!ENTITY MET_MODULE "/contrib/met/modulefiles">
+<!ENTITY MET_VERSION "met/9.1">
+<!ENTITY FV3GFS_LOG "&FV3GFS_HOME;/FV3GFSwfm/log_&PSLOT;">
+<!ENTITY FV3GFS_RUN "&FV3GFS_HOME;/FV3GFSrun">
+<!ENTITY FV3GFS_WFM "&FV3GFS_HOME;/FV3GFSwfm">
+<!ENTITY FV3GFS_POST_DIR "post/fim">
+<!ENTITY SCRIPTS "&FV3GFS_HOME;/FV3GFSwfm/jet_scripts">
+<!ENTITY RTFIM_HOME "/home/rtfim">
+<!ENTITY LFS4_ROOT "/lfs4/BMC/gsd-fv3-dev">
+<!ENTITY CLIMATE_DIR "&LFS4_ROOT;/cmean">
+<!ENTITY PUB_DIR "/public">
+<!ENTITY TRACKDIR "&FV3GFS_HOME;/tracks/">
+<!ENTITY COMPONENT "atmos">
+<!ENTITY NCL_ROOT "&LFS4_ROOT;/rtruns/ncl/fimall">
+<!ENTITY NCL_DIFF_HOME "&LFS4_ROOT;/rtruns/ncl/fimalldiff">
+<!ENTITY CNVGRIB "cnvgrib">
+<!ENTITY WGRIB "wgrib">
+<!ENTITY WGRIB2 "wgrib2">
+<!ENTITY GFS_VERIF_DIR "&PUB_DIR;/data/grids/gfs/0p25deg_anl/grib2">
+<!ENTITY GFS_VERIF_RETRO_DIR "&LFS4_ROOT;/GFS_RETRO_VERIF_ANL">
+<!ENTITY FV3GFS_VERIF_DIR "&FV3GFS_RUN;">
+<!ENTITY CDUMP "gfs">
+<!ENTITY CASE "C768">
+<!ENTITY PARTITION_RES "<partition>vjet</partition>">
+<!ENTITY PARTITION_JET "<partition>sjet,vjet,ujet,tjet,kjet,xjet</partition>">
+<!ENTITY fcst_240hr_metatask '<var name="fcst"> 0 6 12 18 24 30 36 42 48 54 60 66 72 78 84 90 96 102 108 114 120 126 132 138 144 150 156 162 168 174 180 186 192 198 204 210 216 222 228 234 240 </var>'>
+<!ENTITY fcst_168hr_metatask '<var name="fcst"> 0 6 12 18 24 30 36 42 48 54 60 66 72 78 84 90 96 102 108 114 120 126 132 138 144 150 156 162 168 </var>'>
+<!ENTITY fcst_120hr_metatask '<var name="fcst"> 0 6 12 18 24 30 36 42 48 54 60 66 72 78 84 90 96 102 108 114 120 </var>'>
+<!ENTITY t240hr_metatask '<var name="T"> 000 006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 126 132 138 144 150 156 162 168 174 180 186 192 198 204 210 216 222 228 234 240 </var>'>
+<!ENTITY t168hr_metatask '<var name="T"> 000 006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 126 132 138 144 150 156 162 168 </var>'>
+<!ENTITY t120hr_metatask '<var name="T"> 000 006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 </var>'>
+<!ENTITY sounding_240hr_metatask '<var name="fcst">000 012 024 036 048 060 072 084 096 108 120 132 144 156 168 180 192 204 216 228 240 </var>'>
+<!ENTITY sounding_168hr_metatask '<var name="fcst">000 012 024 036 048 060 072 084 096 108 120 132 144 156 168 </var>'>
+<!ENTITY sounding_120hr_metatask '<var name="fcst">000 012 024 036 048 060 072 084 096 108 120 </var>'>
+<!ENTITY surface_72hr_metatask '<var name="fcst">000 006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 </var>'>
+]>
+<workflow realtime="F" scheduler="slurm" cyclethrottle="2" cyclelifespan="0:25:00:00">
+  <log>
+    <cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/log_rt_v17_p8_gf/workflow/workflow_@Y@m@d@H_rt_v17_p8_gf_ncl.log</cyclestr>
+  </log>
+
+  <cycledef group="24hr">202207100000 202207130000 24:00:00</cycledef> 
+
+  <!--<metatask name="remap_ncl" throttle="29"> -->
+  <metatask name="remap_ncl" throttle="3">
+<!--
+    <var name="fcst"> 0 6 12 18 24 30 36 42 48 54 60 66 72 78 84 90 96 102 108 114 120 126 132 138 144 150 156 162 168 </var>
+    <var name="T"> 000 006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 126 132 138 144 150 156 162 168 </var>
+    <var name="fcst"> 168 </var>
+    <var name="T"> 168 </var>
+-->
+      <task name="remapgrib_#T#" cycledefs="24hr" maxtries="4">
+    <command>/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/jet_scripts/remapgrib.ksh</command>
+    <account>gsd-fv3-dev</account>
+    <cores>1</cores>
+    <native>--reservation=judy_post1_00 --export=NONE</native>
+    <walltime>00:35:00</walltime>
+    <partition>vjet</partition>
+    <jobname><cyclestr>remapgrib_#T#</cyclestr></jobname>
+    <join><cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/log_rt_v17_p8_gf/remapgrib/remapgrib_@Y@m@d@H_#T#.log</cyclestr></join>
+    <envar><name>FV3GFS_RUN</name><value>/home/rtfim/GFSv17p8_HFIP/FV3GFSrun</value></envar>
+    <envar><name>PSLOT</name><value>rt_v17_p8_gf</value></envar>
+    <envar><name>CDUMP</name><value>gfs</value></envar>
+    <envar><name>COMPONENT</name><value>atmos</value></envar>
+    <envar><name>yyjjjhh</name><value><cyclestr>@y@j@H</cyclestr></value></envar>
+    <envar><name>yyyymmdd</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
+    <envar><name>hh</name><value><cyclestr>@H</cyclestr></value></envar>
+    <envar><name>fcst</name><value>#T#</value></envar>
+    <envar><name>GRID_NAMES</name><value>201D130D244D236D224D242</value></envar>
+    <dependency>
+      <datadep age="120" minsize="1b"><cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf/gfs.@Y@m@d/@H/atmos/gfs.t@Hz.pgrb2.0p25.f#T#</cyclestr></datadep>
+    </dependency>
+  </task>
+ 
+    <var name="fcst"> 0 6 12 18 24 30 36 42 48 54 60 66 72 78 84 90 96 102 108 114 120 126 132 138 144 150 156 162 168 </var>
+    <var name="T"> 000 006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 126 132 138 144 150 156 162 168 </var>
+      <task name="ncl_#T#" cycledefs="24hr" maxtries="5">
+    <command>/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/jet_scripts/nclfv3_driver.ksh</command>
+    <account>gsd-fv3-dev</account>
+    <memory>4G</memory>
+    <cores>1</cores>
+    <native>--reservation=judy_post1_00 --export=NONE</native>
+    <walltime>01:30:00</walltime>
+    <partition>vjet</partition>
+    <jobname><cyclestr>ncl_#T#</cyclestr></jobname>
+    <join><cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/log_rt_v17_p8_gf/ncl/ncl#T#_@Y@m@d@H00.log</cyclestr></join>
+    <envar><name>FV3GFS_HOME</name><value>/home/rtfim/GFSv17p8_HFIP</value></envar>
+    <envar><name>FV3GFS_RUN</name><value><cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf/gfs.@Y@m@d/@H/atmos/</cyclestr></value></envar>
+    <envar><name>SCRIPTS</name><value>/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/jet_scripts</value></envar>
+    <envar><name>PSLOT</name><value>rt_v17_p8_gf</value></envar>
+    <envar><name>NCL_ROOT</name><value>/lfs4/BMC/gsd-fv3-dev/rtruns/ncl/fimall</value></envar>
+    <envar><name>NCL_HOME</name><value>/lfs4/BMC/gsd-fv3-dev/rtruns/ncl/fimall</value></envar>
+    <envar><name>MODL</name><value>FV3-CCPP_GFSv17p8_gf</value></envar>
+    <envar><name>ATCFNAME</name><value>GFP8</value></envar>
+    <envar><name>yyyymmdd</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
+    <envar><name>H</name><value><cyclestr>@H</cyclestr></value></envar>
+    <envar><name>yyjjjhhmm</name><value><cyclestr>@y@j@H00</cyclestr></value></envar>
+    <envar><name>CDUMP</name><value>gfs</value></envar>
+    <envar><name>COMPONENT</name><value>atmos</value></envar>
+    <envar><name>RES</name><value>0p25</value></envar>
+    <envar><name>T</name><value>#T#</value></envar>
+    <envar><name>FCST_TIME</name><value>#fcst#</value></envar>
+    <envar><name>FCST_LENGTH</name><value>168</value></envar>
+    <envar><name>GRID_NAMES</name><value>fimD201D130D244D236D224D242</value></envar>
+<!--     <envar><name>GRID_NAMES</name><value>fimD201D130D244D236D242</value></envar>
+    <envar><name>GRID_NAMES</name><value>fim</value></envar>--> 
+    <dependency>
+       <and>
+         <datadep age="120" minsize="1b"> <cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf/gfs.@Y@m@d/@H/atmos/gfs.t@Hz.pgrb2.0p25.f#T#</cyclestr></datadep>
+         <datadep age="120" minsize="1b"><cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf/gfs.@Y@m@d/@H/atmos/post/201/@y@j@H@M0#T#.g2</cyclestr></datadep>
+         <datadep age="120" minsize="1b"><cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf/gfs.@Y@m@d/@H/atmos/post/130/@y@j@H@M0#T#.g2</cyclestr></datadep>
+         <datadep age="120" minsize="1b"><cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf/gfs.@Y@m@d/@H/atmos/post/244/@y@j@H@M0#T#.g2</cyclestr></datadep>
+         <datadep age="120" minsize="1b"><cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf/gfs.@Y@m@d/@H/atmos/post/236/@y@j@H@M0#T#.g2</cyclestr></datadep>
+         <datadep age="120" minsize="1b"><cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf/gfs.@Y@m@d/@H/atmos/post/224/@y@j@H@M0#T#.g2</cyclestr></datadep>
+         <datadep age="120" minsize="1b"><cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf/gfs.@Y@m@d/@H/atmos/post/242/@y@j@H@M0#T#.g2</cyclestr></datadep>
+       </and>
+    </dependency>
+  </task>
+
+  </metatask>
+   <!-- <task name="nclzip" cycledefs="24hr" maxtries="3" final="true"> -->
+  <task name="nclzip" cycledefs="24hr" maxtries="3">
+    <command>/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/jet_scripts/fv3_nclzip.ksh</command>
+    <account>gsd-fv3-dev</account>
+    <cores>1</cores>
+    <walltime>00:55:00</walltime>
+    <jobname><cyclestr>nclzip</cyclestr></jobname>
+    <join><cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/log_rt_v17_p8_gf/ncl/nclzip_@Y@m@d@H.log</cyclestr></join>
+    <envar><name>FV3GFS_RUN</name><value>/home/rtfim/GFSv17p8_HFIP/FV3GFSrun</value></envar>
+    <envar><name>yyyymmdd</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
+    <envar><name>PSLOT</name><value>rt_v17_p8_gf</value></envar>
+    <envar><name>CDUMP</name><value>gfs</value></envar>
+    <envar><name>COMPONENT</name><value>atmos</value></envar>
+    <envar><name>hh</name><value><cyclestr>@H</cyclestr></value></envar>
+    <dependency>
+        <or>
+           <metataskdep metatask="remap_ncl"/>
+           <and>
+               <timedep><cyclestr offset="048:00:00">@Y@m@d@H@M00</cyclestr></timedep>
+               <datadep age="600"><cyclestr>/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf/gfs.@Y@m@d/@H/atmos/ncl/fim/pres_pv2_f000.png</cyclestr></datadep>
+           </and>
+        </or>
+    </dependency>
+  </task>
+ 
+
+</workflow>

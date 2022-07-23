@@ -1,0 +1,15 @@
+
+rocotorun -w rt_v17_p8_mynn.xml -d ~/rt_dbfiles/rt_v17_p8_mynn.db
+rocotostat -w rt_v17_p8_mynn.xml -d ~/rt_dbfiles/rt_v17_p8_mynn.db -c `date --date='4 days ago' +%Y%m%d0000`: | m 
+
+rocotorun -w v17_p8_mynn_nores.xml -d ~/retro_dbfiles/v17_p8_mynn_nores.db
+rocotostat -w v17_p8_mynn_nores.xml -d ~/retro_dbfiles/v17_p8_mynn_nores.db | m
+
+rocotorun -w post.xml -d post.db
+rocotostat -w post.xml -d post.db
+
+rocotorun -w trak.xml -d trak.db
+rocotostat -w trak.xml -d trak.db
+
+rocotorun -w arch_nc.xml -d arch_nc.db
+rocotostat -w arch_nc.xml -d arch_nc.db
