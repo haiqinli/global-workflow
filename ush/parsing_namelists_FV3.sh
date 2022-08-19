@@ -286,7 +286,7 @@ EOF
   min_seaice   = ${min_seaice:-"0.15"}
 EOF
   ;;
-  "FV3_GFS_v17_p8_mynn")
+  "FV3_GFS_v17_p8_*mynn")
   cat >> input.nml << EOF
   iovr         = ${iovr:-"3"}
   ltaerosol    = ${ltaerosol:-".false."}

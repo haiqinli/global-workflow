@@ -32,8 +32,8 @@ if [[ ! -d ufs_model.fd ]] ; then
     #JKHgit clone https://github.com/ufs-community/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
     git clone https://github.com/NOAA-GSL/ufs-weather-model ufs_model.fd >> ${logdir}/checkout-ufs_model.log 2>&1
     cd ufs_model.fd
-    #JKH  14Jun22 branch, 576b58edac0246b5a6b5c5ead0213b253e3f943c 
-    git checkout ${ufs_model_hash:-576b58e}
+    #JKH  HFIP2022-08-17 17Aug22 tag, b42ca73
+    git checkout ${ufs_model_hash:-HFIP2022-08-17}
     git submodule update --init --recursive
 
     ################################################################################

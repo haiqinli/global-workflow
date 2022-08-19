@@ -1,3 +1,34 @@
+19 Aug 2022
+    - update UFS to 17Aug22 gsl/develop branch, b42ca73 
+      * add FV3_GFS_v17_p8_gf_mynn suite
+      * updates to GF and sgscloud_radpre for HFIP 2022 
+      * updates for GFS-MYNN configuration for HFIP 2022
+      * regression tests for p8+gf+mynn 
+10 Aug 2022
+    - corrected links for post files
+         nam_micro_lookup.dat -> ../../sorc/upp.fd/parm/nam_micro_lookup.dat
+         optics_luts_DUST.dat -> ../../sorc/upp.fd/parm/optics_luts_DUST.dat
+         AEROSOL_LUTS -> ../../sorc/upp.fd/parm/AEROSOL_LUTS
+21 Jun 2022
+    - update UFS to 14Jun22 gsl/develop branch, 576b58e
+        RAP decomp b4b issues fixed (Grell Freitas)
+        MYNN surface layer bug fix
+17 Jun 2022
+    - update to 30May22 global-workflow develop branch, dbd9fa9 
+      * updated for Prototype p8C
+      * switch to UPP in UFS instead of separate clone
+           FV3/upp  07Apr22, dc8bc68
+      * renamed field_table_gsd to field_table_thompson_aero_tke and updated surface value of 
+        hydrometeor number concentrations and sub-grid TKE to 0
+      * module files converted from tcl to lua
+    - update to 30Mar22 global-workflow develop branch, cabf437
+      * updated for Prototype p8b
+              post:  upp_v10.0.11   (09Dec22 - 0dc3c0c)   
+         ufs_utils:  04ad17e        (13Jan22)
+    - switch to ens_tracker.v1.1.15.4
+    - updates for running on Jet
+    - update UFS to 23May22 gsl/develop branch, 7b0be42 
+      * add FV3_GFS_v17_p8_gf,FV3_GFS_v17_p8_mynn suites
 06 Apr 2022
     - update UFS to 29Mar22 gsl/develop branch, c31f633, tag global-29Mar2022
          v5 namelist

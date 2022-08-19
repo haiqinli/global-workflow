@@ -118,7 +118,7 @@ if [ $gwd_opt -eq 2 ]; then
     #export  do_ugwp_v0_nst_only=".false."
     #export  do_gsl_drag_ls_bl=".true."
     #export  do_gsl_drag_ss=".true."
-    #export  do_gsl_drag_tofd=".true."
+    #export  do_gsl_drag_tofd=".false."
     #export  do_ugwp_v1_orog_only=".false."
   
     #--used for UFS p8b 
@@ -131,7 +131,7 @@ if [ $gwd_opt -eq 2 ]; then
     export do_ugwp_v0_nst_only=".false."
     export do_gsl_drag_ls_bl=".false."
     export do_gsl_drag_ss=".true."
-    export do_gsl_drag_tofd=".true."
+    export do_gsl_drag_tofd=".false."
     export do_ugwp_v1_orog_only=".false."
     export launch_level=$(echo "$LEVS/2.35" |bc)
 
@@ -145,7 +145,7 @@ if [ $gwd_opt -eq 2 ]; then
 ##JKH    export do_ugwp_v0_nst_only=".false."
 ##JKH    export do_gsl_drag_ls_bl=".false."
 ##JKH    export do_gsl_drag_ss=".true."
-##JKH    export do_gsl_drag_tofd=".true."
+##JKH    export do_gsl_drag_tofd=".false."
 ##JKH    export do_ugwp_v1_orog_only=".false."
 ##JKH    export launch_level=$(echo "$LEVS/2.35" |bc)
 fi
@@ -292,8 +292,13 @@ elif [ $imp_physics -eq 8 ]; then # Thompson
         export hord_xx_nh_nonmono=6 ###  JKH - 10dec
     else
         export ncld=2
-        export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_thompson_noaero_tke"
-        export ltaerosol=".false."
+        if [[ "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn" ]] ; then
+          export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_thompson_aero_tke"
+          export ltaerosol=".true."
+        else
+          export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_thompson_noaero_tke"
+          export ltaerosol=".false."
+        fi
         export lradar=".false."
         export dt_inner=$((DELTIM/2))
         export sedi_semi=.true.
@@ -421,7 +426,8 @@ elif [[ "$CDUMP" == "gfs" ]] ; then # GFS cycle specific parameters
     # Write gfs restart files to rerun fcst from any break point         
     export restart_interval_gfs=${restart_interval_gfs:-0}
     if [ $restart_interval_gfs -le 0 ]; then
-        export restart_interval="$FHMAX_GFS"
+        #JKH export restart_interval="$FHMAX_GFS"
+        export restart_interval=0
     else
         rst_list=""
         IAU_OFFSET=${IAU_OFFSET:-0}
