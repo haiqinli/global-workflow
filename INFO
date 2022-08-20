@@ -4,6 +4,7 @@
       * updates to GF and sgscloud_radpre for HFIP 2022 
       * updates for GFS-MYNN configuration for HFIP 2022
       * regression tests for p8+gf+mynn 
+      effective 00Z 20 Aug 2022
 10 Aug 2022
     - corrected links for post files
          nam_micro_lookup.dat -> ../../sorc/upp.fd/parm/nam_micro_lookup.dat

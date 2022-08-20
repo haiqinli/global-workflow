@@ -183,10 +183,10 @@ fi
 
 # PBL/turbulence schemes
 export hybedmf=".false."
-if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn" ]] ; then
    export satmedmf=".false."
    export isatmedmf=0
-   if [[ "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" ]] ; then 
+   if [[ "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn" ]] ; then 
      export shal_cnv=".false."       
    else
      export shal_cnv=".true."       
@@ -229,7 +229,7 @@ export iopt_sfc="3"
 export iopt_trs="2"
 
 # Convection Options: 2-SASAS, 3-GF
-if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn" ]] ; then
     export imfdeepcnv=3
     export imfshalcnv=-1              ## JKH - no shallow GF
 elif [[ "$CCPP_SUITE" == "FV3_GFS_v16_gf" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf" ]] ; then 
