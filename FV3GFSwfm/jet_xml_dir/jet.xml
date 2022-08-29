@@ -35,7 +35,5 @@
   <!ENTITY CDUMP  "gfs">
   <!ENTITY CASE   "C768">
 
-  <!ENTITY RESERVATION_POST "judy_post2_00">
-
   <!ENTITY PARTITION_RES "<partition>vjet</partition>">
   <!ENTITY PARTITION_JET "<partition>sjet,vjet,ujet,tjet,kjet,xjet</partition>">

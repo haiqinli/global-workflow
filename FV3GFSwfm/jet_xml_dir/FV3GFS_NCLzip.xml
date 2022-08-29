@@ -16,8 +16,7 @@
         <or>
            <metataskdep metatask="remap_ncl"/>
            <and>
-<!--               <timedep><cyclestr offset="048:00:00">@Y@m@d@H@M00</cyclestr></timedep> -->
-               <timedep><cyclestr offset="120:00:00">@Y@m@d@H@M00</cyclestr></timedep>
+               <timedep><cyclestr offset="048:00:00">@Y@m@d@H@M00</cyclestr></timedep>
                <datadep age="600"><cyclestr>&FV3GFS_RUN;/&PSLOT;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/ncl/fim/pres_pv2_f000.png</cyclestr></datadep>
            </and>
         </or>

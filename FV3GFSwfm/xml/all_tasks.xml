@@ -1,4 +1,5 @@
   <!ENTITY nclzip_task         SYSTEM  "../jet_xml/FV3GFS_NCLzip.xml">
+  <!ENTITY nclzip_res_task     SYSTEM  "../jet_xml/FV3GFS_NCLzip_res.xml">
   <!ENTITY nclzip_retro_task   SYSTEM  "../jet_xml/FV3GFS_NCLzip_retro.xml">
   <!ENTITY remapgrib_res_task  SYSTEM  "../jet_xml/FV3GFS_RemapGrib_res.xml">
   <!ENTITY remapgrib_task      SYSTEM  "../jet_xml/FV3GFS_RemapGrib.xml">
@@ -7,4 +8,6 @@
   <!ENTITY nclpcp_task         SYSTEM  "../jet_xml/FV3GFS_NCL_precip.xml">
   <!ENTITY nclfim_task         SYSTEM  "../jet_xml/FV3GFS_NCLFim.xml">
   <!ENTITY hfipPlot_task       SYSTEM  "../jet_xml/FV3GFS_HfipPlots.xml">
+  <!ENTITY hfipPlot_res_task   SYSTEM  "../jet_xml/FV3GFS_HfipPlots_res.xml">
   <!ENTITY hfipPlotG1_task     SYSTEM  "../jet_xml/FV3GFS_HfipPlotsG1.xml">
+  <!ENTITY hfipPlotG1_retro_task     SYSTEM  "../jet_xml/FV3GFS_HfipPlotsG1_retro.xml">

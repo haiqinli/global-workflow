@@ -21,7 +21,7 @@ export PARTITION_BATCH="vjet"
 HPSS_PROJECT=fim                                  ## JKH
 
 # Directories relative to installation areas:
-export HOMEgfs=/mnt/lfs4/BMC/gsd-fv3-dev/rtruns/GFSv17p8_HFIP
+export HOMEgfs=/mnt/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP
 export PARMgfs=$HOMEgfs/parm
 export FIXgfs=$HOMEgfs/fix
 export USHgfs=$HOMEgfs/ush
@@ -104,8 +104,8 @@ export EDATE=2022110100
 export EXP_WARM_START=".false."
 export assim_freq=6
 export PSLOT="rt_v17_p8_gf"
-export EXPDIR="/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/$PSLOT"
-export ROTDIR="/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/$PSLOT"
+export EXPDIR="/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP/FV3GFSwfm/$PSLOT"
+export ROTDIR="/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP/FV3GFSrun/$PSLOT"
 export ROTDIR_DUMP="YES"                #Note: A value of "NO" does not currently work
 export DUMP_SUFFIX=""
 if [[ "$CDATE" -ge "2019092100" && "$CDATE" -le "2019110700" ]]; then
@@ -114,7 +114,7 @@ fi
 export RUNDIR="$ROTDIR/../RUNDIRS/$PSLOT"
 export DATAROOT="$RUNDIR/$CDATE/$CDUMP"
 export ARCDIR="$NOSCRUB/archive/$PSLOT"
-export ICSDIR="/lfs4/BMC/gsd-fv3-dev/rtruns/FV3ICS_L127/"
+export ICSDIR="/lfs1/BMC/gsd-fv3-test/rtfim/FV3ICS_L127/"
 export ATARDIR="/BMC/$HPSS_PROJECT/2year/GFSv17p8_HFIP/$PSLOT"
 
 # Commonly defined parameters in JJOBS
@@ -254,10 +254,10 @@ export gfs_cyc=1 # 0: no GFS cycle, 1: 00Z only, 2: 00Z and 12Z only, 4: all 4 c
 # GFS output and frequency
 export FHMIN_GFS=0
 
-export FHMAX_GFS_00=${FHMAX_GFS_00:-168}      ## JKH
-export FHMAX_GFS_06=${FHMAX_GFS_06:-168}      ## JKH
-export FHMAX_GFS_12=${FHMAX_GFS_12:-168}      ## JKH
-export FHMAX_GFS_18=${FHMAX_GFS_18:-168}      ## JKH
+export FHMAX_GFS_00=${FHMAX_GFS_00:-144}      ## JKH
+export FHMAX_GFS_06=${FHMAX_GFS_06:-144}      ## JKH
+export FHMAX_GFS_12=${FHMAX_GFS_12:-144}      ## JKH
+export FHMAX_GFS_18=${FHMAX_GFS_18:-144}      ## JKH
 export FHMAX_GFS=$(eval echo \${FHMAX_GFS_$cyc})
 
 export FHOUT_GFS=${FHOUT_GFS:-6}              ## JKH

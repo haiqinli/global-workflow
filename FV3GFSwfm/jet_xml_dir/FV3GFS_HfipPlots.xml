@@ -1,4 +1,4 @@
-  <task name="hfip_plots_#T#" maxtries="3">
+  <task name="hfip_plots_#T#" cycledefs="g2" maxtries="3">
     <command>&SCRIPTS;/hfipPlots.ksh</command>
     <account>&PROJECT;</account>
     <cores>2</cores>
@@ -22,7 +22,7 @@
         </and>
         <and>
           <datadep age="120"><cyclestr>&FV3GFS_RUN;/&PSLOT;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f#T#</cyclestr></datadep>
-          <timedep><cyclestr offset="013:30:00">@Y@m@d@H@M00</cyclestr></timedep>
+          <timedep><cyclestr offset="014:30:00">@Y@m@d@H@M00</cyclestr></timedep>
         </and>
       </or>
     </dependency>

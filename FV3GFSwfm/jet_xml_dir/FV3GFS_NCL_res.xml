@@ -6,7 +6,7 @@
     <native>--reservation=&RESERVATION_POST; --export=NONE</native>
     <walltime>01:30:00</walltime>
     &PARTITION_RES;
-    <jobname><cyclestr>ncl_#T#</cyclestr></jobname>
+    <jobname><cyclestr>ncl_#T#_&PSLOT;</cyclestr></jobname>
     <join><cyclestr>&FV3GFS_LOG;/ncl/ncl#T#_@Y@m@d@H00.log</cyclestr></join>
     <envar><name>FV3GFS_HOME</name><value>&FV3GFS_HOME;</value></envar>
     <envar><name>FV3GFS_RUN</name><value><cyclestr>&FV3GFS_RUN;/&PSLOT;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/</cyclestr></value></envar>

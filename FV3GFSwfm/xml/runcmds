@@ -1,4 +1,58 @@
 
+*** GF_MYNN ***
+rocotorun -w rt_v17_p8_gf_mynn_ncl.xml -d ~/rt_dbfiles/rt_v17_p8_gf_mynn_ncl.db
+rocotostat -w rt_v17_p8_gf_mynn_ncl.xml -d ~/rt_dbfiles/rt_v17_p8_gf_mynn_ncl.db -c `date --date='4 days ago' +%Y%m%d0000`: | m
+
+rocotorun -w v17_p8_gf_mynn_ncl.xml -d v17_p8_gf_mynn_ncl.db
+rocotostat -w v17_p8_gf_mynn_ncl.xml -d v17_p8_gf_mynn_ncl.db | m
+
+rocotorun -w rt_v17_p8_gf_mynn_hfipPlots.xml -d ~/rt_dbfiles/rt_v17_p8_gf_mynn_hfipPlots.db
+rocotostat -w rt_v17_p8_gf_mynn_hfipPlots.xml -d ~/rt_dbfiles/rt_v17_p8_gf_mynn_hfipPlots.db -c `date --date='4 days ago' +%Y%m%d0000`: | m
+
+rocotorun -w v17_p8_gf_mynn_hfipPlots.xml -d v17_p8_gf_mynn_hfipPlots.db
+rocotostat -w v17_p8_gf_mynn_hfipPlots.xml -d v17_p8_gf_mynn_hfipPlots.db | m
+
+rocotorun -w v17_p8_gf_mynn_hfipPlotsG1.xml -d v17_p8_gf_mynn_hfipPlotsG1.db
+rocotostat -w v17_p8_gf_mynn_hfipPlotsG1.xml -d v17_p8_gf_mynn_hfipPlotsG1.db | m
+
+rocotorun -w gf_mynn_nclzip.xml -d gf_mynn_nclzip.db
+rocotostat -w gf_mynn_nclzip.xml -d gf_mynn_nclzip.db
+
+*** MYNN ***
+rocotorun -w rt_v17_p8_mynn_ncl.xml -d ~/rt_dbfiles/rt_v17_p8_mynn_ncl.db
+rocotostat -w rt_v17_p8_mynn_ncl.xml -d ~/rt_dbfiles/rt_v17_p8_mynn_ncl.db -c `date --date='4 days ago' +%Y%m%d0000`: | m
+
+rocotorun -w rt_v17_p8_mynn_hfipPlots.xml -d ~/rt_dbfiles/rt_v17_p8_mynn_hfipPlots.db
+rocotostat -w rt_v17_p8_mynn_hfipPlots.xml -d ~/rt_dbfiles/rt_v17_p8_mynn_hfipPlots.db -c `date --date='4 days ago' +%Y%m%d0000`: | m
+
+rocotorun -w v17_p8_mynn_ncl.xml -d v17_p8_mynn_ncl.db
+rocotostat -w v17_p8_mynn_ncl.xml -d v17_p8_mynn_ncl.db | m
+
+rocotorun -w v17_p8_mynn_hfipPlots.xml -d v17_p8_mynn_hfipPlots.db
+rocotostat -w v17_p8_mynn_hfipPlots.xml -d v17_p8_mynn_hfipPlots.db | m
+
+rocotorun -w v17_p8_mynn_hfipPlotsG1.xml -d v17_p8_mynn_hfipPlotsG1.db1
+rocotostat -w v17_p8_mynn_hfipPlotsG1.xml -d v17_p8_mynn_hfipPlotsG1.db1 | m
+
+rocotorun -w v17_p8_mynn_hfipPlots_168h.xml -d v17_p8_mynn_hfipPlots_168h.db
+rocotostat -w v17_p8_mynn_hfipPlots_168h.xml -d v17_p8_mynn_hfipPlots_168h.db
+
+rocotorun -w mynn_nclzip.xml -d mynn_nclzip.db
+rocotostat -w mynn_nclzip.xml -d mynn_nclzip.db
+
+rocotorun -w v17_p8_mynn_ncl_fhr.xml -d v17_p8_mynn_ncl_fhr.db
+rocotostat -w v17_p8_mynn_ncl_fhr.xml -d v17_p8_mynn_ncl_fhr.db | m
+
+rocotorun -w tmp_0809_mynn_ncl.xml -d tmp_0809_mynn_ncl.db
+rocotostat -w tmp_0809_mynn_ncl.xml -d tmp_0809_mynn_ncl.db
+
+rocotorun -w tmp_0810_mynn_ncl.xml -d tmp_0810_mynn_ncl.db
+rocotorun -w tmp_0810_mynn_ncl.xml -d tmp_0810_mynn_ncl.db
+
+   * testing hfipPlots *
+    rocotorun -w mynn_testhfip.xml -d mynn_testhfip.db 
+    rocotostat -w mynn_testhfip.xml -d mynn_testhfip.db 
+
 *** GF ***
 rocotorun -w rt_v17_p8_gf_ncl.xml -d ~/rt_dbfiles/rt_v17_p8_gf_ncl.db
 rocotostat -w rt_v17_p8_gf_ncl.xml -d ~/rt_dbfiles/rt_v17_p8_gf_ncl.db -c `date --date='4 days ago' +%Y%m%d0000`: | m
@@ -6,23 +60,25 @@ rocotostat -w rt_v17_p8_gf_ncl.xml -d ~/rt_dbfiles/rt_v17_p8_gf_ncl.db -c `date 
 rocotorun -w v17_p8_gf_ncl.xml -d v17_p8_gf_ncl.db
 rocotostat -w v17_p8_gf_ncl.xml -d v17_p8_gf_ncl.db | m
 
- ** precip NCL only
-rocotorun -w v17_p8_gf_precip.xml -d v17_p8_gf_precip.db
-rocotostat -w v17_p8_gf_precip.xml -d v17_p8_gf_precip.db | m
+rocotorun -w rt_v17_p8_gf_hfipPlots.xml -d ~/rt_dbfiles/rt_v17_p8_gf_hfipPlots.db
+rocotostat -w rt_v17_p8_gf_hfipPlots.xml -d ~/rt_dbfiles/rt_v17_p8_gf_hfipPlots.db -c `date --date='4 days ago' +%Y%m%d0000`: | m
 
-rocotorun -w tmp_0712_gf_ncl.xml -d tmp_0712_gf_ncl.db
-rocotostat -w tmp_0712_gf_ncl.xml -d tmp_0712_gf_ncl.db
+rocotorun -w v17_p8_gf_hfipPlots.xml -d v17_p8_gf_hfipPlots.db
+rocotostat -w v17_p8_gf_hfipPlots.xml -d v17_p8_gf_hfipPlots.db | m
+
+rocotorun -w v17_p8_gf_hfipPlotsG1.xml -d v17_p8_gf_hfipPlotsG1.db
+rocotostat -w v17_p8_gf_hfipPlotsG1.xml -d v17_p8_gf_hfipPlotsG1.db | m
 
 rocotorun -w gf_nclzip.xml -d gf_nclzip.db
 rocotostat -w gf_nclzip.xml -d gf_nclzip.db
 
-*** MYNN ***
-rocotorun -w rt_v17_p8_mynn_ncl.xml -d ~/rt_dbfiles/rt_v17_p8_mynn_ncl.db
-rocotostat -w rt_v17_p8_mynn_ncl.xml -d ~/rt_dbfiles/rt_v17_p8_mynn_ncl.db -c `date --date='4 days ago' +%Y%m%d0000`: | m
 
-rocotorun -w v17_p8_mynn_ncl.xml -d v17_p8_mynn_ncl.db
-rocotostat -w v17_p8_mynn_ncl.xml -d v17_p8_mynn_ncl.db | m
+*** older -- did not use since other variables may have changed in grib2 files; 
+    to be consistent, generate images for ALL variables
+
+rocotorun -w tmp_0712_gf_ncl.xml -d tmp_0712_gf_ncl.db
+rocotostat -w tmp_0712_gf_ncl.xml -d tmp_0712_gf_ncl.db
 
  ** precip NCL only
-rocotorun -w v17_p8_mynn_precip.xml -d v17_p8_mynn_precip.db
-rocotostat -w v17_p8_mynn_precip.xml -d v17_p8_mynn_precip.db | m
+rocotorun -w v17_p8_gf_precip.xml -d v17_p8_gf_precip.db
+rocotostat -w v17_p8_gf_precip.xml -d v17_p8_gf_precip.db | m
