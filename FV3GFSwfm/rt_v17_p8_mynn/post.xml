@@ -21,8 +21,8 @@
 	<!ENTITY ATCFNAME   "myp8">
 
 	<!-- Experiment parameters such as starting, ending dates -->
-	<!ENTITY SDATE    "202207100000">
-	<!ENTITY EDATE    "202207190000">
+	<!ENTITY SDATE    "202208260000">
+	<!ENTITY EDATE    "202208260000">
 	<!ENTITY INTERVAL "24:00:00">
 
 	<!-- Run Envrionment -->
@@ -31,13 +31,13 @@
 	<!-- Experiment related directories -->
 	<!ENTITY EXPDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/rt_v17_p8_mynn">
 	<!ENTITY ROTDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_mynn">
-	<!ENTITY ICSDIR "/lfs4/BMC/gsd-fv3-dev/rtruns/FV3ICS_L127/">
+	<!ENTITY ICSDIR "/lfs1/BMC/gsd-fv3-test/rtfim/FV3ICS_L127/">
 	<!ENTITY PUBDIR "/public/data/grids/gfs/anl/netcdf">
 	<!ENTITY RETRODIR "/lfs4/BMC/gsd-fv3-dev/GFS_RETRO_ANL">
 
 	<!-- Directories for driving the workflow -->
-	<!ENTITY HOMEgfs  "/mnt/lfs4/BMC/gsd-fv3-dev/rtruns/GFSv17p8_HFIP">
-	<!ENTITY JOBS_DIR "/mnt/lfs4/BMC/gsd-fv3-dev/rtruns/GFSv17p8_HFIP/jobs/rocoto">
+	<!ENTITY HOMEgfs  "/home/rtfim/GFSv17p8_HFIP">
+	<!ENTITY JOBS_DIR "/home/rtfim/GFSv17p8_HFIP/jobs/rocoto">
 
 	<!-- Machine related entities -->
 	<!ENTITY ACCOUNT    "rtgsd-fv3-hfip">
@@ -59,11 +59,11 @@
 
 	<!ENTITY QUEUE_POST_GFS     "&QUEUE;">
 	<!ENTITY PARTITION_POST_GFS "&PARTITION_BATCH;">
-	<!ENTITY WALLTIME_POST_GFS  "00:20:00">
+	<!ENTITY WALLTIME_POST_GFS  "00:30:00">
 	<!ENTITY WALLTIME_POST_GFS  "00:10:00">
 	<!ENTITY RESOURCES_POST_GFS "<nodes>10:ppn=12:tpp=1</nodes>">
 	<!ENTITY RESOURCES_POST_GFS "<nodes>3:ppn=12:tpp=1</nodes>">
-	<!ENTITY MEMORY_POST_GFS    "40G">
+	<!ENTITY MEMORY_POST_GFS    "50G">
 	<!ENTITY NATIVE_POST_GFS    "--export=NONE">
 
         <!ENTITY QUEUE_VRFY_GFS     "&QUEUE;">
@@ -97,10 +97,13 @@
 	<var name="grp">_f000-f000 _f006-f006 _f012-f012 _f018-f018 _f024-f024 _f030-f030 _f036-f036 _f042-f042 _f048-f048 _f054-f054 _f060-f060 _f066-f066 _f072-f072 _f078-f078 _f084-f084 _f090-f090 _f096-f096 _f102-f102 _f108-f108 _f114-f114 _f120-f120</var>
 	<var name="dep">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120</var>
 	<var name="lst">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120</var>
+        <var name="grp">_f000-f000 _f006-f006 _f012-f012 _f018-f018 _f024-f024 _f030-f030 _f036-f036 _f042-f042 _f048-f048 _f054-f054 _f060-f060 _f066-f066 _f072-f072 _f078-f078 _f084-f084 _f090-f090 _f096-f096 _f102-f102 _f108-f108 _f114-f114 _f120-f120 _f126-f126 _f132-f132 _f138-f138 _f144-f144 </var>
+        <var name="dep">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120 f126 f132 f138 f144 </var>
+        <var name="lst">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120 f126 f132 f138 f144 </var>
 -->
-        <var name="grp">_f000-f000 _f006-f006 _f012-f012 _f018-f018 _f024-f024 _f030-f030 _f036-f036 _f042-f042 _f048-f048 _f054-f054 _f060-f060 _f066-f066 _f072-f072 _f078-f078 _f084-f084 _f090-f090 _f096-f096 _f102-f102 _f108-f108 _f114-f114 _f120-f120 _f126-f126 _f132-f132 _f138-f138 _f144-f144 _f150-f150 _f156-f156 _f162-f162 _f168-f168</var>
-        <var name="dep">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120 f126 f132 f138 f144 f150 f156 f162 f168</var>
-        <var name="lst">f000 f006 f012 f018 f024 f030 f036 f042 f048 f054 f060 f066 f072 f078 f084 f090 f096 f102 f108 f114 f120 f126 f132 f138 f144 f150 f156 f162 f168</var>
+        <var name="grp">_f072-f072 </var>
+        <var name="dep">f072 </var>
+        <var name="lst">f072 </var>
 
 	<task name="gfspost#grp#" cycledefs="gfs" maxtries="&MAXTRIES;">
 
@@ -191,6 +194,7 @@
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
 	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
 	<envar><name>COMPONENT</name><value>&COMPONENT;</value></envar>
+	<envar><name>ATCFNAME</name><value>&ATCFNAME;</value></envar>
 
 	<dependency>
 		<and>

@@ -21,7 +21,7 @@ export PARTITION_BATCH="vjet"
 HPSS_PROJECT=fim                                  ## JKH
 
 # Directories relative to installation areas:
-export HOMEgfs=/mnt/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP
+export HOMEgfs=/home/rtfim/GFSv17p8_HFIP
 export PARMgfs=$HOMEgfs/parm
 export FIXgfs=$HOMEgfs/fix
 export USHgfs=$HOMEgfs/ush
@@ -104,8 +104,8 @@ export EDATE=2022110100
 export EXP_WARM_START=".false."
 export assim_freq=6
 export PSLOT="rt_v17_p8_gf"
-export EXPDIR="/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP/FV3GFSwfm/$PSLOT"
-export ROTDIR="/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP/FV3GFSrun/$PSLOT"
+export EXPDIR="/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/$PSLOT"
+export ROTDIR="/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/$PSLOT"
 export ROTDIR_DUMP="YES"                #Note: A value of "NO" does not currently work
 export DUMP_SUFFIX=""
 if [[ "$CDATE" -ge "2019092100" && "$CDATE" -le "2019110700" ]]; then

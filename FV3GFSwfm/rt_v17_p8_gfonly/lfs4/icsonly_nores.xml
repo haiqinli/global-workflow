@@ -29,16 +29,16 @@
 	<!ENTITY RUN_ENVIR "emc">
 
 	<!-- Experiment related directories -->
-	<!ENTITY EXPDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/rt_v17_p8_gf">
-	<!ENTITY ROTDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf">
+	<!ENTITY EXPDIR "/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP/FV3GFSwfm/rt_v17_p8_gf">
+	<!ENTITY ROTDIR "/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf">
 	<!ENTITY ICSDIR "/lfs1/BMC/gsd-fv3-test/rtfim/FV3ICS_L127/">
         <!ENTITY SCR_DIR "/home/rtfim/UFS-CAMsuite/FV3GFSwfm/jet_scripts">
         <!ENTITY PUBDIR "/public/data/grids/gfs/anl/netcdf">
         <!ENTITY RETRODIR "/lfs4/BMC/gsd-fv3-dev/GFS_RETRO_ANL/">
 
 	<!-- Directories for driving the workflow -->
-	<!ENTITY HOMEgfs  "/home/rtfim/GFSv17p8_HFIP">
-	<!ENTITY JOBS_DIR "/home/rtfim/GFSv17p8_HFIP/jobs/rocoto">
+	<!ENTITY HOMEgfs  "/mnt/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP">
+	<!ENTITY JOBS_DIR "/mnt/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP/jobs/rocoto">
 
 	<!-- Machine related entities -->
 	<!ENTITY ACCOUNT    "rtgsd-fv3-hfip">
@@ -61,14 +61,7 @@
 
 	<!-- BEGIN: Resource requirements for the workflow -->
 
-	<!ENTITY QUEUE_WAIT_GFS     "&QUEUE;">
-	<!ENTITY PARTITION_WAIT_GFS "vjet">
-	<!ENTITY WALLTIME_WAIT_GFS  "06:10:00">
-	<!ENTITY RESOURCES_WAIT_GFS "<nodes>1:ppn=1:tpp=1</nodes>">
-	<!ENTITY NATIVE_WAIT_GFS    "--reservation=&RESERVATION_FCST; --export=NONE">
-
 	<!ENTITY QUEUE_GETIC_GFS     "&QUEUE;">
-	<!ENTITY PARTITION_GETIC_GFS "vjet">
 	<!ENTITY WALLTIME_GETIC_GFS  "00:10:00">
 	<!ENTITY RESOURCES_GETIC_GFS "<nodes>1:ppn=1:tpp=1</nodes>">
 	<!ENTITY NATIVE_GETIC_GFS    "--export=NONE">
@@ -83,8 +76,8 @@
 	<!ENTITY RESOURCES_INIT_GFS "<nodes>5:ppn=6:tpp=1</nodes>">             <!-- vjet,50G: 1st node 97.7% -->
 	<!ENTITY RESOURCES_INIT_GFS "<nodes>6:ppn=4:tpp=1</nodes>">             <!-- vjet,50G: successful -->
 	<!ENTITY MEMORY_INIT_GFS    "60G">
-        <!ENTITY NATIVE_INIT_GFS    "--reservation=&RESERVATION_FCST; --export=NONE">
 	<!ENTITY NATIVE_INIT_GFS    "--export=NONE">
+        <!ENTITY NATIVE_INIT_GFS    "--reservation=&RESERVATION_FCST; --export=NONE">
 
 	<!-- END: Resource requirements for the workflow -->
 
@@ -96,20 +89,6 @@
 
 	<!-- Define the cycles -->
 	<cycledef group="gfs">&SDATE; &EDATE; &INTERVAL;</cycledef>
-
-<task name="wait4data" cycledefs="gfs" maxtries="&MAXTRIES;">
-
-        <command>/home/Judy.K.Henderson/tmp/datawait.sh</command>
-
-        <jobname><cyclestr>&PSLOT;_wait</cyclestr></jobname>
-        <account>&ACCOUNT;</account>
-        <queue>&QUEUE_WAIT_GFS;</queue>
-        &RESOURCES_WAIT_GFS;
-        <walltime>&WALLTIME_WAIT_GFS;</walltime>
-        <native>&NATIVE_WAIT_GFS;</native>
-
-        <join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfswait.log</cyclestr></join>
-</task>
 
 <task name="gfsgetic" cycledefs="gfs" maxtries="&MAXTRIES;">
 
@@ -146,12 +125,12 @@
 			</nor>
 			<or>
 				<and>
-					<datadep><cyclestr>&RETRODIR;/@y@j@H00.&CDUMP;.t@Hz.atmanl.nc</cyclestr></datadep>
-					<datadep><cyclestr>&RETRODIR;/@y@j@H00.&CDUMP;.t@Hz.sfcanl.nc</cyclestr></datadep>
-				</and>
-				<and>
 					<datadep><cyclestr>&PUBDIR;/@y@j@H00.&CDUMP;.t@Hz.atmanl.nc</cyclestr></datadep>
 					<datadep><cyclestr>&PUBDIR;/@y@j@H00.&CDUMP;.t@Hz.sfcanl.nc</cyclestr></datadep>
+				</and>
+				<and>
+					<datadep><cyclestr>&RETRODIR;/@y@j@H00.&CDUMP;.t@Hz.atmanl.nc</cyclestr></datadep>
+					<datadep><cyclestr>&RETRODIR;/@y@j@H00.&CDUMP;.t@Hz.sfcanl.nc</cyclestr></datadep>
 				</and>
 			</or>
 		</and>
@@ -221,4 +200,6 @@
 </task>
 <!--
 -->
+
+
 </workflow>

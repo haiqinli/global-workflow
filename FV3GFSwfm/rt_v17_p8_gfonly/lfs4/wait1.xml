@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!DOCTYPE workflow
+[
+	<!--
+	PROGRAM
+		Main workflow manager for Forecast only Global Forecast System
+
+	AUTHOR:
+		Rahul Mahajan
+		rahul.mahajan@noaa.gov
+
+	NOTES:
+		This workflow was automatically generated at 2022-07-10 04:19:26.133858
+	-->
+
+	<!-- Experiment parameters such as name, cycle, resolution -->
+	<!ENTITY PSLOT    "rt_v17_p8_gf">
+	<!ENTITY CDUMP    "gfs">
+	<!ENTITY CASE     "C768">
+	<!ENTITY COMPONENT  "atmos">
+	<!ENTITY ATCFNAME   "gfp8">
+
+	<!-- Experiment parameters such as starting, ending dates -->
+	<!ENTITY SDATE    "202207100000">
+	<!ENTITY EDATE    "202211010000">
+	<!ENTITY INTERVAL "24:00:00">
+
+	<!-- Run Envrionment -->
+	<!ENTITY RUN_ENVIR "emc">
+
+	<!-- Experiment related directories -->
+	<!ENTITY EXPDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/rt_v17_p8_gf">
+	<!ENTITY ROTDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf">
+	<!ENTITY ICSDIR "/lfs4/BMC/gsd-fv3-dev/rtruns/FV3ICS_L127/">
+	<!ENTITY PUBDIR "/public/data/grids/gfs/anl/netcdf">
+	<!ENTITY RETRODIR "/lfs4/BMC/gsd-fv3-dev/GFS_RETRO_ANL">
+
+	<!-- Directories for driving the workflow -->
+	<!ENTITY HOMEgfs  "/mnt/lfs4/BMC/gsd-fv3-dev/rtruns/GFSv17p8_HFIP">
+	<!ENTITY JOBS_DIR "/mnt/lfs4/BMC/gsd-fv3-dev/rtruns/GFSv17p8_HFIP/jobs/rocoto">
+
+	<!-- Machine related entities -->
+	<!ENTITY ACCOUNT    "rtgsd-fv3-hfip">
+	<!ENTITY QUEUE      "batch">
+	<!ENTITY QUEUE_SERVICE "service">
+	<!ENTITY PARTITION_BATCH "vjet">
+	<!ENTITY PARTITION_SERVICE "service">
+	<!ENTITY SCHEDULER  "slurm">
+        <!ENTITY RESERVATION_FCST "judy_fcst_00">
+        <!ENTITY RESERVATION_POST1 "judy_post1_00">
+        <!ENTITY RESERVATION_POST2 "judy_post2_00">
+
+	<!-- Toggle HPSS archiving -->
+	<!ENTITY ARCHIVE_TO_HPSS "YES">
+
+	<!-- ROCOTO parameters that control workflow -->
+	<!ENTITY CYCLETHROTTLE "2">
+	<!ENTITY TASKTHROTTLE  "29">
+	<!ENTITY MAXTRIES      "2">
+
+	<!-- BEGIN: Resource requirements for the workflow -->
+
+	<!ENTITY QUEUE_WAIT_GFS     "&QUEUE;">
+	<!ENTITY PARTITION_WAIT_GFS "&PARTITION_BATCH;">
+	<!ENTITY WALLTIME_WAIT_GFS  "00:50:00">
+	<!ENTITY RESOURCES_WAIT_GFS "<nodes>1:ppn=1:tpp=1</nodes>">
+	<!ENTITY NATIVE_WAIT_GFS    "--reservation=&RESERVATION_POST1; --export=NONE">
+
+	<!-- END: Resource requirements for the workflow -->
+
+]>
+
+<workflow realtime="T" scheduler="&SCHEDULER;" cyclethrottle="&CYCLETHROTTLE;" taskthrottle="&TASKTHROTTLE;">
+
+	<log verbosity="10"><cyclestr>&EXPDIR;/logs/@Y@m@d@H.log</cyclestr></log>
+
+	<!-- Define the cycles -->
+	<cycledef group="gfs">&SDATE; &EDATE; &INTERVAL;</cycledef>
+
+<task name="post1wait" cycledefs="gfs" maxtries="&MAXTRIES;">
+
+        <command>/home/Judy.K.Henderson/tmp/datawait.sh</command>
+
+        <jobname><cyclestr>&PSLOT;_wait1</cyclestr></jobname>
+        <account>&ACCOUNT;</account>
+        <queue>&QUEUE_WAIT_GFS;</queue>
+        &RESOURCES_WAIT_GFS;
+        <walltime>&WALLTIME_WAIT_GFS;</walltime>
+        <native>&NATIVE_WAIT_GFS;</native>
+
+        <join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfswait.log</cyclestr></join>
+</task>
+
+</workflow>

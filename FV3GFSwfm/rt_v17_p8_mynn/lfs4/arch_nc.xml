@@ -10,27 +10,30 @@
 		rahul.mahajan@noaa.gov
 
 	NOTES:
-		This workflow was automatically generated at 2022-07-10 04:19:26.133858
+		This workflow was automatically generated at 2022-07-10 08:20:05.979926
 	-->
 
 	<!-- Experiment parameters such as name, cycle, resolution -->
-	<!ENTITY PSLOT    "rt_v17_p8_gf">
+	<!ENTITY PSLOT    "rt_v17_p8_mynn">
 	<!ENTITY CDUMP    "gfs">
 	<!ENTITY CASE     "C768">
 	<!ENTITY COMPONENT  "atmos">
-	<!ENTITY ATCFNAME   "gfp8">
+	<!ENTITY ATCFNAME   "myp8">
 
 	<!-- Experiment parameters such as starting, ending dates -->
 	<!ENTITY SDATE    "202207100000">
-	<!ENTITY EDATE    "202207130000">
+	<!ENTITY EDATE    "202207190000">
 	<!ENTITY INTERVAL "24:00:00">
 
 	<!-- Run Envrionment -->
 	<!ENTITY RUN_ENVIR "emc">
 
 	<!-- Experiment related directories -->
-	<!ENTITY EXPDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/rt_v17_p8_gf">
-	<!ENTITY ROTDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf">
+	<!ENTITY EXPDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/rt_v17_p8_mynn">
+	<!ENTITY ROTDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_mynn">
+	<!ENTITY ICSDIR "/lfs4/BMC/gsd-fv3-dev/rtruns/FV3ICS_L127/">
+	<!ENTITY PUBDIR "/public/data/grids/gfs/anl/netcdf">
+	<!ENTITY RETRODIR "/lfs4/BMC/gsd-fv3-dev/GFS_RETRO_ANL">
 
 	<!-- Directories for driving the workflow -->
 	<!ENTITY HOMEgfs  "/mnt/lfs4/BMC/gsd-fv3-dev/rtruns/GFSv17p8_HFIP">
@@ -54,12 +57,6 @@
 
 	<!-- BEGIN: Resource requirements for the workflow -->
 
-        <!ENTITY QUEUE_VRFY_GFS     "&QUEUE;">
-        <!ENTITY PARTITION_VRFY_GFS "&PARTITION_BATCH;">
-        <!ENTITY WALLTIME_VRFY_GFS  "00:30:00">
-        <!ENTITY RESOURCES_VRFY_GFS "<nodes>1:ppn=1:tpp=1</nodes>">
-        <!ENTITY NATIVE_VRFY_GFS    "--export=NONE">
-
 	<!ENTITY QUEUE_ARCH_GFS     "&QUEUE;">
 	<!ENTITY PARTITION_ARCH_GFS "&PARTITION_SERVICE;">
 	<!ENTITY WALLTIME_ARCH_GFS  "06:00:00">
@@ -78,37 +75,9 @@
 	<!-- Define the cycles -->
 	<cycledef group="gfs">&SDATE; &EDATE; &INTERVAL;</cycledef>
 
-<task name="gfsvrfy" cycledefs="gfs" maxtries="&MAXTRIES;">
+<task name="gfsarch" cycledefs="gfs" maxtries="&MAXTRIES;" >
 
-	<command>&JOBS_DIR;/vrfy.sh</command>
-
-	<jobname><cyclestr>&PSLOT;_gfsvrfy_@H</cyclestr></jobname>
-	<account>&ACCOUNT;</account>
-	<queue>&QUEUE_VRFY_GFS;</queue>
-	<partition>&PARTITION_VRFY_GFS;</partition>
-	&RESOURCES_VRFY_GFS;
-	<walltime>&WALLTIME_VRFY_GFS;</walltime>
-	
-	<native>&NATIVE_VRFY_GFS;</native>
-
-	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsvrfy.log</cyclestr></join>
-
-	<envar><name>RUN_ENVIR</name><value>&RUN_ENVIR;</value></envar>
-	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
-	<envar><name>EXPDIR</name><value>&EXPDIR;</value></envar>
-	<envar><name>CDATE</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
-	<envar><name>CDUMP</name><value>&CDUMP;</value></envar>
-	<envar><name>ATCFNAME</name><value>&ATCFNAME;</value></envar>
-	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
-	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
-
-</task>
-
-<!--
--->
-<task name="gfsarch" cycledefs="gfs" maxtries="&MAXTRIES;" final="true">
-
-	<command>&JOBS_DIR;/arch_gsl.sh</command>
+	<command>&JOBS_DIR;/arch_gsl_nc.sh</command>
 
 	<jobname><cyclestr>&PSLOT;_gfsarch_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
@@ -119,7 +88,7 @@
 	<memory>&MEMORY_ARCH_GFS;</memory>
 	<native>&NATIVE_ARCH_GFS;</native>
 
-	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsarch.log</cyclestr></join>
+	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsarch_nc.log</cyclestr></join>
 
 	<envar><name>RUN_ENVIR</name><value>&RUN_ENVIR;</value></envar>
 	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
@@ -129,12 +98,10 @@
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
 	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
 	<envar><name>COMPONENT</name><value>&COMPONENT;</value></envar>
+	<envar><name>ATCFNAME</name><value>&ATCFNAME;</value></envar>
 
 	<dependency>
-		<and>
-			<taskdep task="gfsvrfy"/>
-			<streq><left>&ARCHIVE_TO_HPSS;</left><right>YES</right></streq>
-		</and>
+		<streq><left>&ARCHIVE_TO_HPSS;</left><right>YES</right></streq>
 	</dependency>
 
 </task>

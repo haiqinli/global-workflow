@@ -29,6 +29,8 @@
 	<!ENTITY RUN_ENVIR "emc">
 
 	<!-- Experiment related directories -->
+	<!ENTITY EXPDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/rt_v17_p8_gf">
+	<!ENTITY ROTDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf">
 	<!ENTITY EXPDIR "/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP/FV3GFSwfm/rt_v17_p8_gf">
 	<!ENTITY ROTDIR "/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf">
 	<!ENTITY ICSDIR "/lfs1/BMC/gsd-fv3-test/rtfim/FV3ICS_L127/">
@@ -37,8 +39,8 @@
         <!ENTITY RETRODIR "/lfs4/BMC/gsd-fv3-dev/GFS_RETRO_ANL/">
 
 	<!-- Directories for driving the workflow -->
-	<!ENTITY HOMEgfs  "/mnt/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP">
-	<!ENTITY JOBS_DIR "/mnt/lfs1/BMC/gsd-fv3-test/rtfim/GFSv17p8_HFIP/jobs/rocoto">
+	<!ENTITY HOMEgfs  "/home/rtfim/GFSv17p8_HFIP">
+	<!ENTITY JOBS_DIR "/home/rtfim/GFSv17p8_HFIP/jobs/rocoto">
 
 	<!-- Machine related entities -->
 	<!ENTITY ACCOUNT    "rtgsd-fv3-hfip">

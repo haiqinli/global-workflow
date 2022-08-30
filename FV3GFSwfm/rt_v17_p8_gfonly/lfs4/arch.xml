@@ -22,7 +22,7 @@
 
 	<!-- Experiment parameters such as starting, ending dates -->
 	<!ENTITY SDATE    "202207100000">
-	<!ENTITY EDATE    "202207200000">
+	<!ENTITY EDATE    "202207160000">
 	<!ENTITY INTERVAL "24:00:00">
 
 	<!-- Run Envrionment -->
@@ -80,7 +80,7 @@
 
 <task name="gfsarch" cycledefs="gfs" maxtries="&MAXTRIES;">
 
-	<command>&JOBS_DIR;/arch_gsl_nc.sh</command>
+	<command>&JOBS_DIR;/arch_gsl.sh</command>
 
 	<jobname><cyclestr>&PSLOT;_gfsarch_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
@@ -101,6 +101,7 @@
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
 	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
 	<envar><name>COMPONENT</name><value>&COMPONENT;</value></envar>
+	<envar><name>ATCFNAME</name><value>&ATCFNAME;</value></envar>
 
 	<dependency>
 		<streq><left>&ARCHIVE_TO_HPSS;</left><right>YES</right></streq>

@@ -21,8 +21,8 @@
 	<!ENTITY ATCFNAME   "myp8">
 
 	<!-- Experiment parameters such as starting, ending dates -->
-	<!ENTITY SDATE    "202207160000">
-	<!ENTITY EDATE    "202207160000">
+	<!ENTITY SDATE    "202208200000">
+	<!ENTITY EDATE    "202208200000">
 	<!ENTITY INTERVAL "24:00:00">
 
 	<!-- Run Envrionment -->
@@ -33,8 +33,8 @@
 	<!ENTITY ROTDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_mynn">
 
 	<!-- Directories for driving the workflow -->
-	<!ENTITY HOMEgfs  "/mnt/lfs4/BMC/gsd-fv3-dev/rtruns/GFSv17p8_HFIP">
-	<!ENTITY JOBS_DIR "/mnt/lfs4/BMC/gsd-fv3-dev/rtruns/GFSv17p8_HFIP/jobs/rocoto">
+	<!ENTITY HOMEgfs  "/home/rtfim/GFSv17p8_HFIP">
+	<!ENTITY JOBS_DIR "/home/rtfim/GFSv17p8_HFIP/jobs/rocoto">
 
 	<!-- Machine related entities -->
 	<!ENTITY ACCOUNT    "rtgsd-fv3-hfip">
@@ -80,7 +80,7 @@
 
 <task name="gfsvrfy" cycledefs="gfs" maxtries="&MAXTRIES;">
 
-	<command>&JOBS_DIR;/vrfy.sh</command>
+	<command>&JOBS_DIR;/vrfy_gsl.sh</command>
 
 	<jobname><cyclestr>&PSLOT;_gfsvrfy_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
@@ -101,6 +101,10 @@
 	<envar><name>ATCFNAME</name><value>&ATCFNAME;</value></envar>
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
 	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
+
+        <dependency>
+            <datadep age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f120</cyclestr></datadep>
+        </dependency>
 
 </task>
 
@@ -128,6 +132,7 @@
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
 	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
 	<envar><name>COMPONENT</name><value>&COMPONENT;</value></envar>
+	<envar><name>ATCFNAME</name><value>&ATCFNAME;</value></envar>
 
 	<dependency>
 		<and>

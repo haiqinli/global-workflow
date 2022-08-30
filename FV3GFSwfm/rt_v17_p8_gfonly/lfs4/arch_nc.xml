@@ -10,27 +10,27 @@
 		rahul.mahajan@noaa.gov
 
 	NOTES:
-		This workflow was automatically generated at 2022-07-10 08:20:05.979926
+		This workflow was automatically generated at 2022-07-10 04:19:26.133858
 	-->
 
 	<!-- Experiment parameters such as name, cycle, resolution -->
-	<!ENTITY PSLOT    "rt_v17_p8_mynn">
+	<!ENTITY PSLOT    "rt_v17_p8_gf">
 	<!ENTITY CDUMP    "gfs">
 	<!ENTITY CASE     "C768">
 	<!ENTITY COMPONENT  "atmos">
-	<!ENTITY ATCFNAME   "myp8">
+	<!ENTITY ATCFNAME   "gfp8">
 
 	<!-- Experiment parameters such as starting, ending dates -->
 	<!ENTITY SDATE    "202207100000">
-	<!ENTITY EDATE    "202207190000">
+	<!ENTITY EDATE    "202207200000">
 	<!ENTITY INTERVAL "24:00:00">
 
 	<!-- Run Envrionment -->
 	<!ENTITY RUN_ENVIR "emc">
 
 	<!-- Experiment related directories -->
-	<!ENTITY EXPDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/rt_v17_p8_mynn">
-	<!ENTITY ROTDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_mynn">
+	<!ENTITY EXPDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSwfm/rt_v17_p8_gf">
+	<!ENTITY ROTDIR "/home/rtfim/GFSv17p8_HFIP/FV3GFSrun/rt_v17_p8_gf">
 	<!ENTITY ICSDIR "/lfs4/BMC/gsd-fv3-dev/rtruns/FV3ICS_L127/">
 	<!ENTITY PUBDIR "/public/data/grids/gfs/anl/netcdf">
 	<!ENTITY RETRODIR "/lfs4/BMC/gsd-fv3-dev/GFS_RETRO_ANL">
@@ -46,6 +46,9 @@
 	<!ENTITY PARTITION_BATCH "vjet">
 	<!ENTITY PARTITION_SERVICE "service">
 	<!ENTITY SCHEDULER  "slurm">
+        <!ENTITY RESERVATION_FCST "judy_fcst_00">
+        <!ENTITY RESERVATION_POST1 "judy_post1_00">
+        <!ENTITY RESERVATION_POST2 "judy_post2_00">
 
 	<!-- Toggle HPSS archiving -->
 	<!ENTITY ARCHIVE_TO_HPSS "YES">
@@ -75,7 +78,7 @@
 	<!-- Define the cycles -->
 	<cycledef group="gfs">&SDATE; &EDATE; &INTERVAL;</cycledef>
 
-<task name="gfsarch" cycledefs="gfs" maxtries="&MAXTRIES;" >
+<task name="gfsarch" cycledefs="gfs" maxtries="&MAXTRIES;">
 
 	<command>&JOBS_DIR;/arch_gsl_nc.sh</command>
 
@@ -88,7 +91,7 @@
 	<memory>&MEMORY_ARCH_GFS;</memory>
 	<native>&NATIVE_ARCH_GFS;</native>
 
-	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsarch_nc.log</cyclestr></join>
+	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/gfsarch.log</cyclestr></join>
 
 	<envar><name>RUN_ENVIR</name><value>&RUN_ENVIR;</value></envar>
 	<envar><name>HOMEgfs</name><value>&HOMEgfs;</value></envar>
@@ -98,6 +101,7 @@
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
 	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
 	<envar><name>COMPONENT</name><value>&COMPONENT;</value></envar>
+	<envar><name>ATCFNAME</name><value>&ATCFNAME;</value></envar>
 
 	<dependency>
 		<streq><left>&ARCHIVE_TO_HPSS;</left><right>YES</right></streq>
