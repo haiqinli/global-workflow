@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE workflow [
+
+  <!ENTITY FV3GFS_HOME "/home/rtfim/GFSv17p8_HFIP">
+  <!ENTITY PSLOT  "rt_v17_p8_mynn">
+  <!ENTITY ATCFNAME "GFP8">               <!-- tracker name -->
+  <!ENTITY MODL "FV3-CCPP_GFSv17p8_mynn">                   <!-- plot name;  needs to have 'FV3' in name for NCL -->
+  <!ENTITY RES "0p25">
+  <!ENTITY FCST_INTERVAL "6">
+  <!ENTITY FCST_LENGTH "144">
+  <!-- set this to 3 character str - ex. 96 would be 096 - used for final FV3GFS_GF verification file required -->
+  <!ENTITY FCST_LENGTH_STR "144">
+
+  <!-- External parameter entites -->
+  <!ENTITY % SITES  SYSTEM "all_sites.xml">  %SITES;
+  <!ENTITY % TASKS  SYSTEM "all_tasks.xml">  %TASKS;
+  <!ENTITY % DEFS   SYSTEM "all_defs.xml">   %DEFS;
+
+  <!ENTITY PARTITION_JET "<partition>vjet,xjet</partition>">
+  <!ENTITY PROJECT   "rtgsd-fv3-hfip">
+  %jet;
+  %metatasks;
+]>
+
+<workflow realtime="F" scheduler="&SCHEDULER;" cyclethrottle="3">
+  <log>
+    <cyclestr>&FV3GFS_LOG;/workflow/workflow_@Y@m@d@H_&PSLOT;_nclzip.log</cyclestr>
+  </log>
+
+  <cycledef group="24hr">202208170000 202208170000 24:00:00</cycledef> 
+
+  <task name="nclzip" cycledefs="24hr" maxtries="3" >
+    <command>&SCRIPTS;/fv3_nclzip.ksh</command>
+    <account>&PROJECT;</account>
+    <cores>1</cores>
+    <walltime>00:55:00</walltime>
+    <jobname><cyclestr>nclzip</cyclestr></jobname>
+    <join><cyclestr>&FV3GFS_LOG;/ncl/nclzip_@Y@m@d@H.log</cyclestr></join>
+    <envar><name>FV3GFS_RUN</name><value>&FV3GFS_RUN;</value></envar>
+    <envar><name>yyyymmdd</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
+    <envar><name>PSLOT</name><value>&PSLOT;</value></envar>
+    <envar><name>CDUMP</name><value>&CDUMP;</value></envar>
+    <envar><name>COMPONENT</name><value>&COMPONENT;</value></envar>
+    <envar><name>hh</name><value><cyclestr>@H</cyclestr></value></envar>
+    <dependency>
+        <or> 
+           <and>
+               <timedep><cyclestr offset="048:00:00">@Y@m@d@H@M00</cyclestr></timedep>
+               <datadep age="600"><cyclestr>&FV3GFS_RUN;/&PSLOT;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/ncl/fim/pres_pv2_f000.png</cyclestr></datadep>
+           </and>
+           <datadep age="600"><cyclestr>&FV3GFS_RUN;/&PSLOT;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/ncl/fim/pres_pv2_f&FCST_LENGTH_STR;.png</cyclestr></datadep>
+        </or> 
+    </dependency>
+  </task>
+
+</workflow>

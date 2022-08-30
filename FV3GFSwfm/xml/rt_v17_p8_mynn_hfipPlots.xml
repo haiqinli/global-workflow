@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE workflow
+[
+  <!ENTITY FV3GFS_HOME "/home/rtfim/GFSv17p8_HFIP">
+  <!ENTITY PSLOT  "rt_v17_p8_mynn">
+  <!ENTITY FCST_INTERVAL "6">            
+  <!ENTITY ATCFNAME "myp8">
+  <!ENTITY FCST_LENGTH "144">
+
+  <!-- External parameter entites -->
+  <!ENTITY % SITES  SYSTEM "all_sites.xml">  %SITES;
+  <!ENTITY % TASKS  SYSTEM "all_tasks.xml">  %TASKS;
+  <!ENTITY % DEFS   SYSTEM "all_defs.xml">   %DEFS;
+
+  <!ENTITY RESERVATION_POST "judy_post2_00">
+  <!ENTITY RESERVATION_POST "judy_post1_00">
+  <!ENTITY PROJECT   "rtgsd-fv3-hfip">
+  %jet;
+
+]>
+
+  <workflow realtime="T" scheduler="&SCHEDULER;" cyclethrottle="15" cyclelifespan="0:25:00:00"> 
+  <log><cyclestr>&FV3GFS_LOG;/workflow/workflow_@Y@m@d@H_hfipPlots.log</cyclestr></log> 
+
+  <!-- set this to year month day(s) hour(s) minute - NOTE if you are running this for an earlier time,
+       make sure you delete the .store file or it will not restart -->
+
+  <cycledef group="g2">202207270000 202211010000 24:00:00</cycledef>
+  <cycledef group="g1">0 0 23-31 7-10 2022 * </cycledef>
+
+  <metatask name="g2hfipPlots" >
+    <var name="T"> 000 006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 126 132 138 144 </var>
+<!--    &hfipPlot_res_task; -->
+    &hfipPlot_task;
+  </metatask>  
+  <metatask name="g1hfipPlots" >
+    <var name="T"> 000 006 012 018 024 030 036 042 048 054 060 066 072 078 084 090 096 102 108 114 120 126 132 138 144 </var>
+    &hfipPlotG1_task;
+  </metatask>  
+<!--
+-->
+</workflow>
