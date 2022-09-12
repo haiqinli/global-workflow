@@ -13,3 +13,14 @@ rocotostat  -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/rt_ufscam_l127_dev1/ufsca
 
 rocotorun -w ufscam_l127_dev1_post.xml -d ufscam_l127_dev1_post.db
 rocotostat -w ufscam_l127_dev1_post.xml -d ufscam_l127_dev1_post.db
+
+rocotorun -w arch.xml -d arch.db
+rocotostat -w arch.xml -d arch.db
+
+rocotorun -w arch_ics.xml -d arch_ics.db
+rocotostat -w arch_ics.xml -d arch_ics.db
+
+PyGraf workflow
+===============
+rocotorun -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/rt_ufscam_l127_dev1/rt_dev1_pygraf_global.xml -d /home/rtfim/rt_dbfiles/rt_dev1_pygraf_global.db
+rocotostat -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/rt_ufscam_l127_dev1/rt_dev1_pygraf_global.xml -d /home/rtfim/rt_dbfiles/rt_dev1_pygraf_global.db -c  `date --date='4 days ago' +%Y%m%d0000`: | m
