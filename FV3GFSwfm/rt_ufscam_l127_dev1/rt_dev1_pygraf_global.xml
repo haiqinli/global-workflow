@@ -103,7 +103,7 @@
                 --file_type prs \
                 --file_tmpl "&CDUMP;.t@Hz.pgrb2.0p25.f{FCST_TIME:03d}"\
                 --images &PYGRAFDIR;/image_lists/#IMGFILE# hourly\
-                -m "FV3-CCPP_GSL_L127" \
+                -m "FV3-CCPP_GSL_L127_dev1" \
                 -n ${SLURM_CPUS_ON_NODE:-12} \
                 -o &ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/pyprd \
                 -s @Y@m@d@H \
