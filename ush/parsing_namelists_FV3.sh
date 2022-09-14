@@ -286,7 +286,7 @@ EOF
   min_seaice   = ${min_seaice:-"0.15"}
 EOF
   ;;
-  "FV3_GFS_v17_p8_*mynn")
+  FV3_GFS_v17_p8_*mynn)
   cat >> input.nml << EOF
   iovr         = ${iovr:-"3"}
   ltaerosol    = ${ltaerosol:-".false."}
@@ -492,6 +492,11 @@ if [ ${DO_LAND_PERT:-"NO"} = "YES" ]; then
   n_var_lndp = ${n_var_lndp:-0}
 EOF
 fi
+
+  cat >> input.nml << EOF
+  $gfs_physics_nml
+/
+EOF
 
 if [ $knob_ugwp_version -eq 0 ]; then
   cat >> input.nml << EOF
