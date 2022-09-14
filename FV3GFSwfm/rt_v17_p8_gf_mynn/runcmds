@@ -14,13 +14,13 @@ rocotostat  -w v17_p8_gf_mynn_nores.xml -d /home/rtfim/rt_dbfiles/v17_p8_gf_mynn
 rocotorun -w post.xml -d post.db
 rocotostat -w post.xml -d post.db | m
 
+rocotorun -w arch.xml -d arch.db
+rocotostat -w arch.xml -d arch.db
+
 =================================================
 
 rocotorun -w trak.xml -d trak.db
 rocotostat -w trak.xml -d trak.db
-
-rocotorun -w arch.xml -d arch.db
-rocotostat -w arch.xml -d arch.db
 
 rocotorun -w arch_ics.xml -d arch_ics.db
 rocotostat -w arch_ics.xml -d arch_ics.db

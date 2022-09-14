@@ -11,5 +11,8 @@ rocotostat -w post.xml -d post.db
 rocotorun -w trak.xml -d trak.db
 rocotostat -w trak.xml -d trak.db
 
+rocotorun -w arch.xml -d arch.db
+rocotostat -w arch.xml -d arch.db
+
 rocotorun -w arch_nc.xml -d arch_nc.db
 rocotostat -w arch_nc.xml -d arch_nc.db
