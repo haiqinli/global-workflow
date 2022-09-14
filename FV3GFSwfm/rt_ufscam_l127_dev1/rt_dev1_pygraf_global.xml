@@ -108,7 +108,7 @@
                 -o &ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/pyprd \
                 -s @Y@m@d@H \
                 --tiles "#TILESET#" \
-                -z &ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/nclprd
+                -z &ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/ncl
             </cyclestr>
           </command>
           <account>&ACCOUNT;</account>
