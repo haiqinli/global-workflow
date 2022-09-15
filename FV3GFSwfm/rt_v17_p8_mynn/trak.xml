@@ -21,9 +21,9 @@
 	<!ENTITY ATCFNAME   "myp8">
 
 	<!-- Experiment parameters such as starting, ending dates -->
-	<!ENTITY SDATE    "202209010000">
-	<!ENTITY EDATE    "202209010000">
-	<!ENTITY INTERVAL "24:00:00">
+	<!ENTITY SDATE    "202209080000">
+	<!ENTITY EDATE    "202209120000">
+	<!ENTITY INTERVAL "96:00:00">
 
 	<!-- Run Envrionment -->
 	<!ENTITY RUN_ENVIR "emc">
@@ -102,12 +102,32 @@
 	<envar><name>PDY</name><value><cyclestr>@Y@m@d</cyclestr></value></envar>
 	<envar><name>cyc</name><value><cyclestr>@H</cyclestr></value></envar>
 
-        <dependency>
+	<dependency>
 		<and>
-            		<datadep age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f120</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f000</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f006</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f012</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f018</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f024</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f030</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f036</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f042</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f048</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f054</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f060</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f066</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f072</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f078</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f084</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f090</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f096</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f102</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f108</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f114</cyclestr></datadep>
+            		<datadep minsize="1b" age="120"><cyclestr>&ROTDIR;/&CDUMP;.@Y@m@d/@H/&COMPONENT;/&CDUMP;.t@Hz.pgrb2.0p25.f120</cyclestr></datadep>
             		<datadep minsize="1b">/lfs4/HFIP/hwrf-data/hwrf-input/SYNDAT-PLUS/syndat_tcvitals.2022</datadep>
 		</and>
-        </dependency>
+	</dependency>
 
 </task>
 
