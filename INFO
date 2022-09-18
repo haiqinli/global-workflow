@@ -1,3 +1,8 @@
+18 Sep 2022
+    - change settings for suites FV3_GFS_v17_p8_gf_mynn and FV3_GFS_v17_p8_mynn
+        sedi_semi=.false. (dt_inner will then become 75)
+        decfl=8
+      effective 00Z 19 Sep 2022
 26 Aug 2022
     - update ufs_utils to ufs_utils_1_8_0
 19 Aug 2022
