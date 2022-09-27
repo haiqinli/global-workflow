@@ -21,6 +21,8 @@ echo " start with ukmet_gfs_meta_sa2.sh"
 export PS4='SA2:$SECONDS + '
 cp $FIXgempak/datatype.tbl datatype.tbl
 
+export COMPONENT=${COMPONENT:-atmos}
+
 mdl=gfs
 MDL=GFS
 
@@ -44,7 +46,7 @@ fi
 
 PDY2=`echo ${PDY} | cut -c3-`
 # export HPCGFS=$COMROOT/nawips/${envir}/gfs.${PDY}
-export HPCGFS=${COMINgempak}/${mdl}.${PDY}/${cyc}/gempak
+export HPCGFS=${COMINgempak}/${mdl}.${PDY}/${cyc}/${COMPONENT}/gempak
 
 grid1="F-GFSHPC | ${PDY2}/${cyc}00"
 
@@ -301,7 +303,7 @@ do
         ukmetfhr=${gfsfhr}
     fi
     gfsfhr="F${gfsfhr}"
-    grid3="${COMINukmet}.${PDY}/ukmet_${PDY}00f${ukmetfhr}"
+    grid3="${COMINukmet}.${PDY}/gempak/ukmet_${PDY}00f${ukmetfhr}"
 
 $GEMEXE/gdplot2_nc << EOF25
 \$MAPFIL = mepowo.gsf

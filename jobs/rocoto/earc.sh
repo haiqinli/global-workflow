@@ -28,6 +28,8 @@ for config in $configs; do
     [[ $status -ne 0 ]] && exit $status
 done
 
+export COMPONENT=${COMPONENT:-atmos}
+
 n=$((ENSGRP))
 
 # ICS are restarts and always lag INC by $assim_freq hours.
@@ -40,7 +42,7 @@ fi
 # EnKF update in GFS, GDAS or both
 CDUMP_ENKF=$(echo ${EUPD_CYC:-"gdas"} | tr a-z A-Z)
 
-ARCH_LIST="$ROTDIR/enkf${CDUMP}.$PDY/$cyc/earc$ENSGRP"
+ARCH_LIST="$ROTDIR/enkf${CDUMP}.$PDY/$cyc/$COMPONENT/earc$ENSGRP"
 [[ -d $ARCH_LIST ]] && rm -rf $ARCH_LIST
 mkdir -p $ARCH_LIST
 cd $ARCH_LIST
@@ -130,12 +132,12 @@ if [ $ENSGRP -eq 0 ]; then
     [[ ! -d $ARCDIR ]] && mkdir -p $ARCDIR
     cd $ARCDIR
 
-    $NCP $ROTDIR/enkf${CDUMP}.$PDY/$cyc/${CDUMP}.t${cyc}z.enkfstat       enkfstat.${CDUMP}.$CDATE
-    $NCP $ROTDIR/enkf$CDUMP.$PDY/$cyc/${CDUMP}.t${cyc}z.gsistat.ensmean  gsistat.${CDUMP}.${CDATE}.ensmean
+    $NCP $ROTDIR/enkf${CDUMP}.$PDY/$cyc/$COMPONENT/${CDUMP}.t${cyc}z.enkfstat         enkfstat.${CDUMP}.$CDATE
+    $NCP $ROTDIR/enkf${CDUMP}.$PDY/$cyc/$COMPONENT/${CDUMP}.t${cyc}z.gsistat.ensmean  gsistat.${CDUMP}.${CDATE}.ensmean
 
     if [ $CDUMP_ENKF != "GDAS" ]; then
-		$NCP $ROTDIR/enkfgfs.$PDY/$cyc/${CDUMP}.t${cyc}z.enkfstat         enkfstat.gfs.$CDATE
-		$NCP $ROTDIR/enkfgfs.$PDY/$cyc/${CDUMP}.t${cyc}z.gsistat.ensmean  gsistat.gfs.${CDATE}.ensmean
+		$NCP $ROTDIR/enkfgfs.$PDY/$cyc/$COMPONENT/${CDUMP}.t${cyc}z.enkfstat         enkfstat.gfs.$CDATE
+		$NCP $ROTDIR/enkfgfs.$PDY/$cyc/$COMPONENT/${CDUMP}.t${cyc}z.gsistat.ensmean  gsistat.gfs.${CDATE}.ensmean
 	fi
 
 fi
@@ -148,35 +150,59 @@ fi
 ###############################################################
 # ENSGRP 0 also does clean-up
 if [ $ENSGRP -eq 0 ]; then
-    ###############################################################
-    # Clean up previous cycles; various depths
-    # PRIOR CYCLE: Leave the prior cycle alone
-    GDATE=$($NDATE -$assim_freq $CDATE)
 
-    # PREVIOUS to the PRIOR CYCLE
-    # Now go 2 cycles back and remove the directory
-    GDATE=$($NDATE -$assim_freq $GDATE)
-    gPDY=$(echo $GDATE | cut -c1-8)
-    gcyc=$(echo $GDATE | cut -c9-10)
+    # Start start and end dates to remove
+    GDATEEND=$($NDATE -${RMOLDEND_ENKF:-24}  $CDATE)
+    GDATE=$($NDATE -${RMOLDSTD_ENKF:-120} $CDATE)
+    while [ $GDATE -le $GDATEEND ]; do
 
-	# Handle GDAS and GFS EnKF directories separately
-    COMIN_ENS="$ROTDIR/enkfgdas.$gPDY/$gcyc"
-    [[ -d $COMIN_ENS ]] && rm -rf $COMIN_ENS
-    COMIN_ENS="$ROTDIR/enkfgfs.$gPDY/$gcyc"
-    [[ -d $COMIN_ENS ]] && rm -rf $COMIN_ENS
+	gPDY=$(echo $GDATE | cut -c1-8)
+	gcyc=$(echo $GDATE | cut -c9-10)
 
-    # PREVIOUS day 00Z remove the whole day
-    GDATE=$($NDATE -48 $CDATE)
-    gPDY=$(echo $GDATE | cut -c1-8)
-    gcyc=$(echo $GDATE | cut -c9-10)
+	# Loop over GDAS and GFS EnKF directories separately.
+        clist="gdas gfs"
+	for ctype in $clist; do
+	    COMIN_ENS="$ROTDIR/enkf$ctype.$gPDY/$gcyc/$COMPONENT"
+            if [ -d $COMIN_ENS ]; then
+		rocotolog="$EXPDIR/logs/${GDATE}.log"
+		if [ -f $rocotolog ]; then
+		    testend=$(tail -n 1 $rocotolog | grep "This cycle is complete: Success")
+		    rc=$?
+		    if [ $rc -eq 0 ]; then
+                        # Retain f006.ens files.  Remove everything else
+			for file in `ls $COMIN_ENS | grep -v f006.ens`; do
+			    rm -rf $COMIN_ENS/$file
+			done
+		    fi
+		fi
+	    fi
 
-	# Handle GDAS and GFS EnKF directories separately
-    COMIN_ENS="$ROTDIR/enkfgdas.$gPDY"
-    [[ -d $COMIN_ENS ]] && rm -rf $COMIN_ENS
-    COMIN_ENS="$ROTDIR/enkfgfs.$gPDY"
-    [[ -d $COMIN_ENS ]] && rm -rf $COMIN_ENS
+	    # Remove empty directories
+	    if [ -d $COMIN_ENS ] ; then
+		[[ ! "$(ls -A $COMIN_ENS)" ]] && rm -rf $COMIN_ENS
+	    fi
+	done
+
+	# Advance to next cycle
+	GDATE=$($NDATE +$assim_freq $GDATE)
+
+    done
 
 fi
+
+# Remove enkf*.$rPDY for the older of GDATE or RDATE
+GDATE=$($NDATE -${RMOLDSTD_ENKF:-120} $CDATE)
+fhmax=$FHMAX_GFS
+RDATE=$($NDATE -$fhmax $CDATE)
+if [ $GDATE -lt $RDATE ]; then
+    RDATE=$GDATE
+fi
+rPDY=$(echo $RDATE | cut -c1-8)
+clist="gdas gfs"
+for ctype in $clist; do
+    COMIN="$ROTDIR/enkf$ctype.$rPDY"
+    [[ -d $COMIN ]] && rm -rf $COMIN
+done
 
 ###############################################################
 exit 0

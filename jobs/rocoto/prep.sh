@@ -23,14 +23,15 @@ status=$?
 
 ###############################################################
 # Set script and dependency variables
+export COMPONENT=${COMPONENT:-atmos}
 export OPREFIX="${CDUMP}.t${cyc}z."
-export COMOUT="$ROTDIR/$CDUMP.$PDY/$cyc"
+export COMOUT="$ROTDIR/$CDUMP.$PDY/$cyc/$COMPONENT"
 [[ ! -d $COMOUT ]] && mkdir -p $COMOUT
 
 ###############################################################
 # If ROTDIR_DUMP=YES, copy dump files to rotdir 
 if [ $ROTDIR_DUMP = "YES" ]; then
-   $HOMEgfs/ush/getdump.sh $CDATE $CDUMP $DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc} $COMOUT
+   $HOMEgfs/ush/getdump.sh $CDATE $CDUMP $DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}/${COMPONENT} $COMOUT
    status=$?
    [[ $status -ne 0 ]] && exit $status
 
@@ -39,9 +40,9 @@ if [ $ROTDIR_DUMP = "YES" ]; then
    gPDY=$(echo $GDATE | cut -c1-8)
    gcyc=$(echo $GDATE | cut -c9-10)
    GDUMP=gdas
-   gCOMOUT="$ROTDIR/$GDUMP.$gPDY/$gcyc"
+   gCOMOUT="$ROTDIR/$GDUMP.$gPDY/$gcyc/$COMPONENT"
    if [ ! -s $gCOMOUT/$GDUMP.t${gcyc}z.updated.status.tm00.bufr_d ]; then
-     $HOMEgfs/ush/getdump.sh $GDATE $GDUMP $DMPDIR/${GDUMP}${DUMP_SUFFIX}.${gPDY}/${gcyc} $gCOMOUT
+     $HOMEgfs/ush/getdump.sh $GDATE $GDUMP $DMPDIR/${GDUMP}${DUMP_SUFFIX}.${gPDY}/${gcyc}/${COMPONENT} $gCOMOUT
      status=$?
      [[ $status -ne 0 ]] && exit $status
    fi
@@ -70,12 +71,12 @@ if [ $PROCESS_TROPCY = "YES" ]; then
 
     [[ $ROTDIR_DUMP = "YES" ]] && rm $COMOUT${CDUMP}.t${cyc}z.syndata.tcvitals.tm00
 
-    $HOMEgfs/jobs/JGLOBAL_TROPCY_QC_RELOC
+    $HOMEgfs/jobs/JGLOBAL_ATMOS_TROPCY_QC_RELOC
     status=$?
     [[ $status -ne 0 ]] && exit $status
 
 else
-    [[ $ROTDIR_DUMP = "NO" ]] && cp $DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}/${CDUMP}.t${cyc}z.syndata.tcvitals.tm00 $COMOUT/
+    [[ $ROTDIR_DUMP = "NO" ]] && cp $DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}/${COMPONENT}/${CDUMP}.t${cyc}z.syndata.tcvitals.tm00 $COMOUT/
 fi
 
 
@@ -90,23 +91,26 @@ if [ $DO_MAKEPREPBUFR = "YES" ]; then
 
     export job="j${CDUMP}_prep_${cyc}"
     export DATAROOT="$RUNDIR/$CDATE/$CDUMP/prepbufr"
+    #export COMIN=${COMIN:-$ROTDIR/$CDUMP.$PDY/$cyc/$COMPONENT}
+    export COMIN=${COMIN:-$ROTDIR}
+    export COMINgdas=${COMINgdas:-$ROTDIR/gdas.$PDY/$cyc/$COMPONENT}
+    export COMINgfs=${COMINgfs:-$ROTDIR/gfs.$PDY/$cyc/$COMPONENT}
     if [ $ROTDIR_DUMP = "NO" ]; then
-      COMIN_OBS=${COMIN_OBS:-$DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}}
+      COMIN_OBS=${COMIN_OBS:-$DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}/${COMPONENT}}
       export COMSP=${COMSP:-$COMIN_OBS/$CDUMP.t${cyc}z.}
+    else
+      export COMSP=${COMSP:-$ROTDIR/${CDUMP}.${PDY}/${cyc}/$COMPONENT/$CDUMP.t${cyc}z.}
     fi
-    export COMIN=${COMIN:-$ROTDIR/$CDUMP.$PDY/$cyc}
-    export COMINgdas=${COMINgdas:-$ROTDIR/gdas.$PDY/$cyc}
-    export COMINgfs=${COMINgfs:-$ROTDIR/gfs.$PDY/$cyc}
 
-    $HOMEobsproc_network/jobs/JGLOBAL_PREP
+    $HOMEobsproc/jobs/JOBSPROC_GLOBAL_PREP
     status=$?
     [[ $status -ne 0 ]] && exit $status
 
 else
     if [ $ROTDIR_DUMP = "NO" ]; then
-	$NCP $DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}/${OPREFIX}prepbufr               $COMOUT/${OPREFIX}prepbufr
-	$NCP $DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}/${OPREFIX}prepbufr.acft_profiles $COMOUT/${OPREFIX}prepbufr.acft_profiles
-	[[ $DONST = "YES" ]] && $NCP $DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}/${OPREFIX}nsstbufr $COMOUT/${OPREFIX}nsstbufr
+	$NCP $DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}/${COMPONENT}/${OPREFIX}prepbufr               $COMOUT/${OPREFIX}prepbufr
+	$NCP $DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}/${COMPONENT}/${OPREFIX}prepbufr.acft_profiles $COMOUT/${OPREFIX}prepbufr.acft_profiles
+	[[ $DONST = "YES" ]] && $NCP $DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}/${COMPONENT}/${OPREFIX}nsstbufr $COMOUT/${OPREFIX}nsstbufr
     fi
 fi
 

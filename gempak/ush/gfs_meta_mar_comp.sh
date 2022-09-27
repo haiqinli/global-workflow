@@ -20,6 +20,8 @@ mkdir -p -m 775 $DATA/GEMPAK_META_MAR $DATA/MAR_COMP
 cd $DATA/MAR_COMP
 cp $FIXgempak/datatype.tbl datatype.tbl
 
+export COMPONENT=${COMPONENT:-atmos}
+
 mdl=gfs
 MDL="GFS"
 metatype="mar_comp"
@@ -30,11 +32,11 @@ PDY2=`echo $PDY | cut -c3-`
 # BV export MODEL=/com/nawips/prod
 #XXW export HPCGFS=${MODEL}/${mdl}.$PDY
 # BV export HPCGFS=${COMROOT}/nawips/${envir}/${mdl}.$PDY
-export HPCGFS=${COMINgempak}/${mdl}.${PDY}/${cyc}/gempak
-export COMIN00=${COMINgempak}/${mdl}.${PDY}/00/gempak
-export COMIN06=${COMINgempak}/${mdl}.${PDY}/06/gempak
-export COMIN12=${COMINgempak}/${mdl}.${PDY}/12/gempak
-export COMIN18=${COMINgempak}/${mdl}.${PDY}/18/gempak
+export HPCGFS=${COMINgempak}/${mdl}.${PDY}/${cyc}/${COMPONENT}/gempak
+export COMIN00=${COMINgempak}/${mdl}.${PDY}/00/${COMPONENT}/gempak
+export COMIN06=${COMINgempak}/${mdl}.${PDY}/06/${COMPONENT}/gempak
+export COMIN12=${COMINgempak}/${mdl}.${PDY}/12/${COMPONENT}/gempak
+export COMIN18=${COMINgempak}/${mdl}.${PDY}/18/${COMPONENT}/gempak
 if [ ${cyc} -eq 00 ] ; then
    cp $COMIN00/gfs_${PDY}00f* $DATA/GEMPAK_META_MAR
 elif [ ${cyc} -eq 06 ] ; then
@@ -179,7 +181,7 @@ export err=$?;err_chk
         done
         # COMPARE THE 1200 UTC GFS MODEL TO THE 0000 UTC UKMET MODEL
         grid="F-${MDL} | ${PDY2}/${cyc}00"
-        export HPCUKMET=${COMINukmet}.${PDY}
+        export HPCUKMET=${COMINukmet}.${PDY}/gempak
         grid2="F-UKMETHPC | ${PDY2}/0000"
         # for gfsfhr in 00 12 24 36 48 60 84 108
         for gfsfhr in 00 12 24 84 108
@@ -436,7 +438,7 @@ if [ ${cyc} = "00" ] ; then
                 cyc2="18"
 		#XXW export HPCGFS=${MODEL}/${mdl}.${PDYm1}
 		# BV export HPCGFS=$COMROOT/nawips/${envir}/${mdl}.${PDYm1}
-                export HPCGFS=${COMINgempak}/${mdl}.${PDYm1}/${cyc2}/gempak
+                export HPCGFS=${COMINgempak}/${mdl}.${PDYm1}/${cyc2}/${COMPONENT}/gempak
 
                 grid2="F-GFSHPC | ${PDY2m1}/1800"
                 add="06"
@@ -444,7 +446,7 @@ if [ ${cyc} = "00" ] ; then
             elif [ ${runtime} = "12" ] ; then
                 cyc2="12"
 		#XXW export HPCGFS=${MODEL}/${mdl}.${PDYm1}
-                export HPCGFS=${COMINgempak}/${mdl}.${PDYm1}/${cyc2}/gempak
+                export HPCGFS=${COMINgempak}/${mdl}.${PDYm1}/${cyc2}/${COMPONENT}/gempak
 
                 grid2="F-GFSHPC | ${PDY2m1}/1200"
                 add="12"
@@ -532,7 +534,7 @@ export err=$?;err_chk
         done
         # COMPARE THE 0000 UTC GFS MODEL TO THE 1200 UTC UKMET FROM YESTERDAY
         grid="F-${MDL} | ${PDY2}/${cyc}00"
-	export HPCUKMET=${COMINukmet}.${PDYm1}
+	export HPCUKMET=${COMINukmet}.${PDYm1}/gempak
         grid2="F-UKMETHPC | ${PDY2m1}/1200"
         # for gfsfhr in 00 12 24 36 48 60 84 108
         for gfsfhr in 00 12 24 84 108
@@ -905,7 +907,7 @@ if [ ${cyc} -eq "06" ] ; then
             elif [ ${runtime} = "18" ] ; then
                 cyc2="18"
 		#XXW export HPCGFS=${MODEL}/${mdl}.${PDYm1}
-                export HPCGFS=${COMINgempak}/${mdl}.${PDYm1}/${cyc2}/gempak
+                export HPCGFS=${COMINgempak}/${mdl}.${PDYm1}/${cyc2}/${COMPONENT}/gempak
                 grid2="F-GFSHPC | ${PDY2m1}/1800"
                 add="12"
                 testgfsfhr="72"

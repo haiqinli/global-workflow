@@ -16,6 +16,7 @@ export m=$1
 mkdir $DATA/$m
 cd $DATA/$m
   cp $FIXbufrsnd/gfs_collective${m}.list $DATA/$m/. 
+set +x
   CCCC=KWBC
     file_list=gfs_collective${m}.list
 
@@ -29,16 +30,14 @@ cd $DATA/$m
       WMOHEAD=JUSX4$m
     fi
 
-    for stn in `cat $file_list`
+    for stn in $(cat $file_list)
     do
        cp ${COMOUT}/bufr.${cycle}/bufr.$stn.$PDY$cyc $DATA/${m}/bufrin
        export pgm=tocsbufr
        #. prep_step
        export FORT11=$DATA/${m}/bufrin
        export FORT51=./bufrout
-       # JY - Turn off the startmsg to reduce the update on jlogfile in this loop
-       # startmsg
-      $EXECbufrsnd/tocsbufr << EOF
+       $EXECbufrsnd/tocsbufr << EOF
  &INPUT
   BULHED="$WMOHEAD",KWBX="$CCCC",
   NCEP2STD=.TRUE.,
@@ -59,6 +58,7 @@ EOF
        rm $DATA/${m}/bufrout
     done
 
+set -x
 #    if test $SENDCOM = 'NO'
     if test $SENDCOM = 'YES'
     then 

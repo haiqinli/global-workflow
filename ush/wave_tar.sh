@@ -34,8 +34,8 @@
   [[ "$LOUD" != YES ]] && set -x
 
   cd $DATA
-  postmsg "$jlogfile" "Making TAR FILE"
 
+  alertName=`echo $RUN|tr [a-z] [A-Z]`
 
   set +x
   echo ' '
@@ -59,7 +59,6 @@
     echo '********************************************'
     echo ' '
     [[ "$LOUD" = YES ]] && set -x
-    postmsg "$jlogfile" "TYPE IN ww3_tar.sh NOT SET"
     exit 1
   else
     ID=$1
@@ -69,6 +68,9 @@
 
   filext=$type
   if [ "$type" = "ibp" ]; then filext='spec'; fi
+  if [ "$type" = "ibpbull" ]; then filext='bull'; fi
+  if [ "$type" = "ibpcbull" ]; then filext='cbull'; fi
+
 
   rm -rf TAR_${filext}_$ID 
   mkdir  TAR_${filext}_$ID
@@ -87,11 +89,10 @@
     echo '*****************************************************'
     echo ' '
     [[ "$LOUD" = YES ]] && set -x
-    postmsg "$jlogfile" "EXPORTED VARIABLES IN ww3_tar.sh NOT SET"
     exit 2
   fi
 
-  cd ${STA_DIR}/${type}
+  cd ${STA_DIR}/${filext}
 
 # --------------------------------------------------------------------------- #
 # 2.  Generate tar file (spectral files are compressed)
@@ -124,7 +125,6 @@
         echo '***************************************** '
         echo ' '
         [[ "$LOUD" = YES ]] && set -x
-        postmsg "$jlogfile" "FATAL ERROR : TAR CREATION FAILED"
         exit 3
       fi
       
@@ -151,11 +151,10 @@
     echo '***************************************** '
     echo ' '
     [[ "$LOUD" = YES ]] && set -x
-    postmsg "$jlogfile" "FATAL ERROR : TAR CREATION FAILED"
     exit 3
   fi
 
-  if [ "$filext" = 'spec' ]
+  if [ "$type" = 'spec' ]
   then
     if [ -s $ID.$cycle.${type}_tar ]
     then
@@ -172,7 +171,6 @@
         echo '***************************************************** '
         echo ' '
         [[ "$LOUD" = YES ]] && set -x
-        postmsg "$jlogfile" "FATAL ERROR : SPECTRAL TAR COMPRESSION FAILED"
         exit 4
       fi
     fi
@@ -201,10 +199,10 @@
     echo '************************************* '
     echo ' '
     [[ "$LOUD" = YES ]] && set -x
-    postmsg "$jlogfile" "FATAL ERROR : TAR COPY FAILED"
     exit 4
   fi
 
+  # if [ "$SENDDBN" = 'YES' -a  $type != "ibp" ]
   if [ "$SENDDBN" = 'YES' ]
   then
     set +x
@@ -212,7 +210,7 @@
     echo "   Alerting TAR file as $COMOUT/station/${file_name}"
     echo ' '
     [[ "$LOUD" = YES ]] && set -x
-    $DBNROOT/bin/dbn_alert MODEL OMBWAVE $job $COMOUT/station/${file_name}
+    $DBNROOT/bin/dbn_alert MODEL ${alertName}_WAVE_TAR $job $COMOUT/station/${file_name}
   fi
 
 # --------------------------------------------------------------------------- #

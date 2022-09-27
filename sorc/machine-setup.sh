@@ -16,25 +16,31 @@ else
     __ms_shell=sh
 fi
 
+HOMEgfs=${HOMEgfs:-`pwd`/../}
 target=""
 USERNAME=`echo $LOGNAME | awk '{ print tolower($0)'}`
 ##---------------------------------------------------------------------------
 export hname=`hostname | cut -c 1,1`
-if [[ -d /scratch1 ]] ; then
+if [[ -d /work ]] ; then
+    # We are on MSU Orion
+    if ( ! eval module help > /dev/null 2>&1 ) ; then
+        echo load the module command 1>&2
+        source /apps/lmod/lmod/init/$__ms_shell
+    fi
+    target=orion
+    export LMOD_SYSTEM_DEFAULT_MODULES=contrib
+    module reset
+
+##---------------------------------------------------------------------------
+elif [[ -d /scratch1 ]] ; then
     # We are on NOAA Hera
     if ( ! eval module help > /dev/null 2>&1 ) ; then
 	echo load the module command 1>&2
         source /apps/lmod/lmod/init/$__ms_shell
     fi
     target=hera
-    module purge
-    module load intel
-    module load impi
-    export NCEPLIBS=/scratch2/NCEPDEV/nwprod/NCEPLIBS
-    module use $NCEPLIBS/modulefiles
-    #export WRFPATH=$NCEPLIBS/wrf.shared.new/v1.1.1/src
-    export myFC=mpiifort
-    export FCOMP=mpiifort
+    export LMOD_SYSTEM_DEFAULT_MODULES=contrib
+    module reset
 
 ##---------------------------------------------------------------------------
 elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
@@ -77,7 +83,17 @@ elif [[ -L /usrx && "$( readlink /usrx 2> /dev/null )" =~ dell ]] ; then
 	source /usrx/local/prod/lmod/lmod/init/$__ms_shell
     fi
     target=wcoss_dell_p3
-    module purge 
+    module purge
+
+##---------------------------------------------------------------------------
+elif [[ -d /lfs/h2 ]] ; then
+    # We are on NOAA Cactus or Dogwood
+    if ( ! eval module help > /dev/null 2>&1 ) ; then
+        echo load the module command 1>&2
+        source /usr/share/lmod/lmod/init/$__ms_shell
+    fi
+    target=wcoss2
+    module reset
 
 ##---------------------------------------------------------------------------
 
@@ -166,18 +182,15 @@ elif [[ -d /lfs3 ]] ; then
     fi
     target=jet
     module purge
-module load intel/15.0.3.187
-module load  impi
-#export  NCEPLIBS=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
-     export NCEPLIBS=/mnt/lfs3/projects/hfv3gfs/gwv/ljtjet/lib
-export NCEPLIBS=/mnt/lfs3/projects/hfv3gfs/gwv/NCEPLIBS.15X
-     module use $NCEPLIBS/modulefiles
-export WRFPATH=$NCEPLIBS/wrf.shared.new/v1.1.1/src
-export myFC=mpiifort
 
 else
     echo WARNING: UNKNOWN PLATFORM 1>&2
 fi
+
+# Source versions file for build
+
+. ${HOMEgfs}/versions/build.ver
+. ${HOMEgfs}/versions/${target}.ver
 
 unset __ms_shell
 unset __ms_ksh_test

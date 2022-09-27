@@ -39,6 +39,8 @@ DONST=${DONST:-"NO"}
 
 ###############################################################
 # Set script and dependency variables
+COMPONENT=${COMPONENT:-atmos}
+
 GDATE=$($NDATE -$assim_freq $CDATE)
 
 cymd=$(echo $CDATE | cut -c1-8)
@@ -53,9 +55,9 @@ GSUFFIX=${GSUFFIX:-$SUFFIX}
 APREFIX="${CDUMP}.t${chh}z."
 ASUFFIX=${ASUFFIX:-$SUFFIX}
 
-COMIN_OBS=${COMIN_OBS:-"$DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}"}
-COMIN_GES=${COMIN_GES:-"$ROTDIR/gdas.$gymd/$ghh"}
-COMOUT=${COMOUT:-"$ROTDIR/$CDUMP.$cymd/$chh"}
+COMIN_OBS=${COMIN_OBS:-"$DMPDIR/${CDUMP}${DUMP_SUFFIX}.${PDY}/${cyc}/${COMPONENT}"}
+COMIN_GES=${COMIN_GES:-"$ROTDIR/gdas.$gymd/$ghh/$COMPONENT"}
+COMOUT=${COMOUT:-"$ROTDIR/$CDUMP.$cymd/$chh/$COMPONENT"}
 [[ ! -d $COMOUT ]] && mkdir -p $COMOUT
 export DATA="$RUNDIR/$CDATE/$CDUMP/prepbufr"
 [[ -d $DATA ]] && rm -rf $DATA

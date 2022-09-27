@@ -46,17 +46,16 @@
   echo '!         Make ice fields        |'
   echo '+--------------------------------+'
   echo "   Model TAG       : $WAV_MOD_TAG"
-  echo "   Model ID        : $COMPONENTwave"
+  echo "   Model ID        : ${CDUMP}wave"
   echo "   Ice grid ID     : $WAVEICE_FID"
   echo "   Ice file        : $WAVICEFILE"
   echo ' '
   set $seton
-  postmsg "$jlogfile" "Making ice fields."
 
   if [ -z "$YMDH" ] || [ -z "$cycle" ] || \
      [ -z "$COMOUT" ] || [ -z "$FIXwave" ] || [ -z "$EXECwave" ] || \
      [ -z "$WAV_MOD_TAG" ] || [ -z "$WAVEICE_FID" ] || [ -z "$SENDCOM" ] || \
-     [ -z "$COMIN_WAV_ICE" ] || [ -z "$COMPONENTwave" ]
+     [ -z "$COMIN_WAV_ICE" ]
   then
     set $setoff
     echo ' '
@@ -64,9 +63,8 @@
     echo '*** EXPORTED VARIABLES IN preprocessor NOT SET ***'
     echo '**************************************************'
     echo ' '
-    exit 0
+    exit 1
     set $seton
-    postmsg "$jlogfile" "NON-FATAL ERROR - EXPORTED VARIABLES IN preprocessor NOT SET"
   fi
 
 # 0.c Links to working directory
@@ -97,8 +95,7 @@
     echo '************************************** '
     echo ' '
     set $seton
-    postmsg "$jlogfile" "FATAL ERROR - NO ICE FILE (GFS GRIB)"
-    exit 0
+    exit 2
   fi
 
 # --------------------------------------------------------------------------- #
@@ -124,8 +121,7 @@
     echo '**************************************** '
     echo ' '
     set $seton
-    postmsg "$jlogfile" "ERROR IN UNPACKING GRIB ICE FILE."
-    exit 0
+    exit 3
   fi
 
   rm -f wgrib.out
@@ -142,21 +138,22 @@
 
   cp -f ${DATA}/ww3_prnc.ice.$WAVEICE_FID.inp.tmpl ww3_prnc.inp
 
+  export pgm=ww3_prnc;. prep_step
+
   $EXECwave/ww3_prnc 1> prnc_${WAVEICE_FID}_${cycle}.out 2>&1 
-  err=$?
+  export err=$?; err_chk
 
   if [ "$err" != '0' ]
   then
-    cat wave_prep.out
+    cat prnc_${WAVEICE_FID}_${cycle}.out 
     set $setoff
     echo ' '
-    echo '************************* '
-    echo '*** ERROR IN waveprep *** '
-    echo '************************* '
+    echo '******************************************** '
+    echo '*** WARNING: NON-FATAL ERROR IN ww3_prnc *** '
+    echo '******************************************** '
     echo ' '
     set $seton
-    postmsg "$jlogfile" "NON-FATAL ERROR IN waveprep."
-    exit 0
+    exit 4
   fi
 
   rm -f wave_prep.out ww3_prep.inp ice.raw mod_def.ww3
@@ -172,7 +169,7 @@
     icefile=${WAV_MOD_TAG}.${WAVEICE_FID}.$cycle.ice
   elif [ "${WW3ATMIENS}" = "F" ]
   then 
-    icefile=${COMPONENTwave}.${WAVEICE_FID}.$cycle.ice
+    icefile=${CDUMP}wave.${WAVEICE_FID}.$cycle.ice
   fi
  
   set $setoff

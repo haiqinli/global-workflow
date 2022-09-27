@@ -110,7 +110,6 @@ export ENDHOUR=180
 # File To Log Msgs
 ####################################
 job=gfs_postsnd_test
-export jlogfile=/com/logs/jlogfiles/jlogfile.${job}.${pid}
 
 ####################################
 # Determine Job Output Name on System
@@ -160,8 +159,8 @@ env
 export KEEPDATA=YES
 ########################################################
 # Execute the script.
-#$SCRbufrsnd/exgfs_postsnd.sh.ecf
-${HOMEbufrsnd}/jobs/JGFS_POSTSND
+#$SCRbufrsnd/exgfs_atmos_postsnd.sh
+${HOMEbufrsnd}/jobs/JGFS_ATMOS_POSTSND
 ########################################################
 
 #cat $pgmout

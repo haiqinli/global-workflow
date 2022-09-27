@@ -49,6 +49,7 @@ C$$$
 !!      include 'mpif.h'
       integer,parameter:: nsta=3000
       integer,parameter:: ifile=11
+      integer,parameter:: levso=64
       integer(sigio_intkind):: irets
       type(nemsio_gfile) :: gfile
       integer ncfsig, nsig
@@ -61,7 +62,7 @@ C$$$
       real :: wrkd(1),dummy
       real rlat(nsta), rlon(nsta), elevstn(nsta)
       integer iidum(nsta),jjdum(nsta)
-      integer nint1, nend1, nint3, nend3
+      integer nint1, nend1, nint3, nend3, np1
       integer landwater(nsta)
       character*1 ns, ew
       character*4 t3
@@ -94,7 +95,7 @@ c     &                      'CLS1' ,'D10M' /
 C
       namelist /nammet/ levs, makebufr, dird,
      &                  nstart, nend, nint, nend1, nint1, 
-     &                  nint3, nsfc, f00, fformat
+     &                  nint3, nsfc, f00, fformat, np1
 
       call mpi_init(ierr)
       call mpi_comm_rank(MPI_COMM_WORLD,mrank,ierr)
@@ -144,9 +145,11 @@ CC        print*, IST,ALAT,NS,ALON,EW,T3,lsfc,DESC,IELEV
       endif
 !          print*,'npoint= ', npoint
 !          print*,'np,IST,idum,jdum,rlat(np),rlon(np)= '
+      if(np1 == 0) then
           do np = 1, npoint
           read(7,98) IST, iidum(np), jjdum(np), ALAT, ALON
           enddo
+      endif
   98     FORMAT (3I6, 2F9.2) 
       if (mrank.eq.0.and.makebufr) then
         REWIND 1
@@ -240,7 +243,7 @@ c     do nf = nss, nend, nint
           call meteorg(npoint,rlat,rlon,istat,cstat,elevstn,
      &             nf,nfile,fnsig,jdate,idate,
      &      levsi,im,jm,nsfc,
-     &      landwater,nend1, nint1, nint3, iidum,jjdum,
+     &      landwater,nend1, nint1, nint3, iidum,jjdum,np1,
      &      fformat,iocomms(ntask),iope,ionproc)
        call mpi_barrier(iocomms(ntask), ierr)
        call mpi_comm_free(iocomms(ntask), ierr)
@@ -249,7 +252,7 @@ c     do nf = nss, nend, nint
           call meteorg(npoint,rlat,rlon,istat,cstat,elevstn,
      &             nf,nfile,fnsig,jdate,idate,
      &      levs,im,jm,nsfc,
-     &      landwater,nend1, nint1, nint3, iidum,jjdum,
+     &      landwater,nend1, nint1, nint3, iidum,jjdum,np1,
      &      fformat,iocomms(ntask),iope,ionproc)
         endif  
         endif  
@@ -265,7 +268,7 @@ c     do nf = nss, nend, nint
       if(makebufr) then
           nend3 = nend
          call buff(nint1,nend1,nint3,nend3,
-     &        npoint,idate,jdate,levs,
+     &        npoint,idate,jdate,levso,
      &        dird,lss,istat,sbset,seqflg,clist,npp,wrkd)
       CALL W3TAGE('METEOMRF')
       endif
