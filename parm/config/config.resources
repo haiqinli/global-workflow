@@ -395,7 +395,7 @@ elif [ $step = "init" ]; then
     export npe_init=24
     export nth_init=1
     export npe_node_init=6
-    elif [ $machine = "JET" ]; then
+    if [ $machine = "JET" ]; then
         export memory_init="50G"
     else
         export memory_init="70G"
