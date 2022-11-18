@@ -48,53 +48,10 @@ elif [[ -d /scratch1 ]] ; then
     export FCOMP=mpiifort
 
 ##---------------------------------------------------------------------------
-elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
-    # We are on NOAA Luna or Surge
-    if ( ! eval module help > /dev/null 2>&1 ) ; then
-	echo load the module command 1>&2
-	source /opt/modules/default/init/$__ms_shell
-    fi
-
-    target=wcoss_cray
-    # Silence the "module purge" to avoid the expected error messages
-    # related to modules that load modules.
-    module purge > /dev/null 2>&1
-    module use /usrx/local/prod/modulefiles
-    module use /gpfs/hps/nco/ops/nwprod/lib/modulefiles
-    module use /gpfs/hps/nco/ops/nwprod/modulefiles
-    module use /opt/cray/alt-modulefiles
-    module use /opt/cray/craype/default/alt-modulefiles
-    module use /opt/cray/ari/modulefiles
-    module use /opt/modulefiles
-    module purge > /dev/null 2>&1
-    # Workaround until module issues are fixed:
-    #unset _LMFILES_
-    #unset LOADEDMODULES
-    echo y 2> /dev/null | module clear > /dev/null 2>&1
-    module use /usrx/local/prod/modulefiles
-    module use /gpfs/hps/nco/ops/nwprod/lib/modulefiles
-    module use /gpfs/hps/nco/ops/nwprod/modulefiles
-    module use /opt/cray/alt-modulefiles
-    module use /opt/cray/craype/default/alt-modulefiles
-    module use /opt/cray/ari/modulefiles
-    module use /opt/modulefiles
-    module load modules
-
-##---------------------------------------------------------------------------
-elif [[ -L /usrx && "$( readlink /usrx 2> /dev/null )" =~ dell ]] ; then
-    # We are on NOAA Venus or Mars
-    if ( ! eval module help > /dev/null 2>&1 ) ; then
-	echo load the module command 1>&2
-	source /usrx/local/prod/lmod/lmod/init/$__ms_shell
-    fi
-    target=wcoss_dell_p3
-    module purge 
-
-##---------------------------------------------------------------------------
 elif [[ -d /glade ]] ; then
     # We are on NCAR Yellowstone
     if ( ! eval module help > /dev/null 2>&1 ) ; then
-	echo load the module command 1>&2
+        echo load the module command 1>&2
         . /usr/share/Modules/init/$__ms_shell
     fi
     target=yellowstone
@@ -102,8 +59,7 @@ elif [[ -d /glade ]] ; then
 
 ##---------------------------------------------------------------------------
 elif [[ -d /lustre && -d /ncrc ]] ; then
-    # We are on GAEA. 
-   # We are on GAEA.
+    # We are on GAEA.
     echo gaea
     if ( ! eval module help > /dev/null 2>&1 ) ; then
         # We cannot simply load the module command.  The GAEA
@@ -118,7 +74,7 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
     fi
     module purge
     module purge
-# clean up after purge
+    # clean up after purge
     unset _LMFILES_
     unset _LMFILES_000
     unset _LMFILES_001
@@ -144,18 +100,17 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
       source /etc/profile
       unset __ms_source_etc_profile
     fi
+    target=gaea
 
-target=gaea
-
-# GWV ADD
-module load craype
-module load intel
-export NCEPLIBS=/lustre/f2/dev/ncep/George.Vandenberghe/NEWCOPY/l508/lib/
-module use $NCEPLIBS/modulefiles
-export myFC=ftn      
-export WRFPATH=$NCEPLIBS/wrf.shared.new/v1.1.1/src                                                    
-export FCOMP=ftn
-# END GWV ADD
+    # GWV ADD
+    module load craype
+    module load intel
+    export NCEPLIBS=/lustre/f2/dev/ncep/George.Vandenberghe/NEWCOPY/l508/lib/
+    module use $NCEPLIBS/modulefiles
+    export WRFPATH=$NCEPLIBS/wrf.shared.new/v1.1.1/src
+    export myFC=ftn
+    export FCOMP=ftn
+    # END GWV ADD
 
 ##---------------------------------------------------------------------------
 elif [[ -d /lfs4 ]] ; then
@@ -176,11 +131,9 @@ elif [[ -d /lfs4 ]] ; then
     export WRFPATH=$NCEPLIBS/wrf.shared.new/v1.1.1/src
     export myFC=mpiifort
 
-##---------------------------------------------------------------------------
 else
     echo WARNING: UNKNOWN PLATFORM 1>&2
 fi
-##---------------------------------------------------------------------------
 
 unset __ms_shell
 unset __ms_ksh_test

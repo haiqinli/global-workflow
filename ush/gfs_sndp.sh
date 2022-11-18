@@ -1,4 +1,5 @@
-#!/bin/ksh
+#! /usr/bin/env bash
+
 ################################################################
 # Script Name:          gfs_sndp.sh
 # Script Description:   Format GFS BUFR sounding files for AWIPS
@@ -6,7 +7,7 @@
 #   1) 2004-09-10       Steve Gilbert       First Implementation
 ################################################################
 
-set -x
+source "$HOMEgfs/ush/preamble.sh"
 
   #  Create "collectives" consisting of groupings of the soundings
   #  into files designated by geographical region.   Each input
@@ -71,8 +72,3 @@ set -x
       cp $DATA/${m}/gfs_collective$m.fil ${COMOUT}/bufr.${cycle}/.
     fi
 
-##    let "m=m+1"
-
-##  done
-
-#exit

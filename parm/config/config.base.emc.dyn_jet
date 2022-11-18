@@ -1,4 +1,4 @@
-#!/bin/ksh -x
+#! /usr/bin/env bash
 
 ########## config.base ##########
 # Common to all steps
@@ -63,8 +63,8 @@ export DO_VRFY="YES"       # VRFY step       ## JKH
 #  use RUNMOS flag (currently in config.vrfy)
 export REALTIME="YES"
 
-# Experiment mode (cycled or free-forecast)
-export MODE="@MODE@" # cycled/free
+# Experiment mode (cycled or forecast-only)
+export MODE="@MODE@" # cycled/forecast-only
 
 ####################################################
 # DO NOT ADD MACHINE DEPENDENT STUFF BELOW THIS LINE
@@ -79,7 +79,6 @@ export HOMEpost="$HOMEgfs"
 export HOMEobsproc_prep="$BASE_GIT/obsproc/obsproc_prep.v5.5.0_hpc-stack"
 export HOMEobsproc_network="$BASE_GIT/obsproc/obsproc_global.v3.4.2_hpc-stack"
 export HOMEobsproc_global=$HOMEobsproc_network
-export BASE_VERIF="$BASE_GIT/verif/global/tags/vsdb"
 
 # CONVENIENT utility scripts and other environment parameters
 export NCP="/bin/cp -p"
@@ -121,6 +120,8 @@ export ATARDIR="@ATARDIR@"
 export envir=${envir:-"prod"}
 export NET="gfs"
 export RUN=${RUN:-${CDUMP:-"gfs"}}
+export COMIN_OBS=${DMPDIR}/${CDUMP}.${PDY}/$cyc/atmos
+export COMIN_GES_OBS=${DMPDIR}/${CDUMP}.${PDY}/$cyc/atmos
 export COMINatmos=${ROTDIR}/${CDUMP}.${PDY}/${cyc}/atmos
 export COMOUTatmos=${ROTDIR}/${CDUMP}.${PDY}/${cyc}/atmos
 export COMINwave=${ROTDIR}/${CDUMP}.${PDY}/${cyc}/wave
@@ -151,59 +152,63 @@ export DBNROOT=${DBNROOT:-${UTILROOT}/fakedbn}
 export APP=@APP@
 
 # Defaults:
+export DO_ATM="YES"
 export DO_COUPLED="NO"
 export DO_WAVE="NO"
 export DO_OCN="NO"
 export DO_ICE="NO"
-export DO_AERO=@DO_AERO@
+export DO_AERO="NO"
 export CCPP_SUITE="FV3_GFS_v17_p8"                              # GFS v17 prototype p8
-#### export CCPP_SUITE="FV3_GFS_v17_p8_gf"                           # GFS v17 prototype p8 + GF
-#### export CCPP_SUITE="FV3_GFS_v17_p8_mynn"                         # GFS v17 prototype p8 + MYNN
-#### export CCPP_SUITE="FV3_GFS_v16"                            # GFS v16
+#### export CCPP_SUITE="FV3_GFS_v17_p8_gf_mynn"                 # GFS v17 prototype p8 + GF + MYNN
+#### export CCPP_SUITE="FV3_GFS_v17_p8_mynn"                    # GFS v17 prototype p8 + MYNN
+#### export CCPP_SUITE="FV3_GFS_v17_p8_gf"                      # GFS v17 prototype p8 + GF 
 #### export CCPP_SUITE="FV3_RAP_cires_ugwp"                     # RUC LSM, MYNN, GF, CIRES UGWP
 #### export CCPP_SUITE="FV3_RAP_noah_sfcdiff_unified_ugwp"      # NOAH LSM, MYNN, GF, no GF shallow, Unified UGWP
 #### export CCPP_SUITE="FV3_RAP_noah_sfcdiff_ugwpv1"            # NOAH LSM, MYNN, GF, no GF shallow, UGWPv1
-#### export CCPP_SUITE="FV3_GFS_v16_gf"                         # GFS v16 + GF
-#### export CCPP_SUITE="FV3_GFS_v16_mynn"                       # GFS v16 + MYNN
-#### export CCPP_SUITE="FV3_GFS_v16_thompson"                   # GFS v16 + THMP
 export WAVE_CDUMP="" # When to include wave suite: gdas, gfs, or both
+export DOBNDPNT_WAVE="NO"
 export cplwav2atm=".false."
-
-aero_nems_string=""
-if [[ $DO_AERO = "YES" ]]; then
-    aero_nems_string="_aero"
-else
-    aero_nems_string=""
-fi
 
 case "${APP}" in
   ATM)
-    echo "APP=ATM; will use defaults"
-    export confignamevarfornems="atm${aero_nems_string}"
+    export confignamevarfornems="atm"
+    ;;
+  ATMA)
+    export DO_AERO="YES"
+    export confignamevarfornems="atm_aero"
     ;;
   ATMW)
     export DO_COUPLED="YES"
     export DO_WAVE="YES"
     export WAVE_CDUMP="both"
-    export confignamevarfornems="leapfrog_atm${aero_nems_string}_wav"
+    export confignamevarfornems="leapfrog_atm_wav"
     ;;
-  S2S)
+  NG-GODAS)
+    export DO_ATM="NO"
+    export DO_OCN="YES"
+    export DO_ICE="YES"
+    ;;
+  S2S*)
     export DO_COUPLED="YES"
     export DO_OCN="YES"
     export DO_ICE="YES"
     export CCPP_SUITE="FV3_GFS_v17_coupled_p8"
-    export confignamevarfornems="cpld${aero_nems_string}"
-    ;;
-  S2SW)
-    export DO_COUPLED="YES"
-    export DO_WAVE="YES"
-    export DO_OCN="YES"
-    export DO_ICE="YES"
-    export CCPP_SUITE="FV3_GFS_v17_coupled_p8"
-    export WAVE_CDUMP="both"
-    export cplwav2atm=".true."
-    export confignamevarfornems="cpld${aero_nems_string}_wave"
+    export confignamevarfornems="cpld"
+
+    if [[ "$APP" =~ A$ ]]; then
+        export DO_AERO="YES"
+        export confignamevarfornems="${confignamevarfornems}_aero"
+    fi
+
+    if [[ "$APP" =~ ^S2SW ]]; then
+        export DO_WAVE="YES"
+        export WAVE_CDUMP="both"
+        export cplwav2atm=".true."
+        export confignamevarfornems="${confignamevarfornems}_wave"
+    fi
+
     source $EXPDIR/config.defaults.s2sw
+
     ;;
   *)
     echo "Unrecognized APP: ${1}"
@@ -330,6 +335,10 @@ fi
 export imp_physics=8
 
 # Shared parameters
+# DA engine
+export DO_JEDIVAR="NO"
+export DO_JEDIENS="NO"
+
 # Hybrid related
 export DOHYBVAR="YES"
 export NMEM_ENKF=@NMEM_ENKF@
@@ -376,7 +385,6 @@ export binary_diag=".false."
 
 # Verification options
 export DO_METP="NO"         # Run METPLUS jobs - set METPLUS settings in config.metp    ## JKH
-export DO_VSDB="NO"         # Run VSDB package - set VSDB settings in config.vrfy       ## JKH
 
 # Archiving options
 export HPSSARCH="@HPSSARCH@"        # save data to HPSS archive

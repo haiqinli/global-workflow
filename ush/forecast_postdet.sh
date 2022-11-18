@@ -1,4 +1,4 @@
-#!/bin/sh
+#! /usr/bin/env bash
 
 #####
 ## This script defines functions for data I/O and namelist.
@@ -91,7 +91,7 @@ EOF
             exit 1
           fi
           $NLN $increment_file $DATA/INPUT/fv_increment$i.nc
-          IAU_INC_FILES="'fv_increment$i.nc',$IAU_INC_FILES"
+          IAU_INC_FILES="'fv_increment$i.nc',${IAU_INC_FILES:-}"
         done
         read_increment=".false."
         res_latlon_dynamics=""
@@ -355,7 +355,7 @@ EOF
   FNTSFC=${FNTSFC:-"$FIX_AM/RTGSST.1982.2012.monthly.clim.grb"}
   FNSNOC=${FNSNOC:-"$FIX_AM/global_snoclim.1.875.grb"}
   FNZORC=${FNZORC:-"igbp"}
-  FNAISC=${FNAISC:-"$FIX_AM/CFSR.SEAICE.1982.2012.monthly.clim.grb"}
+  FNAISC=${FNAISC:-"$FIX_AM/IMS-NIC.blended.ice.monthly.clim.grb"}
   FNALBC2=${FNALBC2:-"${FIX_SFC}/${CASE}.facsf.tileX.nc"}
   FNTG3C=${FNTG3C:-"${FIX_SFC}/${CASE}.substrate_temperature.tileX.nc"}
   FNVEGC=${FNVEGC:-"${FIX_SFC}/${CASE}.vegetation_greenness.tileX.nc"}
@@ -627,13 +627,27 @@ WW3_postdet() {
   COMPONENTwave=${COMPONENTwave:-${RUN}wave}
 
   #Link mod_def files for wave grids
-  array=($WAVECUR_FID $WAVEICE_FID $WAVEWND_FID $waveuoutpGRD $waveGRD $waveesmfGRD $wavesbsGRD $wavepostGRD $waveinterpGRD)
-  echo "Wave Grids: $WAVECUR_FID $WAVEICE_FID $WAVEWND_FID $waveuoutpGRD $waveGRD $waveesmfGRD $wavesbsGRD $wavepostGRD $waveinterpGRD"
-  grdALL=$(printf "%s\n" "${array[@]}" | sort -u | tr '\n' ' ')
+  if [ $waveMULTIGRID = ".true." ]; then
+    array=($WAVECUR_FID $WAVEICE_FID $WAVEWND_FID $waveuoutpGRD $waveGRD $waveesmfGRD)
+    echo "Wave Grids: $WAVECUR_FID $WAVEICE_FID $WAVEWND_FID $waveuoutpGRD $waveGRD $waveesmfGRD"
+    grdALL=$(printf "%s\n" "${array[@]}" | sort -u | tr '\n' ' ')
 
-  for wavGRD in ${grdALL}; do
-    $NCP $ROTDIR/${CDUMP}.${PDY}/${cyc}/wave/rundata/${COMPONENTwave}.mod_def.$wavGRD $DATA/mod_def.$wavGRD
-  done
+    for wavGRD in ${grdALL}; do
+      $NCP $ROTDIR/${CDUMP}.${PDY}/${cyc}/wave/rundata/${COMPONENTwave}.mod_def.$wavGRD $DATA/mod_def.$wavGRD
+    done
+  else 
+    #if shel, only 1 waveGRD which is linked to mod_def.ww3 
+    $NCP $ROTDIR/${CDUMP}.${PDY}/${cyc}/wave/rundata/${COMPONENTwave}.mod_def.$waveGRD $DATA/mod_def.ww3
+  fi
+
+
+  #if wave mesh is not the same as the ocn/ice mesh, linkk it in the file
+  comparemesh=${MESH_OCN_ICE:-"mesh.mx${ICERES}.nc"}
+  if [ "$MESH_WAV" = "$comparemesh" ]; then 
+    echo "Wave is on same mesh as ocean/ice"
+  else 
+    $NLN -sf $FIXwave/$MESH_WAV $DATA/
+  fi 
 
   export WAVHCYC=${WAVHCYC:-6}
   export WRDATE=$($NDATE -${WAVHCYC} $CDATE)
@@ -642,7 +656,7 @@ WW3_postdet() {
   export WRDIR=${ROTDIR}/${CDUMPRSTwave}.${WRPDY}/${WRcyc}/wave/restart
   export RSTDIR_WAVE=$ROTDIR/${CDUMP}.${PDY}/${cyc}/wave/restart
   export datwave=$COMOUTwave/rundata
-  export wavprfx=${CDUMPwave}${WAV_MEMBER}
+  export wavprfx=${CDUMPwave}${WAV_MEMBER:-}
 
   #Copy initial condition files:
   for wavGRD in $waveGRD ; do
@@ -650,21 +664,34 @@ WW3_postdet() {
       if [ $RERUN = "NO" ]; then
         waverstfile=${WRDIR}/${sPDY}.${scyc}0000.restart.${wavGRD}
       else 
-        waverstfile=${RSTDIR_WAVE}/${PDYT}.${cyct}0000.restart.${wavGRD}      
+        waverstfile=${RSTDIR_WAVE}/${PDYT}.${cyct}0000.restart.${wavGRD}
       fi
     else 
       waverstfile=${RSTDIR_WAVE}/${sPDY}.${scyc}0000.restart.${wavGRD}
     fi
     if [ ! -f ${waverstfile} ]; then
-      echo "WARNING: NON-FATAL ERROR wave IC is missing, will start from rest"
+      if [ $RERUN = "NO" ]; then
+        echo "WARNING: NON-FATAL ERROR wave IC is missing, will start from rest"
+      else 
+        echo "ERROR: Wave IC is missing in RERUN, exiting." 
+        exit 1 
+      fi 
     else
-      $NLN ${waverstfile} $DATA/restart.${wavGRD}
+      if [ $waveMULTIGRID = ".true." ]; then
+        $NLN ${waverstfile} $DATA/restart.${wavGRD}
+      else 
+        $NLN ${waverstfile} $DATA/restart.ww3
+      fi
     fi
   done  
 
-  for wavGRD in $waveGRD ; do
-    eval $NLN $datwave/${wavprfx}.log.${wavGRD}.${PDY}${cyc} log.${wavGRD}
-  done 
+  if [ $waveMULTIGRID = ".true." ]; then
+    for wavGRD in $waveGRD ; do
+      $NLN $datwave/${wavprfx}.log.${wavGRD}.${PDY}${cyc} log.${wavGRD}
+    done
+  else 
+    $NLN $datwave/${wavprfx}.log.${waveGRD}.${PDY}${cyc} log.ww3 
+  fi 
 
   if [ "$WW3ICEINP" = "YES" ]; then
     wavicefile=$COMINwave/rundata/${CDUMPwave}.${WAVEICE_FID}.${cycle}.ice
@@ -688,7 +715,9 @@ WW3_postdet() {
 
   # Link output files
   cd $DATA
-  eval $NLN $datwave/${wavprfx}.log.mww3.${PDY}${cyc} log.mww3
+  if [ $waveMULTIGRID = ".true." ]; then
+    $NLN $datwave/${wavprfx}.log.mww3.${PDY}${cyc} log.mww3
+  fi 
 
   # Loop for gridded output (uses FHINC)
   fhr=$FHMIN_WAV
@@ -696,9 +725,13 @@ WW3_postdet() {
     YMDH=$($NDATE $fhr $CDATE)
     YMD=$(echo $YMDH | cut -c1-8)
     HMS="$(echo $YMDH | cut -c9-10)0000"
-    for wavGRD in ${waveGRD} ; do
-      eval $NLN $datwave/${wavprfx}.out_grd.${wavGRD}.${YMD}.${HMS} $DATA/${YMD}.${HMS}.out_grd.${wavGRD}
-    done
+    if [ $waveMULTIGRID = ".true." ]; then
+      for wavGRD in ${waveGRD} ; do
+        $NLN $datwave/${wavprfx}.out_grd.${wavGRD}.${YMD}.${HMS} $DATA/${YMD}.${HMS}.out_grd.${wavGRD}
+      done
+    else 
+      $NLN $datwave/${wavprfx}.out_grd.${waveGRD}.${YMD}.${HMS} $DATA/${YMD}.${HMS}.out_grd.ww3
+    fi 
     FHINC=$FHOUT_WAV
     if [ $FHMAX_HF_WAV -gt 0 -a $FHOUT_HF_WAV -gt 0 -a $fhr -lt $FHMAX_HF_WAV ]; then
       FHINC=$FHOUT_HF_WAV
@@ -712,7 +745,12 @@ WW3_postdet() {
     YMDH=$($NDATE $fhr $CDATE)
     YMD=$(echo $YMDH | cut -c1-8)
     HMS="$(echo $YMDH | cut -c9-10)0000"
-    eval $NLN $datwave/${wavprfx}.out_pnt.${waveuoutpGRD}.${YMD}.${HMS} $DATA/${YMD}.${HMS}.out_pnt.${waveuoutpGRD}
+    if [ $waveMULTIGRID = ".true." ]; then
+      $NLN $datwave/${wavprfx}.out_pnt.${waveuoutpGRD}.${YMD}.${HMS} $DATA/${YMD}.${HMS}.out_pnt.${waveuoutpGRD}
+    else 
+      $NLN $datwave/${wavprfx}.out_pnt.${waveuoutpGRD}.${YMD}.${HMS} $DATA/${YMD}.${HMS}.out_pnt.ww3
+    fi 
+
     FHINC=$FHINCP_WAV
     fhr=$((fhr+FHINC))
   done
@@ -722,11 +760,17 @@ WW3_nml() {
   echo "SUB ${FUNCNAME[0]}: Copying input files for WW3"
   WAV_MOD_TAG=${CDUMP}wave${waveMEMB}
   if [ "${USE_WAV_RMP:-YES}" = "YES" ]; then
-    for file in $(ls $COMINwave/rundata/rmp_src_to_dst_conserv_*) ; do
-      $NLN $file $DATA/
-    done
-  fi 
-  $NLN $COMINwave/rundata/ww3_multi.${CDUMPwave}${WAV_MEMBER}.${cycle}.inp $DATA/ww3_multi.inp
+    if (( $( ls -1 $FIXwave/rmp_src_to_dst_conserv_* > /dev/null | wc -l) > 0 )); then
+      for file in $(ls $FIXwave/rmp_src_to_dst_conserv_*) ; do
+        $NLN $file $DATA/ 
+      done
+    else
+      echo 'FATAL ERROR : No rmp precomputed nc files found for wave model' 
+      exit 4 
+    fi
+  fi
+  source $SCRIPTDIR/parsing_namelists_WW3.sh
+  WW3_namelists
 }
 
 WW3_out() {
@@ -789,7 +833,7 @@ MOM6_postdet() {
     if [ $fhr = 'anl' ]; then
       continue
     fi
-    if [ -z $last_fhr ]; then
+    if [ -z ${last_fhr:-} ]; then
       last_fhr=$fhr
       continue
     fi
@@ -854,8 +898,8 @@ CICE_postdet() {
   npt=$((FHMAX*$stepsperhr))      # Need this in order for dump_last to work
 
   histfreq_n=${histfreq_n:-6}
-  dumpfreq_n=${dumpfreq_n:-3024000}  # restart write interval in seconds, default 35 days
-  dumpfreq=${dumpfreq:-"s"} #  "s" or "d" or "m" for restarts at intervals of "seconds", "days" or "months"
+  dumpfreq_n=${dumpfreq_n:-840}  # restart write interval in seconds, default 35 days
+  dumpfreq=${dumpfreq:-"h"} #  "h","d","m" or "y" for restarts at intervals of "hours", "days", "months" or "years"
   cice_hist_avg=${cice_hist_avg:-".true."}
 
   FRAZIL_FWSALT=${FRAZIL_FWSALT:-".true."}
@@ -966,7 +1010,8 @@ GOCART_rc() {
         cat ${AERO_CONFIG_DIR}/ExtData.${AERO_EMIS_FIRE:-none} ; \
         echo "%%" ; \
       } > $DATA/AERO_ExtData.rc
-      [[ $status -ne 0 ]] && exit $status
+      status=$?
+      if (( status != 0 )); then exit $status; fi
     fi
   fi
 }

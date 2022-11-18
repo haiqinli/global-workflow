@@ -1,3 +1,5 @@
+#! /usr/bin/env bash
+
 # parsing namelist of CICE
 
 CICE_namelists(){
@@ -21,7 +23,7 @@ cat > ice_in <<eof
    npt            = $npt
    ndtd           = 1
    runtype        = '$cmeps_run_type'
-   runid          = 'cpcice'
+   runid          = 'unknown'
    ice_ic         = '$iceic'
    restart        = .true.
    restart_ext    = .false.

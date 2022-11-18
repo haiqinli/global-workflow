@@ -19,7 +19,7 @@ cd aeroconv.fd
 echo "extracting thirdparty directory..."
 tar -xvzf thirdparty_${machine}.tar.gz
 
-# create IPUT.tar file
+# create INPUT.tar file
 for file in INPUT*
 do
   gunzip $file
