@@ -16,8 +16,8 @@ source "$HOMEgfs/modulefiles/module-setup.sh.inc"
 module use "$HOMEgfs/modulefiles"
 
 if [[ -d /lfs4 ]] ; then
-    # We are on NOAA Jet
-	module load module_base.jet 
+  # We are on NOAA Jet
+  module load module_base.jet
 elif [[ -d /scratch1 ]] ; then
   # We are on NOAA Hera
   module load module_base.hera

@@ -1,10 +1,11 @@
-#!/bin/bash -x
+#! /usr/bin/env bash
+
+source "$HOMEgfs/ush/preamble.sh"
 
 ## this script makes links to FV3GFS netcdf files under /public and copies over GFS analysis file for verification
 ##   /home/rtfim/UFS_CAMSUITE/FV3GFSrun/FV3ICS/YYYYMMDDHH/gfs
 ##     gfs.tHHz.sfcanl.nc -> /public/data/grids/gfs/netcdf/YYDDDHH00.gfs.tHHz.sfcanl.nc
 ##     gfs.tHHz.atmanl.nc -> /public/data/grids/gfs/netcdf/YYDDDHH00.gfs.tHHz.atmanl.nc
-
 
 echo
 echo "CDATE = $CDATE"

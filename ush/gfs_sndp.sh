@@ -17,7 +17,6 @@ export m=$1
 mkdir $DATA/$m
 cd $DATA/$m
   cp $FIXbufrsnd/gfs_collective${m}.list $DATA/$m/. 
-set +x
   CCCC=KWBC
     file_list=gfs_collective${m}.list
 
@@ -61,7 +60,6 @@ EOF
        rm $DATA/${m}/bufrout
     done
 
-set -x
 #    if test $SENDCOM = 'NO'
     if test $SENDCOM = 'YES'
     then 
