@@ -155,8 +155,14 @@ mkdir -p ${logdir}
 errs=0
 #JKHcheckout "ufs_model.fd"    "https://github.com/NOAA-GSL/ufs-weather-model" "${ufs_model_hash}"; errs=$((errs + $?))
 checkout "ufs_model.fd"    "https://github.com/ufs-community/ufs-weather-model" "${ufs_model_hash}"; errs=$((errs + $?))
+if [[ -d ufs_model.fd_gsl ]]; then
+    rsync -avx ufs_model.fd_gsl/ ufs_model.fd/        ## copy over GSL changes not in UFS repository
+fi
 #JKHcheckout "ufs_utils.fd"    "https://github.com/ufs-community/UFS_UTILS.git"     "a2b0817"          ; errs=$((errs + $?))
 checkout "ufs_utils.fd"    "https://github.com/ufs-community/UFS_UTILS.git"     "ufs_utils_1_8_0"          ; errs=$((errs + $?))
+if [[ -d ufs_utils.fd_gsl ]]; then
+    rsync -avx ufs_utils.fd_gsl/ ufs_utils.fd/        ## copy over GSL changes not in UFS_UTILS repository
+fi
 checkout "verif-global.fd" "https://github.com/NOAA-EMC/EMC_verif-global.git"   "c267780"          ; errs=$((errs + $?))
 
 if [[ $CHECKOUT_GSI == "YES" ]]; then
