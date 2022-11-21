@@ -1,0 +1,19 @@
+base_git: '/scratch1/NCEPDEV/global/glopara/git'
+base_svn: '/scratch1/NCEPDEV/global/glopara/svn'
+dmpdir: '/scratch1/NCEPDEV/global/glopara/dump'
+nwprod: '/scratch1/NCEPDEV/global/glopara/nwpara'
+comroot: '/scratch1/NCEPDEV/global/glopara/com'
+homedir: '/scratch1/BMC/gsd-fv3-dev/NCEPDEV/global/$USER'
+stmp: '$ROTDIR/..'
+ptmp: '$ROTDIR/..'
+noscrub: $HOMEDIR
+account: gsd-fv3-dev
+scheduler: slurm
+queue: batch
+queue_service: service
+partition_batch: hera
+chgrp_rstprod: 'YES'
+chgrp_cmd: 'chgrp rstprod'
+hpssarch: 'YES'
+localarch: 'NO'
+atardir: '/BMC/$HPSS_PROJECT/1year/$USER/$machine/scratch/$PSLOT'

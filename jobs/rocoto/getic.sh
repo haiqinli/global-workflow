@@ -61,6 +61,13 @@ if [ ! -d $ROTDIR ]; then mkdir -p $ROTDIR ; fi
 if [ ! -d $EXTRACT_DIR ]; then mkdir -p $EXTRACT_DIR ; fi
 cd $EXTRACT_DIR
 
+# JKH:  tarball name changes effective 00Z 22 Jun 2022 to "v16.2" instead of "prod"
+if [ $yy$mm$dd$hh -ge 2022062700 ]; then
+  version="v16.2"
+else
+  version="prod"
+fi
+
 # Check version, cold/warm start, and resolution
 if [[ $gfs_ver = "v16" && $EXP_WARM_START = ".true." && $CASE = $OPS_RES ]]; then # Pull warm start ICs - no chgres
 
@@ -86,9 +93,9 @@ if [[ $gfs_ver = "v16" && $EXP_WARM_START = ".true." && $CASE = $OPS_RES ]]; the
 
     cd $ROTDIR
     # Pull CDATE gfs restart tarball
-    htar -xvf ${PRODHPSSDIR}/rh${yy}/${yy}${mm}/${yy}${mm}${dd}/com_gfs_prod_gfs.${yy}${mm}${dd}_${hh}.gfs_restart.tar
+    htar -xvf ${PRODHPSSDIR}/rh${yy}/${yy}${mm}/${yy}${mm}${dd}/com_gfs_${version}_gfs.${yy}${mm}${dd}_${hh}.gfs_restart.tar
     # Pull GDATE gdas restart tarball
-    htar -xvf ${PRODHPSSDIR}/rh${gyy}/${gyy}${gmm}/${gyy}${gmm}${gdd}/com_gfs_prod_gdas.${gyy}${gmm}${gdd}_${ghh}.gdas_restart.tar
+    htar -xvf ${PRODHPSSDIR}/rh${gyy}/${gyy}${gmm}/${gyy}${gmm}${gdd}/com_gfs_${version}_gdas.${gyy}${gmm}${gdd}_${ghh}.gdas_restart.tar
   fi
 
 else # Pull chgres cube inputs for cold start IC generation
@@ -143,7 +150,7 @@ if [ $gfs_ver = v14 -o $gfs_ver = v15 -o $gfs_ver = v16 ]; then
       else # Production source
 
         cd $ROTDIR
-        export tarball="com_gfs_prod_gfs.${yy}${mm}${dd}_${hh}.gfs_pgrb2.tar"
+        export tarball="com_gfs_${version}_gfs.${yy}${mm}${dd}_${hh}.gfs_pgrb2.tar"
         htar -xvf ${PRODHPSSDIR}/rh${yy}/${yy}${mm}/${yy}${mm}${dd}/${tarball} ./${CDUMP}.${yy}${mm}${dd}/${hh}/atmos/${file}
 
       fi # RETRO vs production
