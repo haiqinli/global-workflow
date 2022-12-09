@@ -1,3 +1,54 @@
+06 Dec 2022
+    - update to prototype/8 tag of global-workflow develop branch, 9a538ee
+18 Nov 2022
+    - update to 03Aug22 global-workflow develop branch, a658e75
+      * Updates for P8
+      * Fix GLDAS j-job link
+      * Add ocean post to archive dependencies
+      * Initial commit of directory comparison tools
+      * Convert scripts to bash and add preamble 
+      * Creat a data-atmosphere XML
+      * Remove obsolete platform references (Cray, Dell, WCOSS1, Theia)
+      * Add GDASApp capability to global-workflow  (Jedi-based atmospheric DA)
+      * Change gdasechgres dependency
+      * Optimize DA clone, build, and link
+      * Updates to WCOSS2 gempak ush scripts and cleanup of old release notes
+      * Add postsnd job when bufrsnd is on
+      * Update transfer list files from operations
+      * Fix history type of cldfra in diag tables
+      * Combine ecflow and rocoto workflow generation
+      * Remove new GSI scripts from gitignore
+      * Add ecFlow generator 
+      * Update gsi-utils hash to include bugfix in handling 3D sfc files
+      * Combine setup_workflows scripts
+      * Load `ncdiag` module instead of building it in the GSI, use UFSWM build system, pull sfcanl out from anal
+      * Update ice climo, fix option for non-fractional grid, and add cloud fraction for Thompson
+      * Update aerosol variable names and dust alpha
+      * Allow for wave mesh to be different than the ocean/ice mesh
+      * Migrate `jobs/`, `scripts/` and `ush/` from GSI to global-workflow
+      * Build GSI utilities from GSI-utils repo  
+      * Replace print_esmf with esmf_logkind
+      * Restore cycling capability
+      * Merge `ecf` changes from `WCOSS2`  (ecflow/ecf => ecf)
+      * Fix settings of dt_inner and lheatstrg
+      * Update buoy locations
+      * Update dust input files to not include _FillValue = NaN
+      * Replace --aerosols option with new apps, ATMA and S2SWA
+      * Update component versions 
+      * Update GSI and UPP build scripts
+      * Fix typo in parm/post file list
+      * Update caculation of restart based on if a wave IC exists
+      * Update from dev_v16 utils.f90. See issue #713
+      * Update GOCART settings for p8/p81
+      * Retire VSDB
+      * Add "atmos" COMPONENT subfolder to DMPDIR paths
+      * Move remaining global post scripts over from UPP (#771)
+      * Update readme for new linking procedure
+      * Consolidate post scripts to eliminate coupled mode of link script
+      * Updates for wave mesh cap
+      * Extend `rocoto.py` for handling offsets in data dependencies
+      * Refactor checkout script
+      * Update IC location for hera
 18 Sep 2022
     - change settings for suites FV3_GFS_v17_p8_gf_mynn and FV3_GFS_v17_p8_mynn
         sedi_semi=.false. (dt_inner will then become 75)

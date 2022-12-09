@@ -276,9 +276,9 @@
 "gfs_sfc",     "nwfa2d",       "nwfa2d",        "fv3_history2d",  "all",  .false.,  "none",  2
 "gfs_sfc",     "nifa2d",       "nifa2d",        "fv3_history2d",  "all",  .false.,  "none",  2
 # Cloud effective radii from Thompson and WSM6 microphysics
-"gfs_phys",    "cleffr",       "cleffr",        "fv3_history",    "all",  .false.,  "none",  2
-"gfs_phys",    "cieffr",       "cieffr",        "fv3_history",    "all",  .false.,  "none",  2
-"gfs_phys",    "cseffr",       "cseffr",        "fv3_history",    "all",  .false.,  "none",  2
+"gfs_dyn",    "cleffr",       "cleffr",        "fv3_history",    "all",  .false.,  "none",  2
+"gfs_dyn",    "cieffr",       "cieffr",        "fv3_history",    "all",  .false.,  "none",  2
+"gfs_dyn",    "cseffr",       "cseffr",        "fv3_history",    "all",  .false.,  "none",  2
 # Prognostic/diagnostic variables from MYNN
 "gfs_dyn",    "QC_BL",        "qc_bl",         "fv3_history",    "all",  .false.,  "none",  2
 "gfs_dyn",    "CLDFRA_BL",    "cldfra_bl",     "fv3_history",    "all",  .false.,  "none",  2
