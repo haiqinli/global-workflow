@@ -52,7 +52,7 @@
 	<!ENTITY ARCHIVE_TO_HPSS "YES">
 
 	<!-- ROCOTO parameters that control workflow -->
-	<!ENTITY CYCLETHROTTLE "2">
+	<!ENTITY CYCLETHROTTLE "4">
 	<!ENTITY TASKTHROTTLE  "25">
 	<!ENTITY MAXTRIES      "2">
 
@@ -91,7 +91,7 @@
 
 <task name="gfsgetic" cycledefs="gfs" maxtries="&MAXTRIES;">
 
-	<command>&JOBS_DIR;/getic_gsl.sh</command>
+	<command>&JOBS_DIR;/getic_gsl_fv3gfsv16.sh</command>
 
 	<jobname><cyclestr>&PSLOT;_gfsgetic_@H</cyclestr></jobname>
 	<account>&ACCOUNT;</account>
@@ -182,7 +182,6 @@
 
 </task>
 
-<!--
 <task name="mssFV3ICS" cycledefs="gfs" maxtries="&MAXTRIES;">
 	<command>&SCR_DIR;/archive_fv3ics.ksh</command>
 	<account>&ACCOUNT;</account>
@@ -193,7 +192,7 @@
 	<jobname><cyclestr>mssfv3ics</cyclestr></jobname>
 	<join><cyclestr>&ROTDIR;/logs/@Y@m@d@H/mssfv3ics.log</cyclestr></join>
 	<envar><name>ICSDIR</name><value>&ICSDIR;/<cyclestr>@Y@m@d@H</cyclestr></value></envar>
-	<envar><name>mssDir</name><value>FV3_ICs_GFS/<cyclestr>@Y</cyclestr>/<cyclestr>@m</cyclestr></value></envar>
+	<envar><name>mssDir</name><value>FV3ICS_L127/<cyclestr>@Y</cyclestr>/<cyclestr>@m</cyclestr></value></envar>
 	<envar><name>yyyymmddhh</name><value><cyclestr>@Y@m@d@H</cyclestr></value></envar>
 	<envar><name>CDUMP</name><value>&CDUMP;</value></envar>
 	<envar><name>CASE</name><value>&CASE;</value></envar>
@@ -204,5 +203,6 @@
 		</and>
 	</dependency>
 </task>
+<!--
 -->
 </workflow>

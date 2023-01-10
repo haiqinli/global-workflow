@@ -24,3 +24,9 @@ PyGraf workflow
 ===============
 rocotorun -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/rt_ufscam_l127_dev1/rt_dev1_pygraf_global.xml -d /home/rtfim/rt_dbfiles/rt_dev1_pygraf_global.db
 rocotostat -w /home/rtfim/UFS-CAMsuite_dev1/FV3GFSwfm/rt_ufscam_l127_dev1/rt_dev1_pygraf_global.xml -d /home/rtfim/rt_dbfiles/rt_dev1_pygraf_global.db -c  `date --date='4 days ago' +%Y%m%d0000`: | m
+
+rocotorun -w pygraf_dev1_global.xml -d pygraf_dev1_global.db
+rocotostat -w pygraf_dev1_global.xml -d pygraf_dev1_global.db
+
+rocotorun -w pygraf_dev1_global-full.xml -d pygraf_dev1_global-full.db
+rocotostat -w pygraf_dev1_global-full.xml -d pygraf_dev1_global-full.db
