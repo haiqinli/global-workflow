@@ -102,13 +102,12 @@ function checkout() {
 
 # Set defaults for variables toggled by options
 export CLEAN="NO"
-CHECKOUT_GSI="NO"
+CHECKOUT_GSI="YES"
 CHECKOUT_GDAS="NO"
 checkout_gtg="NO"
 checkout_wafs="NO"
 checkout_aeroconv="NO"
-#JKHufs_model_hash="HFIP2022-08-17"
-ufs_model_hash="Prototype-P8"
+ufs_model_hash="b6ddbbb"               ### JKH - Li's fork
 
 # Parse command line arguments
 while getopts ":chgum:o" option; do
@@ -154,10 +153,11 @@ mkdir -p ${logdir}
 # The checkout version should always be a speciifc commit (hash or tag), not a branch
 errs=0
 #JKHcheckout "ufs_model.fd"    "https://github.com/NOAA-GSL/ufs-weather-model" "${ufs_model_hash}"; errs=$((errs + $?))
-checkout "ufs_model.fd"    "https://github.com/ufs-community/ufs-weather-model" "${ufs_model_hash}"; errs=$((errs + $?))
-if [[ -d ufs_model.fd_gsl ]]; then
-    rsync -avx ufs_model.fd_gsl/ ufs_model.fd/        ## copy over GSL changes not in UFS repository
-fi
+#checkout "ufs_model.fd"    "https://github.com/ufs-community/ufs-weather-model" "${ufs_model_hash}"; errs=$((errs + $?))
+#JKHif [[ -d ufs_model.fd_gsl ]]; then
+#JKH    rsync -avx ufs_model.fd_gsl/ ufs_model.fd/        ## copy over GSL changes not in UFS repository
+#JKHfi
+checkout "ufs_model.fd"    "https://github.com/zhanglikate/ufs-weather-model" "${ufs_model_hash}"; errs=$((errs + $?))
 #JKHcheckout "ufs_utils.fd"    "https://github.com/ufs-community/UFS_UTILS.git"     "a2b0817"          ; errs=$((errs + $?))
 checkout "ufs_utils.fd"    "https://github.com/ufs-community/UFS_UTILS.git"     "ufs_utils_1_8_0"          ; errs=$((errs + $?))
 if [[ -d ufs_utils.fd_gsl ]]; then
@@ -175,6 +175,9 @@ fi
 
 if [[ $CHECKOUT_GSI == "YES" || $CHECKOUT_GDAS == "YES" ]]; then
   checkout "gsi_utils.fd"    "https://github.com/NOAA-EMC/GSI-Utils.git"   "322cc7b"; errs=$((errs + $?))
+  if [[ -d gsi_utils.fd_chem ]]; then
+      rsync -avx gsi_utils.fd_chem/ gsi_utils.fd/        ## copy over GSL changes not in GSI-Utils repository
+  fi
   checkout "gsi_monitor.fd"  "https://github.com/NOAA-EMC/GSI-Monitor.git" "acf8870"; errs=$((errs + $?))
   checkout "gldas.fd"        "https://github.com/NOAA-EMC/GLDAS.git"       "fd8ba62"; errs=$((errs + $?))
 fi

@@ -10,20 +10,19 @@ source "$HOMEgfs/ush/preamble.sh"
 echo
 echo "CDATE = $CDATE"
 echo "CDUMP = $CDUMP"
-echo "COMPONENT = $COMPONENT"
 echo "ICSDIR = $ICSDIR"
 echo "PUBDIR = $PUBDIR"
 echo "GFSDIR = $GFSDIR"
 echo "RETRODIR = $RETRODIR"
 echo "ROTDIR = $ROTDIR"
-echo "PSLOT = $PSLOT"
 echo
 
 ## initialize
+export COMPONENT="atmos"
 yyyymmdd=`echo $CDATE | cut -c1-8`
 hh=`echo $CDATE | cut -c9-10`
 yyddd=`date +%y%j -u -d $yyyymmdd`
-fv3ic_dir=${ROTDIR}/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}
+fv3ic_dir=$ICSDIR/${CDATE}/${CDUMP}
 
 ## create links in FV3ICS directory
 mkdir -p $fv3ic_dir
@@ -35,26 +34,46 @@ sfc_file=`echo $pubsfc_file | cut -d. -f2-`
 pubatm_file=${yyddd}${hh}00.${CDUMP}.t${hh}z.atmanl.nc
 atm_file=`echo $pubatm_file | cut -d. -f2-`
 
-echo "pubsfc_file:  $pubsfc_file"
-echo "pubatm_file:  $pubatm_file"
+# create link for GDAS atmanl
+#    use GFS atmanl instead of GDAS atmanl file
+gdas_atm_file=gdas.t${hh}z.atmanl.nc
 
-if  [[ -f $RETRODIR/${pubatm_file} ]]; then
+###
+### look on local /public directory
+###
+if [[ -f $PUBDIR/${pubsfc_file} ]]; then
+  echo "linking $PUBDIR...."
+  echo "pubsfc_file:  $pubsfc_file"
+  echo "pubatm_file:  $pubatm_file"
+  echo "link $pubatm_file to $gdas_atm_file"
+  ln -fs $PUBDIR/${pubsfc_file} $sfc_file 
+  ln -fs $PUBDIR/${pubatm_file} $atm_file 
+  ln -fs $PUBDIR/${pubatm_file} $gdas_atm_file 
+elif  [[ -f $RETRODIR/${pubsfc_file} ]]; then
   echo "linking $RETRODIR...."
   echo "pubsfc_file:  $pubsfc_file"
   echo "pubatm_file:  $pubatm_file"
+  echo "link $pubatm_file to $gdas_atm_file"
   ln -fs $RETRODIR/${pubsfc_file} $sfc_file
   ln -fs $RETRODIR/${pubatm_file} $atm_file 
-elif [[ -f $PUBDIR/${pubatm_file} ]]; then
-  echo "linking $PUBDIR...."
-  ln -fs $PUBDIR/${pubsfc_file} $sfc_file
-  ln -fs $PUBDIR/${pubatm_file} $atm_file
-elif  [[ -f $RETRODIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${atm_file} ]]; then
+  ln -fs $RETRODIR/${pubatm_file} $gdas_atm_file 
+elif  [[ -f $GFSDIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${sfc_file} ]]; then
+  echo "linking $GFSDIR...."
+  echo "sfc_file:  $sfc_file"
+  echo "atm_file:  $atm_file"
+  echo "link $atm_file to $gdas_atm_file"
+  ln -s $GFSDIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${sfc_file}
+  ln -s $GFSDIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${atm_file}
+  ln -s $GFSDIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${atm_file} $gdas_atm_file
+elif  [[ -f $RETRODIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${sfc_file} ]]; then
   echo "linking $RETRODIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}..."
   echo "sfc_file:  $sfc_file"
   echo "atm_file:  $atm_file"
+  echo "link $atm_file to $gdas_atm_file"
   ln -s $RETRODIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${sfc_file}
   ln -s $RETRODIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${atm_file}
+  ln -s $RETRODIR/${CDUMP}.${yyyymmdd}/${hh}/${COMPONENT}/${atm_file} $gdas_atm_file
 else
   echo "missing input files!"
-  exit 1
+  exit 5
 fi

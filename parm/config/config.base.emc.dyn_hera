@@ -383,7 +383,7 @@ export netcdf_diag=".true."
 export binary_diag=".false."
 
 # Verification options
-export DO_METP="NO"         # Run METPLUS jobs - set METPLUS settings in config.metp    ## JKH
+export DO_METP="YES"         # Run METPLUS jobs - set METPLUS settings in config.metp    ## JKH
 
 # Archiving options
 export HPSSARCH="@HPSSARCH@"        # save data to HPSS archive
