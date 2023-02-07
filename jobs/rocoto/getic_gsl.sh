@@ -1,1 +1,1 @@
-getic_gsl_fv3gfsv16.sh
+getic_gsl_fv3gfsv16_chem.sh
