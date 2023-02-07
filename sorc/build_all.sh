@@ -221,6 +221,20 @@ $Build_ufs_utils && {
 }
 
 #------------------------------------
+# build prepchem_NC
+#------------------------------------
+$Build_prepchem_NC && {
+echo " .... Building prepchem_NC .... "
+./build_prepchem_NC.sh > $logs_dir/build_prepchem_NC.log 2>&1
+rc=$?
+if [[ $rc -ne 0 ]] ; then
+    echo "Fatal error in building prepchem_NC."
+    echo "The log file is in $logs_dir/build_prepchem_NC.log"
+fi
+((err+=$rc))
+}
+
+#------------------------------------
 # build gldas
 #------------------------------------
 if [ -d gldas.fd ]; then

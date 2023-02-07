@@ -99,6 +99,7 @@ cpl=${cpl:-.false.}
 cplflx=${cplflx:-.false.} # default off,import from outside source
 cplwav=${cplwav:-.false.} # ? how to control 1-way/2-way?
 cplchm=${cplchm:-.false.} # Chemistry model
+cplchp=${cplchp:-.false.} # Chemistry model
 cplice=${cplice:-.false.} # ICE model
 
 OCNTIM=${OCNTIM:-1800}
@@ -167,6 +168,7 @@ esac				#no namelist for data atmosphere
 [[ $cplwav = .true. ]] && WW3_nml
 [[ $cplice = .true. ]] && CICE_nml
 [[ $cplchm = .true. ]] && GOCART_rc
+[[ $cplchp = .true. ]] && CCPPChem_rc
 
 case $RUN in
   'data') DATM_model_configure;;

@@ -442,9 +442,46 @@ cat >> input.nml <<EOF
   doGP_lwscat        = ${doGP_lwscat:-".false."}
 EOF
 
-if [ $cplchm = .true. ]; then
+if [ $cplchm = .true. ] || [ $cplchp = .true. ]; then
   cat >> input.nml << EOF
   fscav_aero = ${fscav_aero:-'*:0.0'}
+EOF
+fi
+
+if [ $cplchp = .true. ]; then
+  cat >> input.nml << EOF
+  aer_bc_opt=1
+  aer_ic_opt=1
+  aer_ra_feedback=0
+  aer_ra_frq=60
+  aerchem_onoff=1
+  bio_emiss_opt=0
+  biomass_burn_cplchp=1
+  chem_conv_tr=0
+  chem_in_opt=$CHEMIN
+  chem_opt=300
+  chemdt=3
+  cldchem_onoff=0
+  dmsemis_opt=1
+  dust_opt_cplchp=5
+  dust_alpha = 2.2
+  dust_gamma = 1.0
+  dust_calcdrag=1
+  emiss_inpt_opt=1
+  emiss_opt=5
+  gas_bc_opt=1
+  gas_ic_opt=1
+  gaschem_onoff=1
+  kemit=1
+  plumerisefire_frq_cplchp=60
+  PLUMERISE_flag=$EMITYPE
+  seas_opt_cplchp=2
+  seas_emis_scheme=-1
+  seas_emis_scale=1.,1.,1.,1.,1.
+  vertmix_onoff=1
+  wetdep_ls_cplchp =1
+  restart_inname    = "$DATA/INPUT/"
+  restart_outname   = "$RSTDIR_ATM/"
 EOF
 fi
 
@@ -453,6 +490,7 @@ cat >> input.nml <<EOF
   do_shum      = ${do_shum:-".false."}
   do_skeb      = ${do_skeb:-".false."}
   frac_grid    = ${FRAC_GRID:-".true."}
+  cplchp       = ${cplchp:-".false."}
   cplchm       = ${cplchm:-".false."}
   cplflx       = ${cplflx:-".false."}
   cplice       = ${cplice-".false."} 

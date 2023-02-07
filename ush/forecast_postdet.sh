@@ -40,6 +40,7 @@ FV3_GFS_postdet(){
 
   #-------------------------------------------------------
   if [ $warm_start = ".true." -o $RERUN = "YES" ]; then
+     CHEMIN=1 #lzhang
     #-------------------------------------------------------
     #.............................
     if [ $RERUN = "NO" ]; then
@@ -134,6 +135,7 @@ EOF
     #.............................
 
   else ## cold start
+    CHEMIN=0 #lzhang
     for file in $(ls $memdir/INPUT/*.nc); do
       file2=$(echo $(basename $file))
       fsuf=$(echo $file2 | cut -c1-3)
@@ -250,10 +252,7 @@ EOF
 
   # Files for GWD
   OROFIX_ugwd=${OROFIX_ugwd:-"${FIX_DIR}/fix_ugwd"}
-  if [[ "$CCPP_SUITE" != "FV3_RAP_cires_ugwp" && "$CCPP_SUITE" != "FV3_RAP_noah_sfcdiff_unified_ugwp" && "$CCPP_SUITE" != "FV3_RAP_noah_sfcdiff_ugwpv1" ]] ; then   ## JKH
-
-    $NLN ${OROFIX_ugwd}/ugwp_limb_tau.nc $DATA/ugwp_limb_tau.nc
-  fi
+  $NLN ${OROFIX_ugwd}/ugwp_limb_tau.nc $DATA/ugwp_limb_tau.nc
   for n in $(seq 1 $ntiles); do
     $NLN ${OROFIX_ugwd}/$CASE/${CASE}_oro_data_ls.tile${n}.nc $DATA/INPUT/oro_data_ls.tile${n}.nc
     $NLN ${OROFIX_ugwd}/$CASE/${CASE}_oro_data_ss.tile${n}.nc $DATA/INPUT/oro_data_ss.tile${n}.nc
@@ -289,7 +288,8 @@ EOF
   $NLN $FIX_AM/global_sfc_emissivity_idx.txt     $DATA/sfc_emissivity_idx.txt
 
   ## merra2 aerosol climo
-  if [ $IAER -eq "1011" ]; then
+  #if [ $IAER -eq "1011" ]; then
+  if [ $IAER -ge "1011" ]; then
     FIX_AER="${FIX_DIR}/fix_aer"
     for month in $(seq 1 12); do
       MM=$(printf %02d $month)
@@ -984,6 +984,14 @@ CICE_nml() {
 CICE_out() {
   echo "SUB ${FUNCNAME[0]}: Copying output data for CICE"
 }
+
+CCPPChem_rc() {
+#link input data for CCPP-Chem to RUNDIR
+  for file in $(ls $DATA/../prep/*.nc) ; do
+    $NLN $file $DATA/INPUT/$(echo $(basename $file))
+  done
+}
+
 
 GOCART_rc() {
   echo "SUB ${FUNCNAME[0]}: Linking input data and copying config files for GOCART"

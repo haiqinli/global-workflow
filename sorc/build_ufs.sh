@@ -4,9 +4,9 @@ set -eux
 cwd=$(pwd)
 
 # Default settings
-APP="S2SWA"
-CCPP_SUITES="FV3_GFS_v16,FV3_GFS_v16_ugwpv1,FV3_GFS_v17_p8,FV3_RAP_noah_sfcdiff_unified_ugwp,FV3_GFS_v17_p8,FV3_GFS_v17_p8_mynn,FV3_GFS_v17_p8_gf_mynn"
-#JKHCCPP_SUITES="FV3_GFS_v16,FV3_GFS_v16_ugwpv1,FV3_GFS_v17_p8,FV3_GFS_v16_coupled_nsstNoahmpUGWPv1,FV3_GFS_v17_coupled_p8"
+#APP="S2SWA"
+APP="ATM"
+CCPP_SUITES="FV3_GFS_v16,FV3_GFS_v16_ugwpv1,FV3_GFS_v17_p8,FV3_GFS_v16_coupled_nsstNoahmpUGWPv1,FV3_GFS_v17_coupled_p8,FV3_GFS_v16_gsd_chem,FV3_GFS_v17_p8_gsd_chem"
 
 while getopts ":da:v" option; do
   case "${option}" in
@@ -26,7 +26,8 @@ cd $cwd/ufs_model.fd
 
 export RT_COMPILER="intel"
 source $cwd/ufs_model.fd/tests/detect_machine.sh
-MAKE_OPT="-DAPP=${APP} -DCCPP_SUITES=${CCPP_SUITES}"
+#MAKE_OPT="-DAPP=${APP} -DCCPP_SUITES=${CCPP_SUITES}"
+MAKE_OPT="-DAPP=${APP} -DCCPP_SUITES=${CCPP_SUITES} -D32BIT=ON"
 [[ ${BUILD_TYPE:-"Release"} = "DEBUG" ]] && MAKE_OPT+=" -DDEBUG=ON"
 COMPILE_NR=0
 CLEAN_BEFORE=YES
