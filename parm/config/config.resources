@@ -11,7 +11,7 @@ if [ $# -ne 1 ]; then
     echo "getic init coupled_ic aerosol_init"
     echo "atmanalprep atmanalrun atmanalpost"
     echo "atmensanalprep atmensanalrun atmensanalpost"
-    echo "anal sfcanl analcalc analdiag gldas fcst post vrfy metp arch echgres"
+    echo "anal sfcanl analcalc analdiag gldas regrid calcinc fcst post vrfy metp arch echgres"
     echo "eobs ediag eomg eupd ecen esfc efcs epos earc"
     echo "init_chem mom6ic ocnpost"
     echo "waveinit waveprep wavepostsbs wavepostbndpnt wavepostbndpntbll wavepostpnt"
@@ -204,6 +204,24 @@ elif [ $step = "gldas" ]; then
     export npe_gaussian=96
     export nth_gaussian=1
     export npe_node_gaussian=24
+
+elif [ $step = "regrid" ]; then
+
+    export wtime_regrid="00:15:00"
+    export npe_regrid=2
+    export npe_node_regrid=1
+
+elif [ $step = "calcinc" ]; then
+
+    export wtime_calcinc="00:15:00"
+    export npe_calcinc=2
+    export npe_node_calcinc=1
+
+elif [ $step = "prepchem" ]; then
+
+    export wtime_prepchem="00:15:00"
+    export npe_prepchem=2
+    export npe_node_prepchem=1
 
 elif [ $step = "fcst" ]; then
 
