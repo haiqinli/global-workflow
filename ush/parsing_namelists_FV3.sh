@@ -495,7 +495,7 @@ EOF
 fi
 
   cat >> input.nml << EOF
-  $gfs_physics_nml
+
 /
 EOF
 
