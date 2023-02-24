@@ -15,9 +15,10 @@ RESDET=768               ## 96 192 384 768
        --idate $IDATE --edate $EDATE --resdet $RESDET \
        --comrot $COMROT --expdir $EXPDIR --icsdir $ICSDIR
 
-## call jobs/rocoto/makeinit_link.sh for init task
-#sed -i "s/init.sh/makeinit_link.sh/" $EXPDIR/$PSLOT/$PSLOT.xml
-# call jobs/rocoto/arch_gsl.sh for gfsarch task
-#sed -i "s/arch.sh/arch_gsl.sh/" $EXPDIR/$PSLOT/$PSLOT.xml
+./setup_xml.py ../FV3GFSwfm/$PSLOT
 
+## call jobs/rocoto/makeinit_link.sh for init task
+sed -i "s/init.sh/makeinit_link.sh/" $EXPDIR/$PSLOT/$PSLOT.xml
+# call jobs/rocoto/arch_gsl.sh for gfsarch task
+sed -i "s/arch.sh/arch_gsl.sh/" $EXPDIR/$PSLOT/$PSLOT.xml
 

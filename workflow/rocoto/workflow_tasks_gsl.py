@@ -207,24 +207,36 @@ class Tasks:
 
         return task
 
+##JKH    def init(self):
+##JKH
+##JKH        files = ['gfs.t@Hz.sanl',
+##JKH                 'gfs.t@Hz.atmanl.nemsio',
+##JKH                 'gfs.t@Hz.atmanl.nc',
+##JKH                 'atmos/gfs.t@Hz.atmanl.nc',
+##JKH                 'atmos/RESTART/@Y@m@d.@H0000.sfcanl_data.tile6.nc']
+##JKH
+##JKH        deps = []
+##JKH        for file in files:
+##JKH            dep_dict = {'type': 'data', 'data': f'&ROTDIR;/{self.cdump}.@Y@m@d/@H/{file}'}
+##JKH            deps.append(rocoto.add_dependency(dep_dict))
+##JKH        dependencies = rocoto.create_dependency(dep_condition='or', dep=deps)
+##JKH
+##JKH        if self.app_config.do_hpssarch:
+##JKH            dep_dict = {'type': 'task', 'name': f'{self.cdump}getic'}
+##JKH            dependencies.append(rocoto.add_dependency(dep_dict))
+##JKH            dependencies = rocoto.create_dependency(dep_condition='and', dep=dependencies)
+##JKH
+##JKH        resources = self.get_resource('init')
+##JKH        task = create_wf_task('init', resources, cdump=self.cdump, envar=self.envars, dependency=dependencies)
+##JKH
+##JKH        return task
+
     def init(self):
 
-        files = ['gfs.t@Hz.sanl',
-                 'gfs.t@Hz.atmanl.nemsio',
-                 'gfs.t@Hz.atmanl.nc',
-                 'atmos/gfs.t@Hz.atmanl.nc',
-                 'atmos/RESTART/@Y@m@d.@H0000.sfcanl_data.tile6.nc']
-
         deps = []
-        for file in files:
-            dep_dict = {'type': 'data', 'data': f'&ROTDIR;/{self.cdump}.@Y@m@d/@H/{file}'}
-            deps.append(rocoto.add_dependency(dep_dict))
-        dependencies = rocoto.create_dependency(dep_condition='or', dep=deps)
-
-        if self.app_config.do_hpssarch:
-            dep_dict = {'type': 'task', 'name': f'{self.cdump}getic'}
-            dependencies.append(rocoto.add_dependency(dep_dict))
-            dependencies = rocoto.create_dependency(dep_condition='and', dep=dependencies)
+        dep_dict = {'type': 'data', 'data': f'&ROTDIR;/{self.cdump}.@Y@m@d/@H/INPUT'}
+        deps.append(rocoto.add_dependency(dep_dict))
+        dependencies = rocoto.create_dependency(dep_condition='not', dep=deps)
 
         resources = self.get_resource('init')
         task = create_wf_task('init', resources, cdump=self.cdump, envar=self.envars, dependency=dependencies)

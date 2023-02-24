@@ -14,6 +14,6 @@ queue_service: service
 partition_batch: hera
 chgrp_rstprod: 'YES'
 chgrp_cmd: 'chgrp rstprod'
-hpssarch: 'YES'
+hpssarch: 'NO'
 localarch: 'NO'
 atardir: '/BMC/$HPSS_PROJECT/1year/$USER/$machine/scratch/$PSLOT'
