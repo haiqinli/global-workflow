@@ -98,7 +98,7 @@ class Tasks:
 
         memory = task_config.get(f'memory_{task_name}', None)
 
-        native = '--export=NONE' if scheduler in ['slurm'] else None
+        native = '&NATIVE_STR;' if scheduler in ['slurm'] else None
 
         queue = task_config['QUEUE']
         if task_name in Tasks.SERVICE_TASKS and scheduler not in ['slurm']:
