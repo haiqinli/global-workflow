@@ -159,8 +159,9 @@ export DO_OCN="NO"
 export DO_ICE="NO"
 export DO_AERO="NO"
 export CCPP_SUITE="FV3_GFS_v17_p8"                              # GFS v17 prototype p8
-#### export CCPP_SUITE="FV3_GFS_v17_p8_gf_mynn"                 # GFS v17 prototype p8 + GF + MYNN
-#### export CCPP_SUITE="FV3_GFS_v17_p8_mynn"                    # GFS v17 prototype p8 + MYNN
+#### export CCPP_SUITE="FV3_GFS_v17_p8_ufs_mp"                  # GFS v17 prototype p8 + UFS MP
+#### export CCPP_SUITE="FV3_GFS_v17_p8_mynn_ufs_mp"             # GFS v17 prototype p8 + MYNN + UFS MP
+#### export CCPP_SUITE="FV3_GFS_v17_p8_gf_mynn_ufs_mp"          # GFS v17 prototype p8 + GF + MYNN + UFS MP
 #### export CCPP_SUITE="FV3_RAP_cires_ugwp"                     # RUC LSM, MYNN, GF, CIRES UGWP
 #### export CCPP_SUITE="FV3_RAP_noah_sfcdiff_unified_ugwp"      # NOAH LSM, MYNN, GF, no GF shallow, Unified UGWP
 #### export CCPP_SUITE="FV3_RAP_noah_sfcdiff_ugwpv1"            # NOAH LSM, MYNN, GF, no GF shallow, UGWPv1
@@ -330,7 +331,7 @@ fi
 #   echo "WARNING: Wave suite turned off due to lack of RTOFS in GDA for SDATE"
 # fi
 
-# Microphysics Options: 99-ZhaoCarr, 8-Thompson; 6-WSM6, 10-MG, 11-GFDL
+# Microphysics Options: 99-ZhaoCarr, 8-Thompson; 6-WSM6, 10-MG, 11-GFDL, 21-UFS MP
 export imp_physics=8
 
 # Shared parameters

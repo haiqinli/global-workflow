@@ -170,10 +170,10 @@ fi
 
 # PBL/turbulence schemes
 export hybedmf=".false."
-if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v16_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn_ufs_mp" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn_ufs_mp" ]] ; then
    export satmedmf=".false."
    export isatmedmf=0
-   if [[ "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn" ]] ; then 
+   if [[ "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn_ufs_mp" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn_ufs_mp" ]] ; then 
      export shal_cnv=".false."       
    else
      export shal_cnv=".true."       
@@ -216,7 +216,7 @@ export iopt_sfc="3"
 export iopt_trs="2"
 
 # Convection Options: 2-SASAS, 3-GF
-if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn" ]] ; then
+if [[ "$CCPP_SUITE" == "FV3_RAP_cires_ugwp" || "$CCPP_SUITE" == "FV3_RAP_noah_sfcdiff_unified_ugwp" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf_mynn_ufs_mp" ]] ; then
     export imfdeepcnv=3
     export imfshalcnv=-1              ## JKH - no shallow GF
 elif [[ "$CCPP_SUITE" == "FV3_GFS_v16_gf" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf" ]] ; then 
@@ -224,7 +224,7 @@ elif [[ "$CCPP_SUITE" == "FV3_GFS_v16_gf" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_gf
     export imfshalcnv=3              
 else
     export imfdeepcnv=2
-    if [[ "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" ]] ; then 
+    if [[ "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn" || "$CCPP_SUITE" == "FV3_GFS_v17_p8_mynn_ufs_mp" ]] ; then 
       export imfshalcnv=-1
     else
       export imfshalcnv=2
@@ -300,7 +300,25 @@ elif [ $imp_physics -eq 8 ]; then # Thompson
         export vtdm4_nh_nonmono=0.02
         export nord=2
     fi
+elif [ $imp_physics -eq 21 ]; then # UFS MP
+    export ncld=2
+    export FIELD_TABLE="$HOMEgfs/parm/parm_fv3diag/field_table_ufsmp_tke"
+    export nwat=6
 
+    export cal_pre=".false."
+    export random_clds=".false."
+    export effr_in=".true."
+    export ltaerosol=".false."
+    export lradar=".false."
+    export sedi_semi=.true.
+    export decfl=10
+
+    export hord_mt_nh_nonmono=5
+    export hord_xx_nh_nonmono=5
+    export vtdm4_nh_nonmono=0.02
+    export nord=2
+    export dddmp=0.1
+    export d4_bg=0.12
 elif [ $imp_physics -eq 11 ]; then # GFDL
     export ncld=5
     if [[ "$CCPP_SUITE" == "FV3_GFS_v16_mynn" ]] ; then
@@ -415,6 +433,10 @@ elif [[ "$CDUMP" == "gfs" ]] ; then # GFS cycle specific parameters
         fi
     else
         export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_orig"
+    fi
+
+    if [ $imp_physics -eq 21 ]; then # UFS MP
+        export DIAG_TABLE="$HOMEgfs/parm/parm_fv3diag/diag_table_ufsmp"
     fi
 
     # Write gfs restart files to rerun fcst from any break point         

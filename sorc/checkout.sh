@@ -154,7 +154,8 @@ mkdir -p ${logdir}
 # The checkout version should always be a speciifc commit (hash or tag), not a branch
 errs=0
 #JKHcheckout "ufs_model.fd"    "https://github.com/NOAA-GSL/ufs-weather-model" "${ufs_model_hash}"; errs=$((errs + $?))
-checkout "ufs_model.fd"    "https://github.com/ufs-community/ufs-weather-model" "${ufs_model_hash}"; errs=$((errs + $?))
+#checkout "ufs_model.fd"    "https://github.com/ufs-community/ufs-weather-model" "${ufs_model_hash}"; errs=$((errs + $?))
+git clone -b develop-ufsmp-v0 --recursive https://github.com/haiqinli/ufs-weather-model ufs_model.fd
 if [[ -d ufs_model.fd_gsl ]]; then
     rsync -avx ufs_model.fd_gsl/ ufs_model.fd/        ## copy over GSL changes not in UFS repository
 fi

@@ -440,6 +440,7 @@ cat >> input.nml <<EOF
   rrtmgp_nBandsSW    = ${rrtmgp_nBandsSW:-"14"}
   doGP_cldoptics_LUT = ${doGP_cldoptics_LUT:-".false."}
   doGP_lwscat        = ${doGP_lwscat:-".false."}
+  icloud       = ${icloud:-"0"}
 EOF
 
 if [ $cplchm = .true. ]; then
