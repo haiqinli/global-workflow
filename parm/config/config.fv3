@@ -185,9 +185,9 @@ case $case_in in
     if [[ "$machine" = "JET" ]]; then
       export OUTPUT_FILETYPE_ATM="netcdf"                  ## JKH
     else
-      export OUTPUT_FILETYPE_ATM="netcdf_parallel"
+      export OUTPUT_FILETYPE_ATM="netcdf"
     fi
-    export OUTPUT_FILETYPE_SFC="netcdf_parallel"
+    export OUTPUT_FILETYPE_SFC="netcdf"
     ;;
 esac
 echo "END: config.fv3"
